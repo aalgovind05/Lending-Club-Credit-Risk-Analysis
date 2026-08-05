@@ -17,7 +17,7 @@ WHERE grade = 'A'
 GROUP BY YEAR(issue_date), grade
 ),
 
-avg_charged_off_rate AS(
+avg_charged_off AS(
 SELECT 
     issue_year,
     grade,
@@ -29,10 +29,11 @@ FROM status_rates
 SELECT TOP 1
     issue_year,
     grade,
+    (charged_off_rate - avg_charged_off_rate) changed_off_rate_diff,
     charged_off_rate AS highest_charged_off_rate,
     avg_charged_off_rate
-FROM avg_charged_off_rate
+FROM avg_charged_off
 WHERE charged_off_rate > avg_charged_off_rate
-ORDER BY highest_charged_off_rate DESC
+ORDER BY changed_off_rate_diff DESC
 
 
