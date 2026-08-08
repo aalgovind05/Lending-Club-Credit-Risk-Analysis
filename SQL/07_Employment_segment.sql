@@ -7,11 +7,11 @@ default rate can mean a higher dollar loss exposure.*/
 WITH bucketed AS (
     SELECT
         CASE
-            WHEN employment_length IS NULL OR employment_length = 'Unknown'        THEN 'Unknown'
-            WHEN employment_length = '< 1 year' OR employment_length IN ('1 year','2 years')      THEN '0-2 years'
-            WHEN employment_length IN ('3 years','4 years','5 years')                             THEN '3-5 years'
-            WHEN employment_length IN ('6 years','7 years','8 years','9 years')                   THEN '6-9 years'
-            WHEN employment_length = '10+ years'                                                  THEN '10+ years'
+            WHEN employment_length IS NULL OR employment_length = 'Unknown' THEN 'Unknown'
+            WHEN employment_length = '< 1 year' OR employment_length IN ('1 year','2 years') THEN '0-2 years'
+            WHEN employment_length IN ('3 years','4 years','5 years') THEN '3-5 years'
+            WHEN employment_length IN ('6 years','7 years','8 years','9 years') THEN '6-9 years'
+            WHEN employment_length = '10+ years' THEN '10+ years'
         END AS emp_bucket,
         loan_amount,
         CASE WHEN loan_status IN ('Charged Off','Default',
@@ -22,11 +22,11 @@ WITH bucketed AS (
 )
 SELECT
     emp_bucket,
-    COUNT(*)                                                        AS loan_count,
-    ROUND(100.0 * SUM(is_default) / COUNT(*), 2)                    AS default_rate_pct,
-    ROUND(AVG(loan_amount * 1.0), 0)                                AS avg_loan_amount,
-    SUM(is_default)                                                 AS defaulted_loans,
-    ROUND(SUM(is_default * loan_amount * 1.0), 0)                  AS est_loss_exposure,
+    COUNT(*) AS loan_count,
+    ROUND(100.0 * SUM(is_default) / COUNT(*), 2) AS default_rate_pct,
+    ROUND(AVG(loan_amount * 1.0), 0) AS avg_loan_amount,
+    SUM(is_default) AS defaulted_loans,
+    ROUND(SUM(is_default * loan_amount * 1.0), 0) AS est_loss_exposure,
     ROUND(SUM(CASE WHEN is_default = 1 THEN loan_amount END) * 1.0
         / NULLIF(SUM(is_default), 0), 0)                          AS avg_defaulted_loan_amount
 FROM bucketed
