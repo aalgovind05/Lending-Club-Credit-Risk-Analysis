@@ -1,0 +1,15 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://localhost:20128",
+    "ANTHROPIC_AUTH_TOKEN": "sk-c5106be15d26f348-373ae4-5a2f72d5",
+    "ANTHROPIC_API_KEY": "",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "auto",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "cl/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "kr/claude-sonnet-4.5"
+  },
+  "model": "opus",
+  "effortLevel": "low",
+  "theme": "dark",
+  "switchModelsOnFlag": false
+}
