@@ -67,3 +67,4 @@ FROM per_score p
 CROSS JOIN portfolio pf
 CROSS JOIN matrix m
 ORDER BY p.risk_score;
+
