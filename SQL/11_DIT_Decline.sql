@@ -23,27 +23,6 @@ rest_portfolio AS (
     FROM dti_deciles
     WHERE dti_decile < 10
 ),
-charged_off_analysis AS (
-    SELECT
-        'Top Decile (10)' AS segment,
-        COUNT(*) AS loan_count,
-        SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) AS charged_off_count,
-        ROUND(100.0 * SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) / COUNT(*), 2) AS charged_off_rate_pct,
-        ROUND(AVG(loan_amount), 2) AS avg_loan_amount,
-        1 AS sort_order,
-        NULL AS overrepresentation_ratio
-    FROM top_decile
-    UNION ALL
-    SELECT
-        'Rest of Portfolio (Deciles 1-9)' AS segment,
-        COUNT(*) AS loan_count,
-        SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) AS charged_off_count,
-        ROUND(100.0 * SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) / COUNT(*), 2) AS charged_off_rate_pct,
-        ROUND(AVG(loan_amount), 2) AS avg_loan_amount,
-        2 AS sort_order,
-        NULL AS overrepresentation_ratio
-    FROM rest_portfolio
-),
 grade_distribution AS (
     SELECT
         grade,
@@ -57,42 +36,83 @@ top_decile_grades AS (
         COUNT(*) * 1.0 / SUM(COUNT(*)) OVER () AS top_decile_share
     FROM top_decile
     GROUP BY grade
-),
-grade_overrepresentation AS (
+)
+
+-- PART 1: Charged-off rate & avg loan amount for top decile vs rest
+SELECT
+    'PART 1: Charged-off Rate & Avg Loan Amount' AS result_part,
+    segment,
+    metric_1_name,
+    metric_1,
+    metric_2_name,
+    metric_2,
+    metric_3_name,
+    metric_3,
+    metric_4_name,
+    metric_4,
+    sort_order
+FROM (
     SELECT
-        g.grade AS segment,
-        CAST(g.portfolio_share * 100 AS DECIMAL(10,2)) AS loan_count,
-        CAST(t.top_decile_share * 100 AS DECIMAL(10,2)) AS charged_off_count,
-        ROUND(t.top_decile_share / g.portfolio_share, 2) AS charged_off_rate_pct,
-        NULL AS avg_loan_amount,
-        4 AS sort_order,
-        ROUND(t.top_decile_share / g.portfolio_share, 2) AS overrepresentation_ratio
+        'Top Decile (10)'                          AS segment,
+        'loan_count'                               AS metric_1_name,
+        COUNT(*)                                   AS metric_1,
+        'charged_off_count'                        AS metric_2_name,
+        SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) AS metric_2,
+        'charged_off_rate_pct'                     AS metric_3_name,
+        ROUND(100.0 * SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) / COUNT(*), 2) AS metric_3,
+        'avg_loan_amount'                          AS metric_4_name,
+        ROUND(AVG(loan_amount), 2)                 AS metric_4,
+        1 AS sort_order
+    FROM top_decile
+
+    UNION ALL
+
+    SELECT
+        'Rest of Portfolio (Deciles 1-9)'          AS segment,
+        'loan_count'                               AS metric_1_name,
+        COUNT(*)                                   AS metric_1,
+        'charged_off_count'                        AS metric_2_name,
+        SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) AS metric_2,
+        'charged_off_rate_pct'                     AS metric_3_name,
+        ROUND(100.0 * SUM(CASE WHEN loan_status = 'Charged Off' THEN 1 ELSE 0 END) / COUNT(*), 2) AS metric_3,
+        'avg_loan_amount'                          AS metric_4_name,
+        ROUND(AVG(loan_amount), 2)                 AS metric_4,
+        2 AS sort_order
+    FROM rest_portfolio
+) p1
+
+UNION ALL
+
+-- PART 2: Grade overrepresentation in top DTI decile
+-- Inner join is intentional: only grades present in BOTH overall portfolio AND top decile can be compared.
+-- Grades missing from top_decile_grades have 0 share there and are excluded by design.
+SELECT
+    'PART 2: Grade Overrepresentation in Top Decile' AS result_part,
+    segment,
+    metric_1_name,
+    metric_1,
+    metric_2_name,
+    metric_2,
+    metric_3_name,
+    metric_3,
+    metric_4_name,
+    metric_4,
+    sort_order
+FROM (
+    SELECT
+        g.grade                                    AS segment,
+        'portfolio_share_pct'                      AS metric_1_name,
+        ROUND(g.portfolio_share * 100, 2)          AS metric_1,
+        'top_decile_share_pct'                     AS metric_2_name,
+        ROUND(t.top_decile_share * 100, 2)         AS metric_2,
+        'overrepresentation_ratio'                 AS metric_3_name,
+        ROUND(t.top_decile_share / g.portfolio_share, 2) AS metric_3,
+        NULL                                       AS metric_4_name,
+        NULL                                       AS metric_4,
+        4 AS sort_order
     FROM grade_distribution g
     JOIN top_decile_grades t ON g.grade = t.grade
     WHERE t.top_decile_share > g.portfolio_share
-)
-SELECT
-    segment,
-    loan_count,
-    charged_off_count,
-    charged_off_rate_pct,
-    avg_loan_amount,
-    sort_order,
-    overrepresentation_ratio
-FROM charged_off_analysis
-UNION ALL
-SELECT
-    '--- GRADE OVERREPRESENTATION IN TOP DECILE ---',
-    NULL, NULL, NULL, NULL,
-    3, NULL
-UNION ALL
-SELECT
-    segment,
-    loan_count,
-    charged_off_count,
-    charged_off_rate_pct,
-    avg_loan_amount,
-    sort_order,
-    overrepresentation_ratio
-FROM grade_overrepresentation
-ORDER BY sort_order, overrepresentation_ratio DESC;
+) p2
+
+ORDER BY sort_order, metric_3 DESC;
