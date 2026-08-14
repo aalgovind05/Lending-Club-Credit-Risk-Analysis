@@ -59,4 +59,4 @@ UNION ALL
 SELECT check_name, violation_count FROM check_win_dti_high
 UNION ALL
 SELECT check_name, violation_count FROM check_future_issue_date
-ORDER BY violation_count DESC;
+ORDER BY violation_count DESC
