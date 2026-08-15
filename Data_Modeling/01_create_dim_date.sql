@@ -5,7 +5,8 @@ CREATE TABLE dim_grade (
 
 
 INSERT INTO dim_grade(grade, sub_grade)
-SELECT DISTINCT grade, 
+SELECT 
+    DISTINCT grade, 
     sub_grade
 FROM happen
 ORDER BY grade, sub_grade;
