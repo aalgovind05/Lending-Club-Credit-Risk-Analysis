@@ -1,5 +1,6 @@
 # Lending-Club-Credit-Risk-Analysis
 
+## SQL Analysis
 ## Overview
 This repository contains SQL analyses for the Lending Club loan dataset, exploring credit risk patterns, pricing integrity, vintage performance, data quality validation, and cohort default curves.
 
