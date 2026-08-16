@@ -11,4 +11,3 @@ FROM happen
 ORDER BY employment_length, home_ownership, verification_status;
 
 SELECT * FROM dim_borrower;
-SELECT top(1) * FROM happen;
