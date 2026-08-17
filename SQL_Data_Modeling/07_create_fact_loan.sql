@@ -94,8 +94,11 @@ SELECT
 FROM happen;
 
 
--- Fact table final Duplicates verification
+-- Quick view
+SELECT TOP(10) * FROM fact_loan
 
+
+-- Fact table final Duplicates verification
 SELECT COUNT(loan_id) as DN ,
         loan_id  
 FROM fact_loan 
@@ -104,5 +107,4 @@ HAVING COUNT(loan_id) > 1
 
 
 -- Column type confirmation
-
 SP_HELP 'fact_loan';
