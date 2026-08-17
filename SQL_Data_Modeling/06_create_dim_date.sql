@@ -40,3 +40,26 @@ SELECT full_date, COUNT(*) AS cnt
 FROM dim_date
 GROUP BY full_date
 HAVING COUNT(*) > 1;
+
+-- adding date key into main table
+
+ALTER TABLE happen ADD date_key INT;
+
+UPDATE f
+SET    f.date_key = d.date_key
+FROM   happen f
+JOIN   dim_date d
+    ON f.issue_date = d.full_date;
+
+-- Check date key 
+
+
+SELECT top(10)*  from happen
+
+-- Verify immediately after each UPDATE
+SELECT 
+    COUNT(*)                                              AS total_rows,
+    SUM(CASE WHEN date_key IS NULL THEN 1 ELSE 0 END)    AS null_date_key
+FROM happen;
+
+
