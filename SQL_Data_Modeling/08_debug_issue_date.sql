@@ -1,5 +1,9 @@
--- Adding issue_date into fact_loan table 
+-- Add index to fast excution
+CREATE INDEX idx_happen_loan_id
+ON happen(loan_id)
 
+
+-- Adding issue_date into fact_loan table
 ALTER TABLE fact_loan 
 ADD issue_date DATE;
 

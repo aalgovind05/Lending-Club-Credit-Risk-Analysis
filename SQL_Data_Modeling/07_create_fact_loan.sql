@@ -1,7 +1,6 @@
 
 -- STEP 1: Create fact_loan structure
- ALTER TABLE fact_loan
- ALTER COLUMN loan_id INT;
+
 CREATE TABLE fact_loan (
 
     loan_id INT  NOT NULL,
