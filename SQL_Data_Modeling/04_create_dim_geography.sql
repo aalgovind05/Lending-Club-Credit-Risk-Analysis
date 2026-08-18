@@ -13,7 +13,7 @@ SELECT * FROM dim_geography ;
 
 -- Insert state_key into happen table
 
-ALTER TABLE happen ADD state_key    INT;
+ALTER TABLE happen ADD state_key INT;
 
 UPDATE f
 SET    f.state_key = d.state_key
@@ -28,6 +28,6 @@ SELECT TOP(10) * FROM happen;
 
 -- Verify
 SELECT
-    COUNT(*)                                              AS total_rows,
-    SUM(CASE WHEN state_key IS NULL THEN 1 ELSE 0 END)   AS null_state_key
+    COUNT(*) AS total_rows,
+    SUM(CASE WHEN state_key IS NULL THEN 1 ELSE 0 END) AS null_state_key
 FROM happen;

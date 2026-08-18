@@ -58,8 +58,8 @@ SELECT top(10)*  from happen
 
 -- Verify immediately after each UPDATE
 SELECT 
-    COUNT(*)                                              AS total_rows,
-    SUM(CASE WHEN date_key IS NULL THEN 1 ELSE 0 END)    AS null_date_key
+    COUNT(*) AS total_rows,
+    SUM(CASE WHEN date_key IS NULL THEN 1 ELSE 0 END) AS null_date_key
 FROM happen;
 
 

@@ -40,6 +40,6 @@ SELECT TOP(10)* FROM happen
 
 -- Verify
 SELECT
-    COUNT(*)                                                AS total_rows,
-    SUM(CASE WHEN borrower_key IS NULL THEN 1 ELSE 0 END)  AS null_borrower_key
+    COUNT(*) AS total_rows,
+    SUM(CASE WHEN borrower_key IS NULL THEN 1 ELSE 0 END) AS null_borrower_key
 FROM happen;
