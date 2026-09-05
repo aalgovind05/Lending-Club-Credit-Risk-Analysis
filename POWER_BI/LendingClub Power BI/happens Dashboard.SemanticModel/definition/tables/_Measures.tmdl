@@ -71,6 +71,10 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Total loan amount for loans with status Fully paid.
+	measure 'Total Amount - Fully Paid' = CALCULATE([Total Amount], 'dim_loan_status'[loan_status] = "Fully paid")
+		lineageTag: 59204dba-f4a8-4cfa-8f8a-1ab560090b77
+
 	column Column
 		formatString: 0
 		lineageTag: 3421dc75-983b-47d9-bf12-35329a9f517a
