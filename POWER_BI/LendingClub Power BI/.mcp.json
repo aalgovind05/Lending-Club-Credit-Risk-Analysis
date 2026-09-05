@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "power-bi": {
+      "command": "npx",
+      "args": ["-y", "@microsoft/mcp-power-bi"]
+    }
+  }
+}

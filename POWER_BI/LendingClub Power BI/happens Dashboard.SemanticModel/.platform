@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "happens Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "35af4d8d-0a1b-445e-afc8-d0347565873c"
+  }
+}

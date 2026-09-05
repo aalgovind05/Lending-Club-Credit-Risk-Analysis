@@ -1,0 +1,291 @@
+table fact_loan
+	lineageTag: 343e06a1-18ab-45d3-acbd-c0f43b3cfdd1
+
+	column loan_id
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: dff60fc7-a1a0-411d-a64c-9550b6af4fc4
+		summarizeBy: sum
+		sourceColumn: loan_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 89bc6233-8f74-42c4-8865-c0e7c0262f9c
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 314aebc1-c611-4028-94b4-234f39e9b1ca
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: fbb1980b-6281-488e-8fa7-b033759c8d96
+		summarizeBy: none
+		sourceColumn: status_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column purpose_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: ff109c01-11ef-453d-a841-73aed37e579f
+		summarizeBy: none
+		sourceColumn: purpose_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: dfc0399f-1927-4010-ac7b-e18f4df181eb
+		summarizeBy: none
+		sourceColumn: state_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column borrower_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 277de89c-cc7b-4ea1-ac98-72ae6942a5aa
+		summarizeBy: none
+		sourceColumn: borrower_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column loan_amount
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 49f5d523-1ce9-426c-843f-33ed431e6267
+		summarizeBy: sum
+		sourceColumn: loan_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column installment
+		dataType: double
+		sourceProviderType: float
+		lineageTag: c4166384-585c-404f-a2b9-f96e982c8cce
+		summarizeBy: sum
+		sourceColumn: installment
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column revolving_balance
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 610f9d62-13e5-4c3f-8084-8f37ef0a4d27
+		summarizeBy: sum
+		sourceColumn: revolving_balance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column open_accounts
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 73e5f393-1253-4194-8198-40e9d905c302
+		summarizeBy: sum
+		sourceColumn: open_accounts
+
+		annotation SummarizationSetBy = Automatic
+
+	column public_derogatory_records
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 7d225b2e-2d32-405a-8432-f78e0f2d373d
+		summarizeBy: sum
+		sourceColumn: public_derogatory_records
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_accounts
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: b388868a-726a-4b81-8112-15619f873cb1
+		summarizeBy: sum
+		sourceColumn: total_accounts
+
+		annotation SummarizationSetBy = Automatic
+
+	column term_months
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 0555bc18-6376-451b-8e28-f5e11ba119a9
+		summarizeBy: sum
+		sourceColumn: term_months
+
+		annotation SummarizationSetBy = Automatic
+
+	column interest_rate
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 85ec9b2a-a5bd-4851-a4ae-8c63411061fd
+		summarizeBy: sum
+		sourceColumn: interest_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column revolving_utilization_rate
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 8282e783-c35f-4c88-b751-9d194441a8b8
+		summarizeBy: sum
+		sourceColumn: revolving_utilization_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column annual_income
+		dataType: double
+		sourceProviderType: float
+		lineageTag: f51743c0-8e9c-4fd3-952f-919359be093b
+		summarizeBy: sum
+		sourceColumn: annual_income
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column win_annual_inc
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 6f304d7c-6411-4212-bbb1-08256ff32416
+		summarizeBy: sum
+		sourceColumn: win_annual_inc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column debt_to_income_ratio
+		dataType: double
+		sourceProviderType: float
+		lineageTag: 3b6d4a34-cb46-44ae-96dc-dbec1ebd8502
+		summarizeBy: sum
+		sourceColumn: debt_to_income_ratio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column win_dti
+		dataType: double
+		sourceProviderType: float
+		lineageTag: ffe25e69-1435-43eb-88ff-793b6fc27f5e
+		summarizeBy: sum
+		sourceColumn: win_dti
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fico_range_low
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 97058878-cdac-432b-a20f-bd7d3e89d049
+		summarizeBy: sum
+		sourceColumn: fico_range_low
+
+		annotation SummarizationSetBy = Automatic
+
+	column fico_range_high
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 1e30ce2f-7454-40de-af8b-f16dafc9ad59
+		summarizeBy: sum
+		sourceColumn: fico_range_high
+
+		annotation SummarizationSetBy = Automatic
+
+	column earliest_credit_line
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 49e13cb2-9669-487f-8b9f-317dc0c81682
+		summarizeBy: none
+		sourceColumn: earliest_credit_line
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column issue_date
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 488cde81-517e-4f03-991b-526d6b041924
+		summarizeBy: none
+		sourceColumn: issue_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition fact_loan = m
+		mode: directQuery
+		source =
+				let
+				  Source = Sql.Database("LAPTOP-2M8AORNT\SQLEXPRESS", "LendingClubDB"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "fact_loan"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

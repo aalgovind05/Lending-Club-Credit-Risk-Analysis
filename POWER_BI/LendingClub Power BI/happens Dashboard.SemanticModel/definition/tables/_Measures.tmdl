@@ -1,0 +1,90 @@
+table _Measures
+	lineageTag: 7096aad0-e8da-45dd-a0a5-0910bbe272da
+
+	measure 'Total Amount' = SUM(fact_loan[loan_amount])
+		lineageTag: af8edc29-bc48-441c-a33d-18c6adcd24c2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Loan' = COUNTROWS(fact_loan)
+		formatString: 0
+		lineageTag: dc36ca83-d266-41df-be3e-793793bcd7b7
+
+	measure 'AVG Interest Rate' = AVERAGE(fact_loan[interest_rate])
+		lineageTag: 69e2cb4d-e771-46a7-8f4e-dc8c6ebb5f1f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG DTI' = AVERAGE(fact_loan[win_dti])
+		lineageTag: 78dc8122-8804-4946-be54-762e474d3676
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG Annual Income' = AVERAGE(fact_loan[annual_income])
+		lineageTag: dadc4e8a-bcc1-4e57-9bf1-1a2154ca7b80
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG Default Rate' = ```
+			
+			    DIVIDE(
+			        CALCULATE(
+			            COUNTROWS(fact_loan),dim_loan_status[loan_status] = "Charged Off"),
+			            COUNTROWS(fact_loan)
+			            )
+			```
+		lineageTag: 9179dbd8-734d-41db-a33d-dd3807defc3e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG Fully Paid Rate' = ```
+			
+			    DIVIDE(
+			        CALCULATE(
+			            COUNTROWS(fact_loan),dim_loan_status[loan_status] = "Fully Paid"),
+			            COUNTROWS(fact_loan))
+			```
+		lineageTag: c8a3f05a-4200-48f5-8783-aacec88a10af
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Credit Age (Years)' =
+			
+			AVERAGEX(
+			    fact_loan,
+			    DATEDIFF(
+			        fact_loan[earliest_credit_line],
+			        fact_loan[issue_date],
+			        YEAR
+			    )
+			)
+		lineageTag: 51995886-9fd5-4f19-aca6-ef2852c3af01
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg FICO Score' =
+			
+			AVERAGEX(fact_loan,
+			    (fact_loan[fico_range_low] + fact_loan[fico_range_high]) / 2
+			)
+		lineageTag: dbf34e54-402c-4ad1-a07d-f1de9ce2dafa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		formatString: 0
+		lineageTag: 3421dc75-983b-47d9-bf12-35329a9f517a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 978046417af64d4ea1fe0366bf5d0ba4
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

@@ -1,0 +1,48 @@
+table dim_grade
+	lineageTag: 21aa762b-b6ea-41b3-818c-556f033e3cb2
+
+	column grade_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 909fc1a0-e72e-456f-98ae-058df4282f30
+		summarizeBy: none
+		sourceColumn: grade_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(5)
+		lineageTag: 4497f18a-50c4-455e-848f-f74dfa6c75a4
+		summarizeBy: none
+		sourceColumn: grade
+
+		annotation SummarizationSetBy = Automatic
+
+	column sub_grade
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(5)
+		lineageTag: 2ed6f03a-0212-4399-8ba5-cd82f539af72
+		summarizeBy: none
+		sourceColumn: sub_grade
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_grade = m
+		mode: directQuery
+		source =
+				let
+				  Source = Sql.Database("LAPTOP-2M8AORNT\SQLEXPRESS", "LendingClubDB"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "dim_grade"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+
