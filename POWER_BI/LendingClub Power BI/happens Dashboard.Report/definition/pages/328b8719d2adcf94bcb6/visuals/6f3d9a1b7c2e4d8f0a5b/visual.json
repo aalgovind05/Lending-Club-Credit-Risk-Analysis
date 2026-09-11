@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "03fa2e872b2b1d07a175",
+  "name": "6f3d9a1b7c2e4d8f0a5b",
   "position": {
-    "x": 1460,
+    "x": 500,
     "y": 40,
-    "z": 13,
+    "z": 11,
     "height": 180,
     "width": 420,
-    "tabOrder": 4
+    "tabOrder": 2
   },
   "visual": {
     "visualType": "cardVisual",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Avg Credit Age (Years)"
+                  "Property": "AVG Annual Income"
                 }
               },
-              "queryRef": "_Measures.Avg Credit Age (Years)",
-              "nativeQueryRef": "Avg Credit Age (Years)"
+              "queryRef": "_Measures.AVG Annual Income",
+              "nativeQueryRef": "AVG Annual Income"
             }
           ]
         }
