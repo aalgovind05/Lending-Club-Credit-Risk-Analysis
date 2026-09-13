@@ -174,20 +174,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "f8a547a8af2c7d89b3b9",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Measures"
-              }
-            },
-            "Property": "Total Amount"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

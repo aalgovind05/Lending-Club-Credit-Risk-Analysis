@@ -51,6 +51,22 @@
           "name": "Fluent2-CY26SU07",
           "path": "BaseThemes/Fluent2-CY26SU07.json",
           "type": "BaseTheme"
+        },
+        {
+          "name": "usa.states.topo",
+          "path": "Shapemaps/usa.states.topo.json",
+          "type": "ShapeMap"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Frame_1_(1)19709801189891318.svg",
+          "path": "Frame_1_(1)19709801189891318.svg",
+          "type": "Image"
         }
       ]
     }
@@ -61,6 +77,7 @@
     "defaultDrillFilterOtherVisuals": true,
     "allowChangeFilterTypes": true,
     "useEnhancedTooltips": true,
+    "filterPaneHiddenInEditMode": true,
     "useDefaultAggregateDisplayName": true
   }
 }
