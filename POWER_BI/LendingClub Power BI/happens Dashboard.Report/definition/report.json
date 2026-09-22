@@ -51,11 +51,6 @@
           "name": "Fluent2-CY26SU07",
           "path": "BaseThemes/Fluent2-CY26SU07.json",
           "type": "BaseTheme"
-        },
-        {
-          "name": "usa.states.topo",
-          "path": "Shapemaps/usa.states.topo.json",
-          "type": "ShapeMap"
         }
       ]
     },
@@ -64,8 +59,8 @@
       "type": "RegisteredResources",
       "items": [
         {
-          "name": "Frame_1_(1)19709801189891318.svg",
-          "path": "Frame_1_(1)19709801189891318.svg",
+          "name": "Happen_final_front_page8978162396943442.gif",
+          "path": "Happen_final_front_page8978162396943442.gif",
           "type": "Image"
         }
       ]

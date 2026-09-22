@@ -1,12 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "dc7d22cec86880c5bea4",
+  "name": "0d9fd9e90592d795a350",
   "position": {
     "x": 0,
     "y": 0,
     "z": 0,
-    "height": 1079.4666666666667,
-    "width": 1909.3333333333333,
+    "height": 1080.3001860127001,
+    "width": 1919.7126424493808,
     "tabOrder": 0
   },
   "visual": {
@@ -15,26 +15,12 @@
       "image": [
         {
           "properties": {
-            "sourceType": {
-              "expr": {
-                "Literal": {
-                  "Value": "'image'"
-                }
-              }
-            },
-            "sourceUrl": {
-              "expr": {
-                "Literal": {
-                  "Value": "'https://www.figma.com/design/JRNlG687w76gWce4guoc5W/LendingClub-Credit-Risk-Dashboard?node-id=7-6&t=QfjqFq1PChlsp2N1-1'"
-                }
-              }
-            },
             "sourceFile": {
               "image": {
                 "name": {
                   "expr": {
                     "Literal": {
-                      "Value": "'Frame 1 (1).svg'"
+                      "Value": "'Happen final front page.gif'"
                     }
                   }
                 },
@@ -43,7 +29,7 @@
                     "ResourcePackageItem": {
                       "PackageName": "RegisteredResources",
                       "PackageType": 1,
-                      "ItemName": "Frame_1_(1)19709801189891318.svg"
+                      "ItemName": "Happen_final_front_page8978162396943442.gif"
                     }
                   }
                 },
