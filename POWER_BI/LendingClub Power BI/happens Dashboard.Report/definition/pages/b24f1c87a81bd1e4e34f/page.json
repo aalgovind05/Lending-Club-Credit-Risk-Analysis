@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
   "name": "b24f1c87a81bd1e4e34f",
-  "displayName": "Analysis page",
+  "displayName": "Loan Overview",
   "displayOption": "FitToPage",
   "height": 1080,
   "width": 1920,

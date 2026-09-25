@@ -59,8 +59,13 @@
       "type": "RegisteredResources",
       "items": [
         {
-          "name": "Happen_final_front_page8978162396943442.gif",
-          "path": "Happen_final_front_page8978162396943442.gif",
+          "name": "animated_cards6452544091054006.gif",
+          "path": "animated_cards6452544091054006.gif",
+          "type": "Image"
+        },
+        {
+          "name": "LendingClub_cover_final_svg7360309766948773.svg",
+          "path": "LendingClub_cover_final_svg7360309766948773.svg",
           "type": "Image"
         }
       ]
