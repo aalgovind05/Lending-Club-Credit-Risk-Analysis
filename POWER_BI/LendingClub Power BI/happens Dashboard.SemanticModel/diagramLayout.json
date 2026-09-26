@@ -4,14 +4,14 @@
     {
       "ordinal": 0,
       "scrollPosition": {
-        "x": 411.20001220703125,
-        "y": 192
+        "x": 0,
+        "y": 0
       },
       "nodes": [
         {
           "location": {
             "x": 117,
-            "y": 497
+            "y": 507.5
           },
           "nodeIndex": "dim_borrower",
           "nodeLineageTag": "afce5955-fc21-4da4-9702-139c56218876",
@@ -25,7 +25,7 @@
         {
           "location": {
             "x": 4,
-            "y": 187
+            "y": 197.5
           },
           "nodeIndex": "dim_date",
           "nodeLineageTag": "a4374959-da40-4631-98e0-96104e164f69",
@@ -38,7 +38,7 @@
         {
           "location": {
             "x": 277,
-            "y": 62
+            "y": 72.5
           },
           "nodeIndex": "dim_geography",
           "nodeLineageTag": "890c063e-28d3-4675-9eb3-b7988c2aedc7",
@@ -52,7 +52,7 @@
         {
           "location": {
             "x": 690,
-            "y": 21
+            "y": 31.5
           },
           "nodeIndex": "dim_grade",
           "nodeLineageTag": "21aa762b-b6ea-41b3-818c-556f033e3cb2",
@@ -66,7 +66,7 @@
         {
           "location": {
             "x": 998.59999847412109,
-            "y": 170
+            "y": 180.5
           },
           "nodeIndex": "dim_loan_status",
           "nodeLineageTag": "db317eeb-894f-49b3-924f-9a00e083b484",
@@ -80,7 +80,7 @@
         {
           "location": {
             "x": 943.59999084472656,
-            "y": 486
+            "y": 496.5
           },
           "nodeIndex": "dim_purpose",
           "nodeLineageTag": "1f5514cd-9424-420b-81e7-4a0ba9215f65",
@@ -94,7 +94,7 @@
         {
           "location": {
             "x": 521,
-            "y": 299
+            "y": 309.5
           },
           "nodeIndex": "fact_loan",
           "nodeLineageTag": "343e06a1-18ab-45d3-acbd-c0f43b3cfdd1",
@@ -107,8 +107,8 @@
         },
         {
           "location": {
-            "x": 410.59999847412109,
-            "y": 558.09999084472656
+            "x": 1296.5999984741211,
+            "y": 347.5999870300293
           },
           "nodeIndex": "_Measures",
           "nodeLineageTag": "7096aad0-e8da-45dd-a0a5-0910bbe272da",
@@ -117,6 +117,19 @@
             "width": 234
           },
           "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1296.1999740600586,
+            "y": 95.049995422363281
+          },
+          "nodeIndex": "_visual measure",
+          "nodeLineageTag": "72cbe392-24d5-4f13-99e4-89b6f9cbc168",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",

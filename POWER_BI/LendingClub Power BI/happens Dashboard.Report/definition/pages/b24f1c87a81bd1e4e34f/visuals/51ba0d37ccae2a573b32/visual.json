@@ -1,0 +1,41 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "51ba0d37ccae2a573b32",
+  "position": {
+    "x": 0,
+    "y": 382,
+    "z": 8002,
+    "height": 248,
+    "width": 300,
+    "tabOrder": 8002
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_loan_status"
+                    }
+                  },
+                  "Property": "loan_status"
+                }
+              },
+              "queryRef": "dim_loan_status.loan_status",
+              "nativeQueryRef": "loan_status"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

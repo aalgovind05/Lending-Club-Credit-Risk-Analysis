@@ -47,9 +47,9 @@
   "accent": "#0A5599",
   "shapeStroke": "#D1D1D1",
   "disabledText": "#B3B3B3",
-  "good": "#1AAB40",
-  "neutral": "#D9B300",
-  "bad": "#D64554",
+  "good": "#9FD89F",
+  "neutral": "#FDCFB4",
+  "bad": "#EEACB2",
   "maximum": "#D4EDFC",
   "center": "#FAFAFA",
   "minimum": "#FCE4D6",
@@ -112,9 +112,7 @@
               }
             },
             "concatenateLabels": false,
-            "titleFontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "titleFontSize": 10.5,
-            "fontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
             "fontSize": 10.5,
             "labelColor": {
               "solid": {
@@ -133,9 +131,7 @@
                 "color": "#F0F0F0"
               }
             },
-            "titleFontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "titleFontSize": 10.5,
-            "fontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
             "fontSize": 10.5,
             "labelColor": {
               "solid": {
@@ -152,7 +148,6 @@
         "title": [
           {
             "show": true,
-            "fontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "fontSize": 15,
             "titleWrap": true
           }
@@ -213,7 +208,7 @@
         "spacing": [
           {
             "spaceAboveSubtitle": 2,
-            "spaceAboveDivider": 4,
+            "spaceAboveDivider": 16,
             "spaceAbovePlotArea": 16,
             "verticalSpacing": 2,
             "customizeSpacing": true,
@@ -340,7 +335,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -500,7 +494,12 @@
         ],
         "slices": [
           {
-            "innerRadiusRatio": 70
+            "innerRadiusRatio": 80
+          }
+        ],
+        "centerValue": [
+          {
+            "show": true
           }
         ],
         "dataPoint": [
@@ -1403,7 +1402,6 @@
         "referenceLabelTitle": [
           {
             "$id": "default",
-            "titleFontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
             "titleFontSize": 10.5,
             "titleFontColor": {
               "solid": {
@@ -1427,7 +1425,6 @@
         "value": [
           {
             "$id": "default",
-            "fontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "textClass": "callout"
           }
         ],
@@ -1739,7 +1736,6 @@
         "value": [
           {
             "$id": "default",
-            "fontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "fontSize": 10.5,
             "horizontalAlignment": "center",
             "fontColor": {
@@ -1753,7 +1749,6 @@
           {
             "$id": "default",
             "fontSize": 8,
-            "fontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif",
             "fontColor": {
               "solid": {
                 "color": "foregroundNeutralSecondary"
@@ -1872,30 +1867,16 @@
         "value": [
           {
             "$id": "default",
-            "fontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "fontSize": 10.5,
             "horizontalAlignment": "center"
           },
           {
-            "$id": "interaction:rest",
-            "fontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif"
-          },
-          {
             "$id": "selection:selected",
-            "fontFamily": "'Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif",
             "fontColor": {
               "solid": {
                 "color": "foreground"
               }
             }
-          },
-          {
-            "$id": "interaction:hover",
-            "fontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif"
-          },
-          {
-            "$id": "interaction:press",
-            "fontFamily": "'Segoe UI', wf_segoe-ui_normal, helvetica, arial, sans-serif"
           }
         ],
         "label": [
@@ -1991,6 +1972,17 @@
             }
           }
         ],
+        "dropdown": [
+          {
+            "borderColor": {
+              "solid": {
+                "color": "backgroundLight"
+              }
+            },
+            "accentBarShow": true,
+            "borderRadius": 4
+          }
+        ],
         "date": [
           {
             "hideDatePickerButton": false
@@ -2037,6 +2029,58 @@
             "top": 0,
             "right": 0,
             "bottom": 0
+          }
+        ]
+      }
+    },
+    "textSlicer": {
+      "*": {
+        "inputText": [
+          {
+            "backShow": true,
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 2,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "backTransparency": 85,
+            "pillCornerRadius": 4,
+            "dismissSize": 10,
+            "dismissColor": {
+              "solid": {
+                "color": "foreground"
+              }
+            },
+            "paddingTop": 2,
+            "paddingBottom": 4,
+            "paddingLeft": 6,
+            "paddingRight": 6,
+            "borderShow": false,
+            "borderColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 2,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "borderWidth": 1
+          }
+        ],
+        "filterOperator": [
+          {
+            "backShow": false
           }
         ]
       }
@@ -2091,7 +2135,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2151,7 +2194,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2211,7 +2253,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2272,7 +2313,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2332,7 +2372,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2392,7 +2431,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2451,7 +2489,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2550,7 +2587,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2654,7 +2690,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2766,7 +2801,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2878,7 +2912,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -2937,7 +2970,6 @@
         ],
         "subheader": [
           {
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5
           }
         ],
@@ -3157,7 +3189,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3172,7 +3203,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "alignment": "center"
           },
@@ -3312,7 +3342,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3327,7 +3356,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "alignment": "center"
           },
@@ -3455,7 +3483,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3485,7 +3512,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3597,7 +3623,6 @@
           },
           {
             "$id": "default",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3612,7 +3637,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "horizontalAlignment": "left"
           },
@@ -3792,7 +3816,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3806,7 +3829,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "leftMargin": 12,
             "rightMargin": 12,
@@ -3928,7 +3950,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -3942,7 +3963,6 @@
           },
           {
             "$id": "hover",
-            "fontFamily": "Segoe UI",
             "fontColor": {
               "solid": {
                 "color": "foreground"
@@ -3951,7 +3971,6 @@
           },
           {
             "$id": "press",
-            "fontFamily": "Segoe UI",
             "fontColor": {
               "solid": {
                 "color": "foreground"
@@ -3960,7 +3979,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -4107,7 +4125,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -4121,7 +4138,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "leftMargin": 12,
             "rightMargin": 12,
@@ -4246,7 +4262,6 @@
         "text": [
           {
             "$id": "default",
-            "fontFamily": "Segoe UI",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
@@ -4260,7 +4275,6 @@
           },
           {
             "$id": "hover",
-            "fontFamily": "Segoe UI",
             "fontColor": {
               "solid": {
                 "color": "foreground"
@@ -4269,7 +4283,6 @@
           },
           {
             "$id": "press",
-            "fontFamily": "Segoe UI",
             "fontColor": {
               "solid": {
                 "color": "foreground"
@@ -4278,7 +4291,6 @@
           },
           {
             "$id": "selected",
-            "fontFamily": "Segoe UI Semibold",
             "fontSize": 10.5,
             "fontColor": {
               "solid": {
