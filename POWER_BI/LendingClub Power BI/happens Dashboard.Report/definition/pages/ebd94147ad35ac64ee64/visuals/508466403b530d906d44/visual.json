@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "80fba7c723c1a775027c",
+  "name": "508466403b530d906d44",
   "position": {
-    "x": 1331.3598777566363,
-    "y": 19.186100558122543,
-    "z": 1000,
+    "x": 408,
+    "y": 20,
+    "z": 3000,
     "height": 44,
     "width": 180,
-    "tabOrder": 1000
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "actionButton",
@@ -50,7 +50,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#2E75B6'"
+                      "Value": "'#548235'"
                     }
                   }
                 }
@@ -82,7 +82,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#245B8F'"
+                      "Value": "'#3F6329'"
                     }
                   }
                 }
@@ -153,7 +153,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Loan Overview'"
+                  "Value": "'Risk Analysis'"
                 }
               }
             },
@@ -213,7 +213,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Loan Overview'"
+                  "Value": "'Risk Analysis'"
                 }
               }
             },
@@ -284,7 +284,7 @@
             "navigationSection": {
               "expr": {
                 "Literal": {
-                  "Value": "'b24f1c87a81bd1e4e34f'"
+                  "Value": "'e278dc39340851372773'"
                 }
               }
             }

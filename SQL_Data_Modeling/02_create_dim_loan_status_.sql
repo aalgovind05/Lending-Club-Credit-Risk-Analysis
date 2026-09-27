@@ -17,7 +17,7 @@ SELECT
 FROM happen
 ORDER BY loan_status;
 
-SELECT * FROM dim_loan_status;
+SELECT loan_status FROM dim_loan_status;
 
 
 -- Add status key in main big table

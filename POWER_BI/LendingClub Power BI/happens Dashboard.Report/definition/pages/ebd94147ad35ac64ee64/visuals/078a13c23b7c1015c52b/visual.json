@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "15e3c0ef560c8581a4b5",
+  "name": "078a13c23b7c1015c52b",
   "position": {
-    "x": 408.14069353167446,
-    "y": 675.00191622546163,
-    "z": 7000,
+    "x": 305.912638173227,
+    "y": 471.43058732975561,
+    "z": 5000,
     "height": 404.65231153567726,
     "width": 851.16520702332116,
-    "tabOrder": 7000
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "lineStackedColumnComboChart",
@@ -441,6 +441,20 @@
               "expr": {
                 "Literal": {
                   "Value": "'Loan Issuance Trend'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
                 }
               }
             }

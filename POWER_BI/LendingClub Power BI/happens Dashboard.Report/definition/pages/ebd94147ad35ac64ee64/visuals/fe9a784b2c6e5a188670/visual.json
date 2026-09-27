@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "9b4c9383e3e719295000",
+  "name": "fe9a784b2c6e5a188670",
   "position": {
-    "x": 87.777777777777771,
-    "y": 874.44444444444446,
-    "z": 5000,
-    "height": 47.777777777777779,
-    "width": 237.77777777777777,
-    "tabOrder": 5000
+    "x": 24,
+    "y": 20,
+    "z": 1000,
+    "height": 44,
+    "width": 180,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "actionButton",
@@ -50,7 +50,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#2E75B6'"
+                      "Value": "'#1F4E79'"
                     }
                   }
                 }
@@ -82,7 +82,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#245B8F'"
+                      "Value": "'#163A5C'"
                     }
                   }
                 }
@@ -98,17 +98,6 @@
           },
           "selector": {
             "id": "hover"
-          }
-        },
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
           }
         }
       ],
@@ -164,7 +153,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Loan Overview'"
+                  "Value": "'Home'"
                 }
               }
             },
@@ -224,7 +213,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Loan Overview'"
+                  "Value": "'Home'"
                 }
               }
             },
@@ -295,7 +284,7 @@
             "navigationSection": {
               "expr": {
                 "Literal": {
-                  "Value": "'b24f1c87a81bd1e4e34f'"
+                  "Value": "'902acdd0d54763d93b12'"
                 }
               }
             }

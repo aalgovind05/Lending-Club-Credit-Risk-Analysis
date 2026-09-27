@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "fe97aca3b354e7b7270a",
+  "name": "d141336376aa71607426",
   "position": {
-    "x": 1101.9130434782608,
-    "y": 381.91304347826087,
-    "z": 8001,
-    "height": 398.60869565217388,
-    "width": 571.82608695652175,
-    "tabOrder": 8001
+    "x": 1186.049878639054,
+    "y": 554.65273736355766,
+    "z": 7000,
+    "height": 408.14069353167446,
+    "width": 732.56021915941574,
+    "tabOrder": 7000
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -31,9 +31,6 @@
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "isDefaultSort": true
       }
     },
     "visualContainerObjects": {
