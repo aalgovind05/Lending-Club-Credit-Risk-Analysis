@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "d141336376aa71607426",
+  "name": "06f03f23983a9282366b",
   "position": {
-    "x": 594.76913031752565,
+    "x": 0,
     "y": 556.39692836155621,
-    "z": 7000,
+    "z": 9000,
     "height": 491.86186143560769,
-    "width": 716.86250017742827,
-    "tabOrder": 7000
+    "width": 570.35045634554513,
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Loan Status Donut HTML"
+                  "Property": "Loan Overview Hero"
                 }
               },
-              "queryRef": "_Measures.Loan Status Donut HTML",
-              "nativeQueryRef": "Loan Status Donut HTML"
+              "queryRef": "_Measures.Loan Overview Hero",
+              "nativeQueryRef": "Loan Overview Hero"
             }
           ]
         }

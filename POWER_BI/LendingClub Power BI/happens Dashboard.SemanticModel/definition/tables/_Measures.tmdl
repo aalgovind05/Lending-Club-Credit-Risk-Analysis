@@ -166,7 +166,7 @@ table _Measures
 			    )
 			RETURN
 			IF(
-			    SelectedMonthCount <= 6,
+			    SelectedMonthCount <= 8,
 			    [Total Amount],
 			    0
 			)
@@ -184,7 +184,7 @@ table _Measures
 			    )
 			RETURN
 			IF(
-			    SelectedMonthCount > 6,
+			    SelectedMonthCount > 8,
 			    [Total Amount],
 			    BLANK()
 			)
@@ -232,21 +232,21 @@ table _Measures
 			  body { background:transparent; padding:8px; }
 			  .card { background:#fff; border:1px solid #eef0f4; border-radius:14px; padding:16px 18px; box-shadow:0 1px 3px rgba(16,24,40,.06); }
 			  .card-title { font-size:16px; font-weight:700; color:#1a1d29; }
-			  .card-sub { font-size:12px; color:#8a8f9c; margin-top:2px; margin-bottom:6px; }
+			  .card-sub { font-size:12px; color:#8a7a6e; margin-top:2px; margin-bottom:6px; }
 			  .donut-wrap svg { width:100%; height:auto; overflow:visible; }
 			  .seg { cursor:pointer; transition:filter .15s ease; transform-origin:120px 120px; }
-			  .seg:hover { filter:brightness(1.1) drop-shadow(0 0 3px rgba(0,0,0,.15)); }
-			  .center-value { font-size:26px; font-weight:800; fill:#1a1d29; font-family:'Segoe UI',Arial,sans-serif; }
-			  .center-label { font-size:10px; fill:#8a8f9c; font-family:'Segoe UI',Arial,sans-serif; letter-spacing:.3px; }
-			  .info-card { width:100%; height:100%; border-radius:12px; padding:12px 14px; color:#fff; display:flex; flex-direction:column; justify-content:center; gap:6px; }
+			  .seg:hover { filter:brightness(1.08) drop-shadow(0 0 3px rgba(0,0,0,.15)); }
+			  .center-value { font-size:26px; font-weight:800; fill:#3d2b22; font-family:'Segoe UI',Arial,sans-serif; }
+			  .center-label { font-size:10px; fill:#9c8672; font-family:'Segoe UI',Arial,sans-serif; letter-spacing:.3px; }
+			  .info-card { width:100%; height:100%; border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; justify-content:center; gap:6px; }
 			  .info-top { display:flex; align-items:center; gap:8px; }
-			  .info-icon { width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.22); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+			  .info-icon { width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 			  .info-icon svg { width:14px; height:14px; }
 			  .info-title { font-size:12px; font-weight:700; letter-spacing:.2px; }
 			  .info-count { font-size:15px; font-weight:800; margin-top:2px; }
 			  .info-desc { font-size:10.5px; line-height:1.45; opacity:.95; margin-top:2px; }
 			  .info { opacity:0; transition:opacity .18s ease; pointer-events:none; }
-			  .placeholder-card { display:flex; align-items:center; justify-content:center; text-align:center; font-size:11.5px; color:#9aa0ac; padding:14px; background:#f7f8fa; border-radius:12px; height:100%; }
+			  .placeholder-card { display:flex; align-items:center; justify-content:center; text-align:center; font-size:11.5px; color:#a3968a; padding:14px; background:#faf7f4; border-radius:12px; height:100%; }
 			  .fp:hover ~ .info-fp,
 			  .cur:hover ~ .info-cur,
 			  .co:hover ~ .info-co,
@@ -265,38 +265,38 @@ table _Measures
 			  <div class='donut-wrap'>
 			  <svg viewBox='0 0 480 240' xmlns='http://www.w3.org/2000/svg'>
 			
-			    <path class='seg fp' fill='#4CC9BE' d='M138.86,212.92 A95,95 0 0 0 120,25 L120,62 A58,58 0 0 1 131.51,176.73 Z'></path>
-			    <path class='seg cur' fill='#F2B84B' d='M43.40,64.41 A95,95 0 0 0 138.86,212.92 L131.51,176.73 A58,58 0 0 1 73.23,86.06 Z'></path>
-			    <path class='seg co' fill='#E6483E' d='M100.31,27.30 A95,95 0 0 0 43.40,64.41 L73.23,86.06 A58,58 0 0 1 107.98,63.40 Z'></path>
-			    <path class='seg late1' fill='#D9463D' d='M103.51,26.44 A95,95 0 0 0 100.31,27.30 L107.98,63.40 A58,58 0 0 1 109.93,62.88 Z'></path>
-			    <path class='seg grace' fill='#F5CD7A' d='M106.80,26.16 A95,95 0 0 0 103.51,26.44 L109.93,62.88 A58,58 0 0 1 111.94,62.71 Z'></path>
-			    <path class='seg late2' fill='#C23B33' d='M110.10,25.86 A95,95 0 0 0 106.80,26.16 L111.94,62.71 A58,58 0 0 1 113.96,62.53 Z'></path>
-			    <path class='seg ncpfp' fill='#8FE0D8' d='M113.41,25.58 A95,95 0 0 0 110.10,25.86 L113.96,62.53 A58,58 0 0 1 115.98,62.35 Z'></path>
-			    <path class='seg ncpco' fill='#A32E27' d='M116.70,25.28 A95,95 0 0 0 113.41,25.58 L115.98,62.35 A58,58 0 0 1 117.99,62.17 Z'></path>
-			    <path class='seg def' fill='#7A211B' d='M120,25 A95,95 0 0 0 116.70,25.28 L117.99,62.17 A58,58 0 0 1 120,62 Z'></path>
+			    <path class='seg fp' fill='#C99A5B' d='M138.86,212.92 A95,95 0 0 0 120,25 L120,62 A58,58 0 0 1 131.51,176.73 Z'></path>
+			    <path class='seg cur' fill='#7A5240' d='M43.40,64.41 A95,95 0 0 0 138.86,212.92 L131.51,176.73 A58,58 0 0 1 73.23,86.06 Z'></path>
+			    <path class='seg co' fill='#A8362A' d='M100.31,27.30 A95,95 0 0 0 43.40,64.41 L73.23,86.06 A58,58 0 0 1 107.98,63.40 Z'></path>
+			    <path class='seg late1' fill='#C15A3E' d='M103.51,26.44 A95,95 0 0 0 100.31,27.30 L107.98,63.40 A58,58 0 0 1 109.93,62.88 Z'></path>
+			    <path class='seg grace' fill='#E8B4A0' d='M106.80,26.16 A95,95 0 0 0 103.51,26.44 L109.93,62.88 A58,58 0 0 1 111.94,62.71 Z'></path>
+			    <path class='seg late2' fill='#D98F73' d='M110.10,25.86 A95,95 0 0 0 106.80,26.16 L111.94,62.71 A58,58 0 0 1 113.96,62.53 Z'></path>
+			    <path class='seg ncpfp' fill='#E3C79A' d='M113.41,25.58 A95,95 0 0 0 110.10,25.86 L113.96,62.53 A58,58 0 0 1 115.98,62.35 Z'></path>
+			    <path class='seg ncpco' fill='#8B2A20' d='M116.70,25.28 A95,95 0 0 0 113.41,25.58 L115.98,62.35 A58,58 0 0 1 117.99,62.17 Z'></path>
+			    <path class='seg def' fill='#5C1B14' d='M120,25 A95,95 0 0 0 116.70,25.28 L117.99,62.17 A58,58 0 0 1 120,62 Z'></path>
 			
 			    <text x='120' y='116' text-anchor='middle' class='center-value'>" & _totalF & "</text>
 			    <text x='120' y='134' text-anchor='middle' class='center-label'>TOTAL LOANS</text>
 			
 			    <foreignObject class='placeholder' x='250' y='60' width='215' height='110'><div xmlns='http://www.w3.org/1999/xhtml' class='placeholder-card'>Hover a slice on the donut to see details for that loan status</div></foreignObject>
 			
-			    <foreignObject class='info info-fp' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#4CC9BE,#2f9c92)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M8 12.5l2.5 2.5L16 9'></path></svg></div><div class='info-title'>Fully Paid</div></div><div class='info-count'>" & _fpF & "</div><div class='info-desc'>Loan repaid in full &mdash; the healthiest outcome in the portfolio.</div></div></foreignObject>
+			    <foreignObject class='info info-fp' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#C99A5B,#a67c42); color:#3a2c17'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#3a2c17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M8 12.5l2.5 2.5L16 9'></path></svg></div><div class='info-title'>Fully Paid</div></div><div class='info-count'>" & _fpF & "</div><div class='info-desc'>Loan repaid in full &mdash; the healthiest outcome in the portfolio.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-cur' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#F2B84B,#c9922e)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M12 7v5l3.5 2'></path></svg></div><div class='info-title'>Current</div></div><div class='info-count'>" & _curF & "</div><div class='info-desc'>Actively being repaid on schedule; no missed payments yet.</div></div></foreignObject>
+			    <foreignObject class='info info-cur' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#7A5240,#5c3c2d); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M12 7v5l3.5 2'></path></svg></div><div class='info-title'>Current</div></div><div class='info-count'>" & _curF & "</div><div class='info-desc'>Actively being repaid on schedule; no missed payments yet.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-co' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#E6483E,#a8281f)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M9 9l6 6M15 9l-6 6'></path></svg></div><div class='info-title'>Charged Off</div></div><div class='info-count'>" & _coF & "</div><div class='info-desc'>Written off as a loss after prolonged non-payment &mdash; the core default outcome.</div></div></foreignObject>
+			    <foreignObject class='info info-co' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#A8362A,#7a231b); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M9 9l6 6M15 9l-6 6'></path></svg></div><div class='info-title'>Charged Off</div></div><div class='info-count'>" & _coF & "</div><div class='info-desc'>Written off as a loss after prolonged non-payment &mdash; the core default outcome.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-late1' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#D9463D,#9c2c25)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 20h20L12 3z'></path><line x1='12' y1='10' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.7' fill='#fff'></circle></svg></div><div class='info-title'>Late (31-120 days)</div></div><div class='info-count'>" & _late1F & "</div><div class='info-desc'>Seriously delinquent; high risk of rolling into Charged Off.</div></div></foreignObject>
+			    <foreignObject class='info info-late1' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#C15A3E,#93402c); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 20h20L12 3z'></path><line x1='12' y1='10' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.7' fill='#fdf3ea'></circle></svg></div><div class='info-title'>Late (31-120 days)</div></div><div class='info-count'>" & _late1F & "</div><div class='info-desc'>Seriously delinquent; high risk of rolling into Charged Off.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-grace' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#F5CD7A,#d4a445); color:#4a3a12'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.12)'><svg viewBox='0 0 24 24' fill='none' stroke='#4a3a12' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9'></path></svg></div><div class='info-title'>In Grace Period</div></div><div class='info-count'>" & _graceF & "</div><div class='info-desc' style='opacity:.85'>Payment just missed its due date; early-stage flag, not yet a loss.</div></div></foreignObject>
+			    <foreignObject class='info info-grace' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#E8B4A0,#cf8f77); color:#4a2b1f'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.1)'><svg viewBox='0 0 24 24' fill='none' stroke='#4a2b1f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9'></path></svg></div><div class='info-title'>In Grace Period</div></div><div class='info-count'>" & _graceF & "</div><div class='info-desc' style='opacity:.85'>Payment just missed its due date; early-stage flag, not yet a loss.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-late2' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#C23B33,#8c2721)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 20h20L12 3z'></path><line x1='12' y1='10' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.7' fill='#fff'></circle></svg></div><div class='info-title'>Late (16-30 days)</div></div><div class='info-count'>" & _late2F & "</div><div class='info-desc'>Early delinquency stage; still recoverable but worth watching.</div></div></foreignObject>
+			    <foreignObject class='info info-late2' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#D98F73,#b66a4f); color:#3d241a'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.1)'><svg viewBox='0 0 24 24' fill='none' stroke='#3d241a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 20h20L12 3z'></path><line x1='12' y1='10' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.7' fill='#3d241a'></circle></svg></div><div class='info-title'>Late (16-30 days)</div></div><div class='info-count'>" & _late2F & "</div><div class='info-desc'>Early delinquency stage; still recoverable but worth watching.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-ncpfp' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#8FE0D8,#4fb3a8)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M8 12.5l2.5 2.5L16 9'></path></svg></div><div class='info-title'>NCP Fully Paid</div></div><div class='info-count'>" & _ncpfpF & "</div><div class='info-desc'>Fully repaid loan outside the standard consumer program track.</div></div></foreignObject>
+			    <foreignObject class='info info-ncpfp' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#E3C79A,#c7a06a); color:#4a3a1f'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.1)'><svg viewBox='0 0 24 24' fill='none' stroke='#4a3a1f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M8 12.5l2.5 2.5L16 9'></path></svg></div><div class='info-title'>NCP Fully Paid</div></div><div class='info-count'>" & _ncpfpF & "</div><div class='info-desc'>Fully repaid loan outside the standard consumer program track.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-ncpco' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#A32E27,#711f1a)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M9 9l6 6M15 9l-6 6'></path></svg></div><div class='info-title'>NCP Charged Off</div></div><div class='info-count'>" & _ncpcoF & "</div><div class='info-desc'>Written off as a loss outside the standard consumer program track.</div></div></foreignObject>
+			    <foreignObject class='info info-ncpco' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#8B2A20,#5c1b14); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M9 9l6 6M15 9l-6 6'></path></svg></div><div class='info-title'>NCP Charged Off</div></div><div class='info-count'>" & _ncpcoF & "</div><div class='info-desc'>Written off as a loss outside the standard consumer program track.</div></div></foreignObject>
 			
-			    <foreignObject class='info info-def' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#7A211B,#4d1512)'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='7.5,2 16.5,2 22,7.5 22,16.5 16.5,22 7.5,22 2,16.5 2,7.5'></polygon><line x1='12' y1='8' x2='12' y2='13'></line><circle cx='12' cy='16' r='0.7' fill='#fff'></circle></svg></div><div class='info-title'>Default</div></div><div class='info-count'>" & _defF & "</div><div class='info-desc'>Formally defaulted &mdash; the most severe non-payment outcome.</div></div></foreignObject>
+			    <foreignObject class='info info-def' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#5C1B14,#3a100b); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='7.5,2 16.5,2 22,7.5 22,16.5 16.5,22 7.5,22 2,16.5 2,7.5'></polygon><line x1='12' y1='8' x2='12' y2='13'></line><circle cx='12' cy='16' r='0.7' fill='#fdf3ea'></circle></svg></div><div class='info-title'>Default</div></div><div class='info-count'>" & _defF & "</div><div class='info-desc'>Formally defaulted &mdash; the most severe non-payment outcome.</div></div></foreignObject>
 			
 			  </svg>
 			  </div>
@@ -305,6 +305,57 @@ table _Measures
 			RETURN _html
 		displayFolder: HTML Visuals
 		lineageTag: ace839df-2de1-4b54-a91e-928e9a290299
+
+	/// Loan Overview hero banner: handshake photo (hosted URL) with coffee-brown gradient overlay, fade-in/drift animation, and a hover-reveal panel with deeper portfolio-health insight. Live stats from fact_loan. For the HTML Content visual on the Loan Overview page.
+	measure 'Loan Overview Hero' =
+			VAR _totalB    = "$" & FORMAT(DIVIDE([Total Amount],1000000000),"0.0") & "B"
+			VAR _loansF    = FORMAT([Total Loan],"#,##0")
+			VAR _avgF      = "$" & FORMAT(DIVIDE([Total Amount],[Total Loan]),"#,##0")
+			VAR _fpRateF   = FORMAT(DIVIDE(CALCULATE([Total Loan], dim_loan_status[loan_status]="Fully Paid"),[Total Loan]),"0.0%")
+			VAR _coRateF   = FORMAT(DIVIDE(CALCULATE([Total Loan], dim_loan_status[loan_status]="Charged Off"),[Total Loan]),"0.0%")
+			VAR _bcShareF  = FORMAT(DIVIDE(CALCULATE([Total Loan], dim_grade[grade] IN {"B","C"}),[Total Loan]),"0.0%")
+			VAR _img       = "https://i.postimg.cc/j57KFZTw/pexels-pavel-danilyuk-8112186.jpg"
+			VAR _html =
+			"<div style='font-family:Jost,system-ui,sans-serif;border-radius:16px;position:relative;overflow:hidden;height:100vh;width:100%;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  @keyframes imgIn{ 0%{opacity:0} 100%{opacity:1} }
+			  @keyframes imgDrift{ 0%{transform:translateX(0)} 100%{transform:translateX(-3%)} }
+			  .bg-img{ position:absolute; top:0; left:0; width:106%; height:100%; object-fit:cover; opacity:0; animation:imgIn 1.5s ease .3s forwards, imgDrift 25s ease-in-out 1s infinite alternate; border-radius:16px }
+			  .ve-wrap{ position:relative; width:100%; height:100%; overflow:hidden; transition:box-shadow .3s ease }
+			  .ve-wrap:hover{ box-shadow:0 0 0 1px rgba(201,142,58,.2) }
+			  .ve-over{ position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg,#4a2f24,#7a5240); color:white; padding:24px; opacity:0; transition:opacity .35s ease; display:flex; flex-direction:column; justify-content:center; box-sizing:border-box; pointer-events:none }
+			  .ve-wrap:hover .ve-over{ opacity:1; pointer-events:auto }
+			</style>
+			<div class='ve-wrap'>
+			  <div style='position:relative;height:100%;'>
+			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:#4a2f24;'></div>
+			    <img class='bg-img' style='object-position:50% 40%;' src='" & _img & "' />
+			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,rgba(74,47,36,.9) 0%,rgba(74,47,36,.6) 40%,rgba(74,47,36,.15) 100%);'></div>
+			    <div style='position:relative;padding:24px;display:flex;flex-direction:column;justify-content:center;height:100%;box-sizing:border-box;gap:12px;'>
+			      <div style='display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:999px;width:fit-content;'>
+			        <svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='#f0c49b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 13l1.5 1.5L17 10'></path><path d='M3 12l3-3a2 2 0 0 1 2.5-.2L11 10l2-2 2.5 2.5a1.5 1.5 0 0 1 0 2.1L13 15'></path></svg>
+			        <span style='font-size:10px;font-weight:500;letter-spacing:2px;color:#f0c49b;'>PORTFOLIO</span>
+			      </div>
+			      <div style='font-size:28px;font-weight:700;color:#fdf3ea;line-height:1.1;font-family:Cormorant Garamond,Georgia,serif;'>Loan Portfolio<br>at Scale</div>
+			      <div style='font-size:12px;font-weight:400;color:rgba(255,255,255,.88);'>Every closed loan starts with a deal like this one</div>
+			      <div style='font-size:32px;font-weight:300;color:#fdf3ea;line-height:1;letter-spacing:-1px;'>" & _totalB & "</div>
+			      <div style='font-size:11px;font-weight:300;color:#e6d8c8;line-height:1.5;max-width:65%;'>Funded across " & _loansF & " loans since 2007, averaging " & _avgF & " each.</div>
+			    </div>
+			  </div>
+			  <div class='ve-over'>
+			    <div style='display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:999px;margin-bottom:12px;width:fit-content;'>
+			      <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,.9)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'></path></svg>
+			      <span style='font-size:10px;font-weight:500;letter-spacing:2px;color:#f0c49b;'>PORTFOLIO HEALTH</span>
+			    </div>
+			    <div style='font-size:13px;font-weight:300;line-height:1.7;color:rgba(255,255,255,.92);max-width:85%;'>Scale alone does not equal quality. <b>" & _fpRateF & "</b> of all loans have already been repaid in full, while <b>" & _coRateF & "</b> were charged off as losses. Grades B and C alone account for <b>" & _bcShareF & "</b> of total volume &mdash; the portfolio's performance rests on mid-tier borrowers, not its edges.</div>
+			    <div style='margin-top:16px;height:2px;width:60px;border-radius:999px;background:linear-gradient(90deg,#f0c49b,#7a5240,transparent);'></div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 2b406a74-f538-4e7e-b783-19974fbfe60a
 
 	column Column
 		formatString: 0
