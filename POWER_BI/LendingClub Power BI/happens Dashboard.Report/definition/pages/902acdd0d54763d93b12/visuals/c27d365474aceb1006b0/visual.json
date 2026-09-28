@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "006112234b1e203e17d7",
+  "name": "c27d365474aceb1006b0",
   "position": {
-    "x": 600,
-    "y": 20,
-    "z": 0,
-    "height": 44,
-    "width": 180,
-    "tabOrder": 3000
+    "x": 85.565217391304344,
+    "y": 874.43478260869563,
+    "z": 4001,
+    "height": 54.260869565217391,
+    "width": 242.08695652173913,
+    "tabOrder": 3001
   },
   "visual": {
     "visualType": "actionButton",
@@ -50,7 +50,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#7F6000'"
+                      "Value": "'#2E75B6'"
                     }
                   }
                 }
@@ -82,7 +82,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#604800'"
+                      "Value": "'#245B8F'"
                     }
                   }
                 }
@@ -98,6 +98,17 @@
           },
           "selector": {
             "id": "hover"
+          }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ],
@@ -138,6 +149,17 @@
           "selector": {
             "id": "default"
           }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
         }
       ],
       "text": [
@@ -153,7 +175,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Borrower Profile'"
+                  "Value": "'Loan Overview'"
                 }
               }
             },
@@ -213,7 +235,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Borrower Profile'"
+                  "Value": "'Loan Overview'"
                 }
               }
             },
@@ -284,7 +306,7 @@
             "navigationSection": {
               "expr": {
                 "Literal": {
-                  "Value": "'1b32e8be43ee4c2a4bec'"
+                  "Value": "'ebd94147ad35ac64ee64'"
                 }
               }
             }

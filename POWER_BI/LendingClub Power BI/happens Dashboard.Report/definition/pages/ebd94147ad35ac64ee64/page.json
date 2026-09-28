@@ -25,14 +25,23 @@
               "name": {
                 "expr": {
                   "Literal": {
-                    "Value": "''"
+                    "Value": "'Editable blank frame.svg'"
                   }
                 }
               },
               "url": {
                 "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "Editable_blank_frame9155481247086097.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
                   "Literal": {
-                    "Value": "''"
+                    "Value": "'Fill'"
                   }
                 }
               }
