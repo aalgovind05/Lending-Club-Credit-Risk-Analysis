@@ -4,5 +4,41 @@
   "displayName": "Loan Overview",
   "displayOption": "FitToPage",
   "height": 1080,
-  "width": 1920
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F6F1EB'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "06f03f23983a9282366b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "d141336376aa71607426",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "188580b6313c2cc027c5",
+      "type": "NoFilter"
+    }
+  ]
 }

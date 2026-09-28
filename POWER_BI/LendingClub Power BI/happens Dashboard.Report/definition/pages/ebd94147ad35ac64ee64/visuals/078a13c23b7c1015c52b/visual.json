@@ -3,11 +3,11 @@
   "name": "078a13c23b7c1015c52b",
   "position": {
     "x": 34.457096876447785,
-    "y": 205.24444661188463,
-    "z": 5000,
-    "height": 334.08402623686328,
+    "y": 268.1661017775719,
+    "z": 1000,
+    "height": 262.17356319036355,
     "width": 1276.41071907537,
-    "tabOrder": 5000
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "lineStackedColumnComboChart",
@@ -524,8 +524,9 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "Literal": {
-                      "Value": "'#7A5240'"
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
                     }
                   }
                 }
@@ -534,7 +535,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             }

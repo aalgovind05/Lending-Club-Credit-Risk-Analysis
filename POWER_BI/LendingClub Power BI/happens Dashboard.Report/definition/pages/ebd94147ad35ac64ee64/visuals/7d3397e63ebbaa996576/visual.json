@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "7d3397e63ebbaa996576",
   "position": {
-    "x": 490,
-    "y": 216.66666666666669,
-    "z": 6000,
-    "height": 83.75,
-    "width": 211.25,
-    "tabOrder": 6000
+    "x": 594.75945478042479,
+    "y": 283.14744824559267,
+    "z": 2000,
+    "height": 85.393674867718417,
+    "width": 211.23698519909294,
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "slicer",
@@ -27,8 +27,9 @@
                 }
               },
               "queryRef": "dim_date.year",
-              "nativeQueryRef": "year",
-              "active": true
+              "nativeQueryRef": "Loan year",
+              "active": true,
+              "displayName": "Loan year"
             }
           ]
         }
@@ -38,13 +39,6 @@
       "data": [
         {
           "properties": {
-            "numericStart": {
-              "expr": {
-                "Literal": {
-                  "Value": "2011D"
-                }
-              }
-            },
             "mode": {
               "expr": {
                 "Literal": {
@@ -57,41 +51,53 @@
       ],
       "general": [
         {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
           "properties": {
-            "filter": {
-              "filter": {
-                "Version": 2,
-                "From": [
-                  {
-                    "Name": "d",
-                    "Entity": "dim_date",
-                    "Type": 0
-                  }
-                ],
-                "Where": [
-                  {
-                    "Condition": {
-                      "Comparison": {
-                        "ComparisonKind": 2,
-                        "Left": {
-                          "Column": {
-                            "Expression": {
-                              "SourceRef": {
-                                "Source": "d"
-                              }
-                            },
-                            "Property": "year"
-                          }
-                        },
-                        "Right": {
-                          "Literal": {
-                            "Value": "2011D"
-                          }
-                        }
-                      }
-                    }
-                  }
-                ]
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Loans year'"
+                }
+              }
+            },
+            "heading": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Heading2'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
               }
             }
           }

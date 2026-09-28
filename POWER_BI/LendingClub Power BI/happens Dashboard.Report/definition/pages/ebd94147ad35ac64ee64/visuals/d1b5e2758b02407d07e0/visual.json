@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "d141336376aa71607426",
+  "name": "d1b5e2758b02407d07e0",
   "position": {
-    "x": 617.231474482456,
-    "y": 540.82660749555,
-    "z": 3000,
-    "height": 468.91614444905025,
-    "width": 695.134476116164,
-    "tabOrder": 3000
+    "x": 35.478260869565219,
+    "y": 0,
+    "z": 8001,
+    "height": 112.69565217391303,
+    "width": 1855.304347826087,
+    "tabOrder": 8001
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Loan Status Donut HTML"
+                  "Property": "Page Title HTML"
                 }
               },
-              "queryRef": "_Measures.Loan Status Donut HTML",
-              "nativeQueryRef": "Loan Status Donut HTML"
+              "queryRef": "_Measures.Page Title HTML",
+              "nativeQueryRef": "Page Title HTML"
             }
           ]
         }
@@ -35,6 +35,19 @@
     },
     "visualContainerObjects": {
       "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
         {
           "properties": {
             "show": {
