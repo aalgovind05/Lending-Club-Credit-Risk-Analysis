@@ -111,7 +111,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "0L"
+                  "Value": "100D"
                 }
               }
             }

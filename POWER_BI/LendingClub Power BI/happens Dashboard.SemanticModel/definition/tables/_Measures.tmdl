@@ -367,41 +367,6 @@ table _Measures
 		displayFolder: HTML Visuals
 		lineageTag: 2b406a74-f538-4e7e-b783-19974fbfe60a
 
-	/// Page header frame for the Loan Overview page (HTML Content visual): dark brown band with copper accent icon and line, page title, subtitle, and a period chip that follows the year slicer. Leaves room on the right for native filter and navigation buttons.
-	measure 'Report Header HTML' =
-			VAR _y1 = MIN(dim_date[year])
-			VAR _y2 = MAX(dim_date[year])
-			VAR _period = IF(_y1 = _y2, FORMAT(_y1,"0"), FORMAT(_y1,"0") & " &ndash; " & FORMAT(_y2,"0"))
-			VAR _html =
-			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:14px;'>
-			<style>
-			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
-			  .hd{ position:relative; height:100%; width:100%; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; padding:0 76px 0 20px; background:linear-gradient(90deg,#3b241b 0%,#4a2f24 55%,#6a4636 100%); border-radius:14px }
-			  .hd:after{ content:''; position:absolute; left:0; right:0; bottom:0; height:4px; background:linear-gradient(90deg,#d9772b 0%,#d9772b 30%,rgba(217,119,43,0) 100%) }
-			  .left{ display:flex; align-items:center; gap:14px }
-			  .mark{ width:42px; height:42px; border-radius:12px; background:#d9772b; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.3) }
-			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:28px; font-weight:700; color:#ffffff; line-height:1.05; text-shadow:0 1px 3px rgba(0,0,0,.35) }
-			  .sub{ font-size:13px; font-weight:400; color:#f3e3d3; margin-top:3px; letter-spacing:.3px }
-			  .chip{ display:inline-flex; align-items:center; gap:8px; border:1px solid #d9772b; background:rgba(217,119,43,.2); padding:6px 14px; border-radius:999px; color:#ffffff; font-size:13px; font-weight:500; letter-spacing:.4px }
-			  .dot{ width:8px; height:8px; border-radius:50%; background:#d9772b }
-			</style>
-			<div class='hd'>
-			  <div class='left'>
-			    <div class='mark'>
-			      <svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><line x1='6' y1='20' x2='6' y2='12'></line><line x1='12' y1='20' x2='12' y2='5'></line><line x1='18' y1='20' x2='18' y2='9'></line></svg>
-			    </div>
-			    <div>
-			      <div class='ttl'>Loan Portfolio Overview</div>
-			      <div class='sub'>Happen Bank risk analysis</div>
-			    </div>
-			  </div>
-			  <div class='chip'><span class='dot'></span>Showing " & _period & "</div>
-			</div>
-			</div>"
-			RETURN _html
-		displayFolder: HTML Visuals
-		lineageTag: 1600937e-eb87-4dd3-9c4a-916ba816ef71
-
 	/// Page title block for the Loan Overview page (HTML Content visual): large serif title, dot-separated subtitle, copper gradient rule, and a small period label that follows the year slicer. Transparent background so it sits on the page colour.
 	measure 'Page Title HTML' =
 			VAR _y1 = MIN(dim_date[year])
