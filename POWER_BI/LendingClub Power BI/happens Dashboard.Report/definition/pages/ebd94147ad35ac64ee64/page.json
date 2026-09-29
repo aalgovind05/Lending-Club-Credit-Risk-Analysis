@@ -19,33 +19,6 @@
                 }
               }
             }
-          },
-          "image": {
-            "image": {
-              "name": {
-                "expr": {
-                  "Literal": {
-                    "Value": "'Editable blank frame (2).svg'"
-                  }
-                }
-              },
-              "url": {
-                "expr": {
-                  "ResourcePackageItem": {
-                    "PackageName": "RegisteredResources",
-                    "PackageType": 1,
-                    "ItemName": "Editable_blank_frame_(2)12929611508576377.svg"
-                  }
-                }
-              },
-              "scaling": {
-                "expr": {
-                  "Literal": {
-                    "Value": "'Fill'"
-                  }
-                }
-              }
-            }
           }
         }
       }
