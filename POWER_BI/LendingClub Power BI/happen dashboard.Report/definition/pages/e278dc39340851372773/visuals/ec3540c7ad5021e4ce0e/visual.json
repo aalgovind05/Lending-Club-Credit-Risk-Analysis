@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "ec3540c7ad5021e4ce0e",
   "position": {
-    "x": 1493.0274942868091,
-    "y": 580.81560233353673,
-    "z": 2,
-    "height": 430.81517650565638,
-    "width": 427.32679450965918,
-    "tabOrder": 2
+    "x": 16,
+    "y": 86,
+    "z": 1000,
+    "height": 140,
+    "width": 650,
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -27,17 +27,41 @@
                 }
               },
               "queryRef": "_Measures.Risk Hero HTML",
-              "nativeQueryRef": "Risk Hero HTML"
+              "nativeQueryRef": "Risk Hero HTML",
+              "active": true
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "isDefaultSort": true
       }
     },
     "visualContainerObjects": {
       "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
         {
           "properties": {
             "show": {

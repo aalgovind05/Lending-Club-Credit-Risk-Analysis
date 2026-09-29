@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "d64a3bf17a6405236361",
   "position": {
-    "x": 10.486942527614543,
-    "y": 425.47023969179,
-    "z": 4,
-    "height": 459.92733656823782,
-    "width": 933.33788495769431,
-    "tabOrder": 4
+    "x": 15.69771898198748,
+    "y": 137.79108884189009,
+    "z": 1200,
+    "height": 275.58217768378017,
+    "width": 1888.9588508324935,
+    "tabOrder": 1200
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "_Measures.Risk Trend Multi HTML",
-              "nativeQueryRef": "Risk Trend Multi HTML"
+              "nativeQueryRef": "Risk Trend Multi HTML",
+              "active": true
             }
           ]
         }
@@ -35,6 +36,32 @@
     },
     "visualContainerObjects": {
       "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
         {
           "properties": {
             "show": {
