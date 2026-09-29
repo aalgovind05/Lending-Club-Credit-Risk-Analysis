@@ -57,6 +57,13 @@
       "categoryAxis": [
         {
           "properties": {
+            "axisType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Categorical'"
+                }
+              }
+            },
             "show": {
               "expr": {
                 "Literal": {

@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "c4d5e6f708192a3b4c5d",
   "position": {
-    "x": 1257.5617095569969,
-    "y": 540.69920937956874,
+    "x": 952.32828490724046,
+    "y": 558.14111935955486,
     "z": 1400,
     "height": 401.16392953968005,
     "width": 636.62971426949218,
@@ -164,7 +164,8 @@
             "fillRule": {
               "linearGradient2": {
                 "min": {},
-                "max": {}
+                "max": {},
+                "nullColoringStrategy": {}
               }
             }
           }

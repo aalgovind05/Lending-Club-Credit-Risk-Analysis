@@ -449,54 +449,73 @@ table _Measures
 		displayFolder: HTML Visuals
 		lineageTag: 1483998c-a949-421a-bcee-cc2975e1167a
 
-	/// Risk Analysis hero card (HTML Content visual): refined dark charcoal card with a single red accent stripe and a red Default Rate number — not a full red background. Hover reveals the worst grade and worst term to explain why. Same hover interaction pattern as the Overview page hero.
+	/// Risk Analysis hero card (HTML Content visual): full-bleed photo (financial paperwork, desk lamp) with a dark red-brown wash overlay, tag, big headline, live default-rate stat and multiple vs Grade A, explanatory paragraph. Hover reveals worst-term and safe-grade comparison as a bonus layer.
 	measure 'Risk Hero HTML' =
 			VAR _default = FORMAT([AVG Default Rate],"0.0%")
 			
 			VAR _worstGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Default Rate], DESC)
 			VAR _worstGrade  = MAXX(_worstGradeT, dim_grade[grade])
-			VAR _worstGradeR = FORMAT(CALCULATE([AVG Default Rate], dim_grade[grade] = _worstGrade), "0.0%")
+			VAR _worstGradeVal = CALCULATE([AVG Default Rate], dim_grade[grade] = _worstGrade)
+			VAR _worstGradeR = FORMAT(_worstGradeVal, "0.0%")
+			
+			VAR _bestGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Default Rate], ASC)
+			VAR _bestGrade  = MAXX(_bestGradeT, dim_grade[grade])
+			VAR _bestGradeVal = CALCULATE([AVG Default Rate], dim_grade[grade] = _bestGrade)
+			VAR _bestGradeR = FORMAT(_bestGradeVal, "0.0%")
+			
+			VAR _multiple = FORMAT(DIVIDE(_worstGradeVal, _bestGradeVal), "0.0") & "x"
 			
 			VAR _worstTermT = TOPN(1, VALUES(fact_loan[term_months]), [AVG Default Rate], DESC)
 			VAR _worstTerm  = MAXX(_worstTermT, fact_loan[term_months])
 			VAR _worstTermR = FORMAT(CALCULATE([AVG Default Rate], fact_loan[term_months] = _worstTerm), "0.0%")
 			
-			VAR _bestGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Default Rate], ASC)
-			VAR _bestGrade  = MAXX(_bestGradeT, dim_grade[grade])
-			VAR _bestGradeR = FORMAT(CALCULATE([AVG Default Rate], dim_grade[grade] = _bestGrade), "0.0%")
+			VAR _img = "https://i.ibb.co/Gh39KxV/pexels-bia-limova-1908542654-33175673.jpg"
 			
 			VAR _html =
 			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:14px;cursor:pointer;'>
 			<style>
 			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
-			  .ve-wrap{ position:relative; width:100%; height:100%; }
-			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; background:linear-gradient(155deg,#241A16 0%,#2E211C 60%,#3A2A22 100%); display:flex; flex-direction:column; justify-content:center; padding:20px 22px 20px 26px; border-left:4px solid #D9432F; }
-			  .tag{ display:inline-flex; align-items:center; gap:7px; background:rgba(217,67,47,.14); padding:4px 10px; border-radius:999px; width:fit-content; margin-bottom:12px; }
+			  @keyframes imgIn{ 0%{opacity:0} 100%{opacity:1} }
+			  @keyframes imgDrift{ 0%{transform:scale(1.04) translateX(0)} 100%{transform:scale(1.04) translateX(-2%)} }
+			  .bg-img{ position:absolute; top:0; left:0; width:106%; height:100%; object-fit:cover; object-position:50% 35%; opacity:0; animation:imgIn 1.2s ease .2s forwards, imgDrift 26s ease-in-out 1s infinite alternate; }
+			  .ve-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:14px; }
+			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; }
+			  .overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(155deg,rgba(36,20,17,.55) 0%,rgba(30,16,14,.72) 45%,rgba(18,9,8,.9) 100%); }
+			  .content{ position:relative; z-index:1; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; height:100%; box-sizing:border-box; gap:6px; }
+			  .tag{ display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.14); padding:4px 11px; border-radius:999px; width:fit-content; }
 			  .dot{ width:6px; height:6px; border-radius:50%; background:#D9432F; }
-			  .tagtxt{ font-size:10.5px; font-weight:600; letter-spacing:1.3px; color:#f0a99e; }
-			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:52px; font-weight:700; color:#D9432F; line-height:1; }
-			  .cap{ font-size:13px; font-weight:400; color:#c9beb5; margin-top:7px; line-height:1.4; }
-			  .hint{ font-size:11px; color:#8a7c72; margin-top:14px; }
-			  .panel{ position:absolute; inset:0; background:linear-gradient(155deg,#1e1613,#2a1e19); color:#fff; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; gap:10px; opacity:0; transition:opacity .35s ease; pointer-events:none; border-left:4px solid #D9432F; box-sizing:border-box; }
+			  .tagtxt{ font-size:10.5px; font-weight:600; letter-spacing:1.5px; color:#f0a99e; }
+			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:25px; font-weight:700; color:#ffffff; line-height:1.08; text-shadow:0 1px 4px rgba(0,0,0,.4); margin-top:6px; }
+			  .subline{ font-size:12.5px; font-weight:400; color:#e6d3cc; margin-top:3px; }
+			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:44px; font-weight:700; color:#ffffff; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,.45); margin-top:6px; }
+			  .para{ font-size:12px; font-weight:300; color:#e6d8d2; line-height:1.5; margin-top:6px; max-width:96%; }
+			  .hint{ font-size:10.5px; color:#c9beb5; margin-top:8px; opacity:.85; }
+			  .panel{ position:absolute; inset:0; background:linear-gradient(155deg,#1e1613,#2a1a17); color:#fff; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; gap:9px; opacity:0; transition:opacity .35s ease; pointer-events:none; z-index:2; box-sizing:border-box; }
 			  .ve-wrap:hover .panel{ opacity:1; pointer-events:auto; }
 			  .ptitle{ font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
-			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.1); padding-top:8px; }
+			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.12); padding-top:8px; }
 			  .rv{ font-size:18px; font-weight:700; color:#f0a99e; min-width:52px; font-family:Cormorant Garamond,Georgia,serif; }
-			  .rl{ font-size:12.5px; color:#d8ccc3; line-height:1.3; }
+			  .rl{ font-size:12px; color:#d8ccc3; line-height:1.3; }
 			  .safe{ font-size:11.5px; color:#9fc9ad; margin-top:4px; }
 			</style>
 			<div class='ve-wrap'>
 			  <div class='face'>
-			    <div class='tag'><span class='dot'></span><span class='tagtxt'>PORTFOLIO RISK</span></div>
-			    <div class='num'>" & _default & "</div>
-			    <div class='cap'>of all loans ended in charge-off</div>
-			    <div class='hint'>Hover to see where the risk concentrates</div>
+			    <img class='bg-img' src='" & _img & "' />
+			    <div class='overlay'></div>
+			    <div class='content'>
+			      <div class='tag'><span class='dot'></span><span class='tagtxt'>PORTFOLIO RISK</span></div>
+			      <div class='ttl'>Where Risk Concentrates</div>
+			      <div class='subline'>Grade " & _worstGrade & " defaults " & _multiple & " more than Grade " & _bestGrade & "</div>
+			      <div class='num'>" & _worstGradeR & "</div>
+			      <div class='para'>Grade " & _worstGrade & " loans default at " & _worstGradeR & ", versus just " & _bestGradeR & " for Grade " & _bestGrade & ". Risk climbs steadily across every grade in between, and the riskiest tiers carry outsized loss potential relative to their share of the book.</div>
+			      <div class='hint'>Hover for term breakdown</div>
+			    </div>
 			  </div>
 			  <div class='panel'>
-			    <div class='ptitle'>Where risk concentrates</div>
-			    <div class='row'><div class='rv'>" & _worstGradeR & "</div><div class='rl'>Grade " & _worstGrade & " &mdash; the riskiest grade</div></div>
-			    <div class='row'><div class='rv'>" & _worstTermR & "</div><div class='rl'>" & _worstTerm & "-month loans &mdash; the longer term</div></div>
-			    <div class='safe'>Grade " & _bestGrade & " defaults at just " & _bestGradeR & ".</div>
+			    <div class='ptitle'>Beyond grade</div>
+			    <div class='row'><div class='rv'>" & _worstTermR & "</div><div class='rl'>default rate on " & _worstTerm & "-month loans &mdash; the longer term</div></div>
+			    <div class='row'><div class='rv'>" & _default & "</div><div class='rl'>overall portfolio default rate, across every grade and term</div></div>
+			    <div class='safe'>Grade " & _bestGrade & " stays safest at just " & _bestGradeR & ".</div>
 			  </div>
 			</div>
 			</div>"
