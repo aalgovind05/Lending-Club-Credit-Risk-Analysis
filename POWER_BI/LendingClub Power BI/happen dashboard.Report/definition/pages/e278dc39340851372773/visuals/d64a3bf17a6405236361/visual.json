@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "d64a3bf17a6405236361",
+  "position": {
+    "x": 10.486942527614543,
+    "y": 425.47023969179,
+    "z": 4,
+    "height": 459.92733656823782,
+    "width": 933.33788495769431,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Risk Trend Multi HTML"
+                }
+              },
+              "queryRef": "_Measures.Risk Trend Multi HTML",
+              "nativeQueryRef": "Risk Trend Multi HTML"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

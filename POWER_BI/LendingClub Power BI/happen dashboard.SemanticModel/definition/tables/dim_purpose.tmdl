@@ -1,0 +1,38 @@
+table dim_purpose
+	lineageTag: 1f5514cd-9424-420b-81e7-4a0ba9215f65
+
+	column purpose_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 49b5253f-5c47-47a2-8446-b9d6965c0d8e
+		summarizeBy: none
+		sourceColumn: purpose_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column purpose
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(100)
+		lineageTag: efdaaebc-599d-4747-bed0-fd095e6ee634
+		summarizeBy: none
+		sourceColumn: purpose
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_purpose = m
+		mode: directQuery
+		source =
+				let
+				  Source = Sql.Database("LAPTOP-2M8AORNT\SQLEXPRESS", "LendingClubDB"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "dim_purpose"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

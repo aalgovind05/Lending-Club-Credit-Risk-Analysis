@@ -1,0 +1,93 @@
+table dim_date
+	lineageTag: a4374959-da40-4631-98e0-96104e164f69
+
+	column date_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 734c88ae-b9a1-427b-9e09-33ad47c807b2
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_date
+		dataType: dateTime
+		isNullable: false
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 42520114-764b-4053-9170-4329a54e04e3
+		summarizeBy: none
+		sourceColumn: full_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 75eb5750-b11d-460d-90c4-196f7ce55319
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(5)
+		lineageTag: f09d7d7d-3009-4de8-b02c-39b42de37adf
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_number
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 2e955a41-cc49-4119-834e-ef4a0b4a327b
+		summarizeBy: none
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(15)
+		lineageTag: df063818-94d6-40c6-853e-e77a75738f00
+		summarizeBy: none
+		sourceColumn: month_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column half_year
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(5)
+		lineageTag: e7e2a087-8562-42c4-b792-c3dcf2868fcd
+		summarizeBy: none
+		sourceColumn: half_year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = m
+		mode: directQuery
+		source =
+				let
+				  Source = Sql.Database("LAPTOP-2M8AORNT\SQLEXPRESS", "LendingClubDB"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "dim_date"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

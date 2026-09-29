@@ -11,28 +11,6 @@
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
-    "query": {
-      "queryState": {
-        "content": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Loan Status Donut HTML"
-                }
-              },
-              "queryRef": "_Measures.Loan Status Donut HTML",
-              "nativeQueryRef": "Loan Status Donut HTML"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "title": [
         {

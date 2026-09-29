@@ -1,0 +1,122 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "ebd94147ad35ac64ee64",
+  "displayName": "Loan Overview",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F6F1EB'"
+                  }
+                }
+              }
+            }
+          },
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Editable blank frame (3).svg'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "Editable_blank_frame_(3)4809514933472323.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fill'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "''"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "Literal": {
+                    "Value": "''"
+                  }
+                }
+              }
+            }
+          },
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "ThemeDataColor": {
+                    "ColorId": 0,
+                    "Percent": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "06f03f23983a9282366b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "d141336376aa71607426",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "188580b6313c2cc027c5",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "c302be9e2018d7177903",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "d1b5e2758b02407d07e0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7d3397e63ebbaa996576",
+      "target": "23c3f02f359ec785005c",
+      "type": "NoFilter"
+    }
+  ]
+}

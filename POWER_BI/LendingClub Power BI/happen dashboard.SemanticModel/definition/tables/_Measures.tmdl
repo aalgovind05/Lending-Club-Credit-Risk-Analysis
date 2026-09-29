@@ -1,0 +1,887 @@
+table _Measures
+	lineageTag: 7096aad0-e8da-45dd-a0a5-0910bbe272da
+
+	measure 'Total Amount' = SUM(fact_loan[loan_amount])
+		lineageTag: af8edc29-bc48-441c-a33d-18c6adcd24c2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Loan' = COUNTROWS(fact_loan)
+		formatString: 0
+		lineageTag: dc36ca83-d266-41df-be3e-793793bcd7b7
+
+	measure 'AVG Interest Rate' = AVERAGE(fact_loan[interest_rate])
+		lineageTag: 69e2cb4d-e771-46a7-8f4e-dc8c6ebb5f1f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG DTI' = AVERAGE(fact_loan[win_dti])
+		lineageTag: 78dc8122-8804-4946-be54-762e474d3676
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG Annual Income' = AVERAGE(fact_loan[annual_income])
+		lineageTag: dadc4e8a-bcc1-4e57-9bf1-1a2154ca7b80
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG Default Rate' =
+			DIVIDE(
+			    CALCULATE(
+			        COUNTROWS(fact_loan),
+			        dim_loan_status[loan_status] = "Charged Off"
+			    ),
+			    CALCULATE(
+			        COUNTROWS(fact_loan),
+			        ALL(dim_loan_status)
+			    )
+			)
+		lineageTag: 9179dbd8-734d-41db-a33d-dd3807defc3e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'AVG Fully Paid Rate' = ```
+			
+			    DIVIDE(
+			        CALCULATE(
+			            COUNTROWS(fact_loan),dim_loan_status[loan_status] = "Fully Paid"),
+			            COUNTROWS(fact_loan))
+			```
+		lineageTag: c8a3f05a-4200-48f5-8783-aacec88a10af
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Credit Age (Years)' =
+			
+			AVERAGEX(
+			    fact_loan,
+			    DATEDIFF(
+			        fact_loan[earliest_credit_line],
+			        fact_loan[issue_date],
+			        YEAR
+			    )
+			)
+		lineageTag: 51995886-9fd5-4f19-aca6-ef2852c3af01
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg FICO Score' =
+			
+			AVERAGEX(fact_loan,
+			    (fact_loan[fico_range_low] + fact_loan[fico_range_high]) / 2
+			)
+		lineageTag: dbf34e54-402c-4ad1-a07d-f1de9ce2dafa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Total loan amount for loans with status Fully paid.
+	measure 'Total Amount - Fully Paid' = CALCULATE([Total Amount], 'dim_loan_status'[loan_status] = "Fully paid")
+		lineageTag: 59204dba-f4a8-4cfa-8f8a-1ab560090b77
+
+	/// HTML block for the 4 top KPI cards (Total Loan Amount, Avg Interest Rate, Default Rate, Avg FICO Score) with hover-reveal info, for use in an HTML Content visual.
+	measure 'KPI Cards HTML' =
+			VAR _total   = FORMAT(DIVIDE([Total Amount],1000000000),"0.0") & "B"
+			VAR _loans   = FORMAT([Total Loan],"#,##0")
+			VAR _rate    = FORMAT([AVG Interest Rate],"0.0") & "%"
+			VAR _default = FORMAT([AVG Default Rate],"0.0%")
+			VAR _fico    = FORMAT([Avg FICO Score],"0")
+			
+			VAR _maxY = MAX(dim_date[year])
+			VAR _prevY = _maxY - 1
+			
+			VAR _amtCur  = CALCULATE([Total Amount], dim_date[year] = _maxY)
+			VAR _amtPrev = CALCULATE([Total Amount], dim_date[year] = _prevY)
+			VAR _amtChg  = DIVIDE(_amtCur - _amtPrev, _amtPrev)
+			
+			VAR _rateCur  = CALCULATE([AVG Interest Rate], dim_date[year] = _maxY)
+			VAR _ratePrev = CALCULATE([AVG Interest Rate], dim_date[year] = _prevY)
+			VAR _rateChg  = _rateCur - _ratePrev
+			
+			VAR _defCur  = CALCULATE([AVG Default Rate], dim_date[year] = _maxY)
+			VAR _defPrev = CALCULATE([AVG Default Rate], dim_date[year] = _prevY)
+			VAR _defChg  = _defCur - _defPrev
+			
+			VAR _ficoCur  = CALCULATE([Avg FICO Score], dim_date[year] = _maxY)
+			VAR _ficoPrev = CALCULATE([Avg FICO Score], dim_date[year] = _prevY)
+			VAR _ficoChg  = _ficoCur - _ficoPrev
+			
+			VAR _hasComp = NOT ISBLANK(_amtPrev) && _prevY >= MIN(dim_date[year])
+			
+			VAR _upSVG   = "<svg viewBox='0 0 24 24' width='11' height='11' fill='none' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><line x1='12' y1='19' x2='12' y2='5'></line><polyline points='6 11 12 5 18 11'></polyline></svg>"
+			VAR _dnSVG   = "<svg viewBox='0 0 24 24' width='11' height='11' fill='none' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><line x1='12' y1='5' x2='12' y2='19'></line><polyline points='18 13 12 19 6 13'></polyline></svg>"
+			
+			VAR _amtChip  = IF(_hasComp, "<div class='trend " & IF(_amtChg>=0,"good","bad") & "'>" & IF(_amtChg>=0,_upSVG,_dnSVG) & "<span>" & FORMAT(ABS(_amtChg),"0.0%") & " vs " & _prevY & "</span></div>", "")
+			VAR _rateChip = IF(_hasComp, "<div class='trend neutral'>" & IF(_rateChg>=0,_upSVG,_dnSVG) & "<span>" & FORMAT(ABS(_rateChg),"0.00") & " pts vs " & _prevY & "</span></div>", "")
+			VAR _defChip  = IF(_hasComp, "<div class='trend " & IF(_defChg<=0,"good","bad") & "'>" & IF(_defChg>=0,_upSVG,_dnSVG) & "<span>" & FORMAT(ABS(_defChg),"0.0%") & " pts vs " & _prevY & "</span></div>", "")
+			VAR _ficoChip = IF(_hasComp, "<div class='trend " & IF(_ficoChg>=0,"good","bad") & "'>" & IF(_ficoChg>=0,_upSVG,_dnSVG) & "<span>" & FORMAT(ABS(_ficoChg),"0") & " pts vs " & _prevY & "</span></div>", "")
+			
+			VAR _html =
+			"<!DOCTYPE html><html><head><meta charset='UTF-8'><style>
+			  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Arial, sans-serif; }
+			  body { background: transparent; padding: 8px; }
+			  .row { display:flex; gap:14px; }
+			  .card { flex:1; background:#fff; border:1px solid #edf0f5; border-radius:14px; padding:16px 18px; position:relative; overflow:hidden; min-height:112px; box-shadow:0 1px 3px rgba(16,24,40,.06); transition: box-shadow .25s ease, transform .25s ease; cursor:default; }
+			  .card:hover { box-shadow:0 12px 26px rgba(16,24,40,.18); transform: translateY(-2px); }
+			  .label { font-size:11.5px; font-weight:700; color:#7a8194; letter-spacing:.5px; }
+			  .value { font-size:29px; font-weight:700; color:#1a1d29; margin-top:5px; line-height:1.05; }
+			  .sub { font-size:11px; color:#98a0b3; margin-top:5px; }
+			  .red .value { color:#e6483e; }
+			  .red .sub { color:#e6483e; }
+			  .icon { position:absolute; top:12px; right:12px; width:30px; height:30px; border-radius:9px; background:#f2f4f8; display:flex; align-items:center; justify-content:center; }
+			  .red .icon { background:#fdeceb; }
+			  .icon svg { width:16px; height:16px; }
+			  .trend { display:inline-flex; align-items:center; gap:4px; margin-top:9px; font-size:11px; font-weight:600; padding:3px 8px 3px 6px; border-radius:999px; width:fit-content; }
+			  .trend svg { flex-shrink:0; }
+			  .trend.good { background:#eaf7ef; color:#1c9a5b; }
+			  .trend.good svg{ stroke:#1c9a5b; }
+			  .trend.bad { background:#fdeceb; color:#d9432f; }
+			  .trend.bad svg{ stroke:#d9432f; }
+			  .trend.neutral { background:#f2f4f8; color:#5b6272; }
+			  .trend.neutral svg{ stroke:#5b6272; }
+			  .info-panel { position:absolute; inset:0; background:linear-gradient(135deg,#7a5240,#4a2f24); color:#f3e3d3; padding:18px 20px; display:flex; flex-direction:column; justify-content:center; gap:8px; transform:translateX(-105%); transition:transform .35s cubic-bezier(.4,0,.2,1); z-index:2; }
+			  .card:hover .info-panel { transform:translateX(0); }
+			  .info-title { font-size:13px; font-weight:700; letter-spacing:.4px; color:#ffffff; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+			  .info-title:before { content:''; width:4px; height:14px; border-radius:2px; background:#f0c49b; }
+			  .info-text { font-size:14.5px; line-height:1.6; color:#fbf3ea; font-weight:400; }
+			  .info-foot { font-size:11.5px; color:#f0c49b; font-weight:600; letter-spacing:.3px; border-top:1px solid rgba(255,255,255,.2); padding-top:8px; margin-top:2px; }
+			</style></head><body>
+			<div class='row'>
+			
+			  <div class='card'>
+			    <div class='icon'><svg viewBox='0 0 24 24' fill='none' stroke='#5b6272' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='12' rx='2'></rect><circle cx='12' cy='12' r='2.5'></circle><path d='M6 6v0M18 18v0'></path></svg></div>
+			    <div class='label'>TOTAL LOAN AMOUNT</div>
+			    <div class='value'>$" & _total & "</div>
+			    <div class='sub'>Across " & _loans & " loans</div>
+			    " & _amtChip & "
+			    <div class='info-panel'>
+			      <div class='info-title'>Total Loan Amount</div>
+			      <div class='info-text'>Sum of loan_amount across every originated loan &mdash; the total dollar volume funded across the entire portfolio.</div>
+			      <div class='info-foot'>Stakeholder view: overall book size and growth</div>
+			    </div>
+			  </div>
+			
+			  <div class='card'>
+			    <div class='icon'><svg viewBox='0 0 24 24' fill='none' stroke='#5b6272' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='4' y1='20' x2='20' y2='4'></line><circle cx='7' cy='7' r='2.5'></circle><circle cx='17' cy='17' r='2.5'></circle></svg></div>
+			    <div class='label'>AVG INTEREST RATE</div>
+			    <div class='value'>" & _rate & "</div>
+			    <div class='sub'>Portfolio average</div>
+			    " & _rateChip & "
+			    <div class='info-panel'>
+			      <div class='info-title'>Avg Interest Rate</div>
+			      <div class='info-text'>Average interest_rate charged across all loans &mdash; reflects the overall risk-based pricing of the book.</div>
+			      <div class='info-foot'>Stakeholder view: pricing trend vs prior year</div>
+			    </div>
+			  </div>
+			
+			  <div class='card red'>
+			    <div class='icon'><svg viewBox='0 0 24 24' fill='none' stroke='#e6483e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2 2 20h20L12 2z'></path><line x1='12' y1='9' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.8' fill='#e6483e'></circle></svg></div>
+			    <div class='label'>DEFAULT RATE</div>
+			    <div class='value'>" & _default & "</div>
+			    <div class='sub'>Charged off loans</div>
+			    " & _defChip & "
+			    <div class='info-panel'>
+			      <div class='info-title'>Default Rate</div>
+			      <div class='info-text'>Share of loans with loan_status = 'Charged Off' out of all loans &mdash; the core credit-risk indicator for this book.</div>
+			      <div class='info-foot'>Stakeholder view: primary risk signal, watch closely</div>
+			    </div>
+			  </div>
+			
+			  <div class='card'>
+			    <div class='icon'><svg viewBox='0 0 24 24' fill='none' stroke='#5b6272' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 15a8 8 0 0 1 16 0'></path><line x1='12' y1='15' x2='16' y2='10'></line><circle cx='12' cy='15' r='1' fill='#5b6272'></circle></svg></div>
+			    <div class='label'>AVG FICO SCORE</div>
+			    <div class='value'>" & _fico & "</div>
+			    <div class='sub'>Borrower average</div>
+			    " & _ficoChip & "
+			    <div class='info-panel'>
+			      <div class='info-title'>Avg FICO Score</div>
+			      <div class='info-text'>Average of each borrower's FICO range midpoint ((fico_range_low + fico_range_high)/2) &mdash; indicates overall borrower creditworthiness.</div>
+			      <div class='info-foot'>Stakeholder view: credit quality trend</div>
+			    </div>
+			  </div>
+			
+			</div>
+			</body></html>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 6a66598d-d908-49b4-827a-4f1cf1029fd7
+
+	/// Drives the column part of the combo chart when 8 or fewer distinct years are in the current selection; returns 0 otherwise so the line series takes over.
+	measure 'Loan Column Series' =
+			VAR SelectedYearCount =
+			    CALCULATE(
+			        COUNTROWS(SUMMARIZE(dim_date, dim_date[year])),
+			        ALLSELECTED(dim_date)
+			    )
+			RETURN
+			IF(
+			    SelectedYearCount <= 8,
+			    [Total Amount],
+			    0
+			)
+		displayFolder: Combo Chart
+		lineageTag: 21586cd5-1014-4922-b580-19c9f049391b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Drives the line part of the combo chart when more than 8 distinct years are in the current selection; returns blank otherwise so no line renders.
+	measure 'Loan Line Series' =
+			VAR SelectedYearCount =
+			    CALCULATE(
+			        COUNTROWS(SUMMARIZE(dim_date, dim_date[year])),
+			        ALLSELECTED(dim_date)
+			    )
+			RETURN
+			IF(
+			    SelectedYearCount > 8,
+			    [Total Amount],
+			    BLANK()
+			)
+		displayFolder: Combo Chart
+		lineageTag: 684da111-9993-4a17-9c88-016a58eb771b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Shared max scale for the primary and secondary axes of the combo chart: the highest yearly Total Amount in the current selection, plus 10% headroom.
+	measure 'Loan Max Axis Dynamic' =
+			MAXX(
+			    SUMMARIZE(ALLSELECTED(dim_date), dim_date[year]),
+			    [Total Amount]
+			) * 1.1
+		displayFolder: Combo Chart
+		lineageTag: 500b85be-c019-4872-8b1b-b68b062cefa8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Loan Status Distribution donut with hover-reveal detail panels (icon, count, %, description), color-coded by risk: teal=paid, amber=current, red shades=loss/at-risk. For the HTML Content visual.
+	measure 'Loan Status Donut HTML' =
+			VAR _total   = [Total Loan]
+			VAR _fp      = CALCULATE([Total Loan], dim_loan_status[loan_status]="Fully Paid")
+			VAR _cur     = CALCULATE([Total Loan], dim_loan_status[loan_status]="Current")
+			VAR _co      = CALCULATE([Total Loan], dim_loan_status[loan_status]="Charged Off")
+			VAR _late1   = CALCULATE([Total Loan], dim_loan_status[loan_status]="Late (31-120 days)")
+			VAR _grace   = CALCULATE([Total Loan], dim_loan_status[loan_status]="In Grace Period")
+			VAR _late2   = CALCULATE([Total Loan], dim_loan_status[loan_status]="Late (16-30 days)")
+			VAR _ncpfp   = CALCULATE([Total Loan], dim_loan_status[loan_status]="NCP Fully Paid")
+			VAR _ncpco   = CALCULATE([Total Loan], dim_loan_status[loan_status]="NCP Charged Off")
+			VAR _def     = CALCULATE([Total Loan], dim_loan_status[loan_status]="Default")
+			VAR _totalF  = FORMAT(_total,"#,##0")
+			VAR _fpF     = FORMAT(_fp,"#,##0")     & " loans (" & FORMAT(DIVIDE(_fp,_total),"0.0%") & ")"
+			VAR _curF    = FORMAT(_cur,"#,##0")    & " loans (" & FORMAT(DIVIDE(_cur,_total),"0.0%") & ")"
+			VAR _coF     = FORMAT(_co,"#,##0")     & " loans (" & FORMAT(DIVIDE(_co,_total),"0.0%") & ")"
+			VAR _late1F  = FORMAT(_late1,"#,##0")  & " loans (" & FORMAT(DIVIDE(_late1,_total),"0.0%") & ")"
+			VAR _graceF  = FORMAT(_grace,"#,##0")  & " loans (" & FORMAT(DIVIDE(_grace,_total),"0.0%") & ")"
+			VAR _late2F  = FORMAT(_late2,"#,##0")  & " loans (" & FORMAT(DIVIDE(_late2,_total),"0.0%") & ")"
+			VAR _ncpfpF  = FORMAT(_ncpfp,"#,##0")  & " loans (" & FORMAT(DIVIDE(_ncpfp,_total),"0.0%") & ")"
+			VAR _ncpcoF  = FORMAT(_ncpco,"#,##0")  & " loans (" & FORMAT(DIVIDE(_ncpco,_total),"0.0%") & ")"
+			VAR _defF    = FORMAT(_def,"#,##0")    & " loans (" & FORMAT(DIVIDE(_def,_total),"0.0%") & ")"
+			VAR _html =
+			"<!DOCTYPE html><html><head><meta charset='UTF-8'><style>
+			  * { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI',Arial,sans-serif; }
+			  body { background:transparent; padding:8px; }
+			  .card { background:#fff; border:1px solid #eef0f4; border-radius:14px; padding:16px 18px; box-shadow:0 1px 3px rgba(16,24,40,.06); }
+			  .card-title { font-size:16px; font-weight:700; color:#1a1d29; }
+			  .card-sub { font-size:12px; color:#8a7a6e; margin-top:2px; margin-bottom:6px; }
+			  .donut-wrap svg { width:100%; height:auto; overflow:visible; }
+			  .seg { cursor:pointer; transition:filter .15s ease; transform-origin:120px 120px; }
+			  .seg:hover { filter:brightness(1.08) drop-shadow(0 0 3px rgba(0,0,0,.15)); }
+			  .center-value { font-size:26px; font-weight:800; fill:#3d2b22; font-family:'Segoe UI',Arial,sans-serif; }
+			  .center-label { font-size:10px; fill:#9c8672; font-family:'Segoe UI',Arial,sans-serif; letter-spacing:.3px; }
+			  .info-card { width:100%; height:100%; border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; justify-content:center; gap:6px; }
+			  .info-top { display:flex; align-items:center; gap:8px; }
+			  .info-icon { width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+			  .info-icon svg { width:14px; height:14px; }
+			  .info-title { font-size:12px; font-weight:700; letter-spacing:.2px; }
+			  .info-count { font-size:15px; font-weight:800; margin-top:2px; }
+			  .info-desc { font-size:10.5px; line-height:1.45; opacity:.95; margin-top:2px; }
+			  .info { opacity:0; transition:opacity .18s ease; pointer-events:none; }
+			  .placeholder-card { display:flex; align-items:center; justify-content:center; text-align:center; font-size:11.5px; color:#a3968a; padding:14px; background:#faf7f4; border-radius:12px; height:100%; }
+			  .fp:hover ~ .info-fp,
+			  .cur:hover ~ .info-cur,
+			  .co:hover ~ .info-co,
+			  .late1:hover ~ .info-late1,
+			  .grace:hover ~ .info-grace,
+			  .late2:hover ~ .info-late2,
+			  .ncpfp:hover ~ .info-ncpfp,
+			  .ncpco:hover ~ .info-ncpco,
+			  .def:hover ~ .info-def { opacity:1; }
+			  .placeholder { opacity:1; transition:opacity .18s ease; }
+			  .seg:hover ~ .placeholder { opacity:0; }
+			</style></head><body>
+			<div class='card'>
+			  <div class='card-title'>Loan Status Distribution</div>
+			  <div class='card-sub'>Portfolio health at a glance &mdash; hover a segment for details</div>
+			  <div class='donut-wrap'>
+			  <svg viewBox='0 0 480 240' xmlns='http://www.w3.org/2000/svg'>
+			
+			    <path class='seg fp' fill='#C99A5B' d='M138.86,212.92 A95,95 0 0 0 120,25 L120,62 A58,58 0 0 1 131.51,176.73 Z'></path>
+			    <path class='seg cur' fill='#7A5240' d='M43.40,64.41 A95,95 0 0 0 138.86,212.92 L131.51,176.73 A58,58 0 0 1 73.23,86.06 Z'></path>
+			    <path class='seg co' fill='#A8362A' d='M100.31,27.30 A95,95 0 0 0 43.40,64.41 L73.23,86.06 A58,58 0 0 1 107.98,63.40 Z'></path>
+			    <path class='seg late1' fill='#C15A3E' d='M103.51,26.44 A95,95 0 0 0 100.31,27.30 L107.98,63.40 A58,58 0 0 1 109.93,62.88 Z'></path>
+			    <path class='seg grace' fill='#E8B4A0' d='M106.80,26.16 A95,95 0 0 0 103.51,26.44 L109.93,62.88 A58,58 0 0 1 111.94,62.71 Z'></path>
+			    <path class='seg late2' fill='#D98F73' d='M110.10,25.86 A95,95 0 0 0 106.80,26.16 L111.94,62.71 A58,58 0 0 1 113.96,62.53 Z'></path>
+			    <path class='seg ncpfp' fill='#E3C79A' d='M113.41,25.58 A95,95 0 0 0 110.10,25.86 L113.96,62.53 A58,58 0 0 1 115.98,62.35 Z'></path>
+			    <path class='seg ncpco' fill='#8B2A20' d='M116.70,25.28 A95,95 0 0 0 113.41,25.58 L115.98,62.35 A58,58 0 0 1 117.99,62.17 Z'></path>
+			    <path class='seg def' fill='#5C1B14' d='M120,25 A95,95 0 0 0 116.70,25.28 L117.99,62.17 A58,58 0 0 1 120,62 Z'></path>
+			
+			    <text x='120' y='116' text-anchor='middle' class='center-value'>" & _totalF & "</text>
+			    <text x='120' y='134' text-anchor='middle' class='center-label'>TOTAL LOANS</text>
+			
+			    <foreignObject class='placeholder' x='250' y='60' width='215' height='110'><div xmlns='http://www.w3.org/1999/xhtml' class='placeholder-card'>Hover a slice on the donut to see details for that loan status</div></foreignObject>
+			
+			    <foreignObject class='info info-fp' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#C99A5B,#a67c42); color:#3a2c17'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#3a2c17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M8 12.5l2.5 2.5L16 9'></path></svg></div><div class='info-title'>Fully Paid</div></div><div class='info-count'>" & _fpF & "</div><div class='info-desc'>Loan repaid in full &mdash; the healthiest outcome in the portfolio.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-cur' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#7A5240,#5c3c2d); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M12 7v5l3.5 2'></path></svg></div><div class='info-title'>Current</div></div><div class='info-count'>" & _curF & "</div><div class='info-desc'>Actively being repaid on schedule; no missed payments yet.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-co' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#A8362A,#7a231b); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M9 9l6 6M15 9l-6 6'></path></svg></div><div class='info-title'>Charged Off</div></div><div class='info-count'>" & _coF & "</div><div class='info-desc'>Written off as a loss after prolonged non-payment &mdash; the core default outcome.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-late1' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#C15A3E,#93402c); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 20h20L12 3z'></path><line x1='12' y1='10' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.7' fill='#fdf3ea'></circle></svg></div><div class='info-title'>Late (31-120 days)</div></div><div class='info-count'>" & _late1F & "</div><div class='info-desc'>Seriously delinquent; high risk of rolling into Charged Off.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-grace' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#E8B4A0,#cf8f77); color:#4a2b1f'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.1)'><svg viewBox='0 0 24 24' fill='none' stroke='#4a2b1f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 3h12M6 21h12M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9'></path></svg></div><div class='info-title'>In Grace Period</div></div><div class='info-count'>" & _graceF & "</div><div class='info-desc' style='opacity:.85'>Payment just missed its due date; early-stage flag, not yet a loss.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-late2' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#D98F73,#b66a4f); color:#3d241a'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.1)'><svg viewBox='0 0 24 24' fill='none' stroke='#3d241a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3 2 20h20L12 3z'></path><line x1='12' y1='10' x2='12' y2='14'></line><circle cx='12' cy='17' r='0.7' fill='#3d241a'></circle></svg></div><div class='info-title'>Late (16-30 days)</div></div><div class='info-count'>" & _late2F & "</div><div class='info-desc'>Early delinquency stage; still recoverable but worth watching.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-ncpfp' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#E3C79A,#c7a06a); color:#4a3a1f'><div class='info-top'><div class='info-icon' style='background:rgba(0,0,0,.1)'><svg viewBox='0 0 24 24' fill='none' stroke='#4a3a1f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M8 12.5l2.5 2.5L16 9'></path></svg></div><div class='info-title'>NCP Fully Paid</div></div><div class='info-count'>" & _ncpfpF & "</div><div class='info-desc'>Fully repaid loan outside the standard consumer program track.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-ncpco' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#8B2A20,#5c1b14); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'></circle><path d='M9 9l6 6M15 9l-6 6'></path></svg></div><div class='info-title'>NCP Charged Off</div></div><div class='info-count'>" & _ncpcoF & "</div><div class='info-desc'>Written off as a loss outside the standard consumer program track.</div></div></foreignObject>
+			
+			    <foreignObject class='info info-def' x='250' y='45' width='215' height='140'><div xmlns='http://www.w3.org/1999/xhtml' class='info-card' style='background:linear-gradient(135deg,#5C1B14,#3a100b); color:#fdf3ea'><div class='info-top'><div class='info-icon'><svg viewBox='0 0 24 24' fill='none' stroke='#fdf3ea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='7.5,2 16.5,2 22,7.5 22,16.5 16.5,22 7.5,22 2,16.5 2,7.5'></polygon><line x1='12' y1='8' x2='12' y2='13'></line><circle cx='12' cy='16' r='0.7' fill='#fdf3ea'></circle></svg></div><div class='info-title'>Default</div></div><div class='info-count'>" & _defF & "</div><div class='info-desc'>Formally defaulted &mdash; the most severe non-payment outcome.</div></div></foreignObject>
+			
+			  </svg>
+			  </div>
+			</div>
+			</body></html>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: ace839df-2de1-4b54-a91e-928e9a290299
+
+	/// Loan Overview hero banner (HTML Content visual): handshake photo with brown gradient overlay, headline story 'Why People Borrow' (share of loans refinancing debt, share on 36-month terms, top state share) with a hover-reveal borrower profile (avg income, DTI, avg loan size, Grade B+C share). Does not repeat the top KPI cards. Period label follows the year slicer.
+	measure 'Loan Overview Hero' =
+			VAR _y1 = MIN(dim_date[year])
+			VAR _y2 = MAX(dim_date[year])
+			VAR _period = IF(_y1 = _y2, FORMAT(_y1,"0"), FORMAT(_y1,"0") & " &ndash; " & FORMAT(_y2,"0"))
+			VAR _loans = [Total Loan]
+			VAR _refiF = FORMAT(DIVIDE(CALCULATE([Total Loan], dim_purpose[purpose] IN {"debt_consolidation","credit_card"}), _loans),"0%")
+			VAR _term36F = FORMAT(DIVIDE(CALCULATE([Total Loan], fact_loan[term_months] = 36), _loans),"0%")
+			VAR _stateT = TOPN(1, VALUES(dim_geography[borrower_state]), [Total Loan], DESC)
+			VAR _state = MAXX(_stateT, dim_geography[borrower_state])
+			VAR _stateF = FORMAT(DIVIDE(CALCULATE([Total Loan], dim_geography[borrower_state] = _state), _loans),"0%")
+			VAR _incF = "$" & FORMAT(DIVIDE(AVERAGE(fact_loan[win_annual_inc]),1000),"0") & "K"
+			VAR _dtiF = FORMAT([AVG DTI],"0.0") & "%"
+			VAR _avgF = "$" & FORMAT(DIVIDE([Total Amount],_loans),"#,##0")
+			VAR _bcF = FORMAT(DIVIDE(CALCULATE([Total Loan], dim_grade[grade] IN {"B","C"}), _loans),"0.0%")
+			VAR _img = "https://i.postimg.cc/j57KFZTw/pexels-pavel-danilyuk-8112186.jpg"
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;border-radius:16px;position:relative;overflow:hidden;height:100vh;width:100%;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  @keyframes imgIn{ 0%{opacity:0} 100%{opacity:1} }
+			  @keyframes imgDrift{ 0%{transform:translateX(0)} 100%{transform:translateX(-3%)} }
+			  .bg-img{ position:absolute; top:0; left:0; width:106%; height:100%; object-fit:cover; opacity:0; animation:imgIn 1.5s ease .3s forwards, imgDrift 25s ease-in-out 1s infinite alternate; border-radius:16px }
+			  .ve-wrap{ position:relative; width:100%; height:100%; overflow:hidden; transition:box-shadow .3s ease }
+			  .ve-wrap:hover{ box-shadow:0 0 0 1px rgba(201,142,58,.2) }
+			  .ve-over{ position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg,#4a2f24,#7a5240); color:#ffffff; padding:22px; opacity:0; transition:opacity .35s ease; display:flex; flex-direction:column; justify-content:center; box-sizing:border-box; pointer-events:none }
+			  .ve-wrap:hover .ve-over{ opacity:1; pointer-events:auto }
+			  .t{ color:#ffffff; text-shadow:0 1px 3px rgba(0,0,0,.4) }
+			  .row{ display:flex; align-items:center; gap:12px; padding:6px 0; border-top:1px solid rgba(255,255,255,.22) }
+			  .val{ min-width:66px; font-size:27px; font-weight:700; color:#ffffff; line-height:1; font-family:Cormorant Garamond,Georgia,serif; text-shadow:0 1px 3px rgba(0,0,0,.4) }
+			  .lbl{ font-size:14px; line-height:1.3; color:#ffffff; text-shadow:0 1px 3px rgba(0,0,0,.4) }
+			</style>
+			<div class='ve-wrap'>
+			  <div style='position:relative;height:100%;'>
+			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:#4a2f24;'></div>
+			    <img class='bg-img' style='object-position:50% 40%;' src='" & _img & "' />
+			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,rgba(74,47,36,.94) 0%,rgba(74,47,36,.84) 55%,rgba(74,47,36,.6) 100%);'></div>
+			    <div style='position:relative;padding:16px 22px;display:flex;flex-direction:column;justify-content:center;height:100%;box-sizing:border-box;gap:5px;'>
+			      <div style='display:inline-flex;align-items:center;background:rgba(255,255,255,.18);padding:4px 11px;border-radius:999px;width:fit-content;'>
+			        <span class='t' style='font-size:12px;font-weight:500;letter-spacing:1.4px;'>PORTFOLIO &middot; " & _period & "</span>
+			      </div>
+			      <div class='t' style='font-size:28px;font-weight:700;line-height:1.1;font-family:Cormorant Garamond,Georgia,serif;margin-bottom:3px;'>Why People Borrow</div>
+			      <div class='row'><div class='val'>" & _refiF & "</div><div class='lbl'>of loans refinance existing debt</div></div>
+			      <div class='row'><div class='val'>" & _term36F & "</div><div class='lbl'>choose the 36-month term</div></div>
+			      <div class='row'><div class='val'>" & _stateF & "</div><div class='lbl'>of loans come from " & _state & "</div></div>
+			      <div class='t' style='font-size:12.5px;font-weight:400;margin-top:1px;opacity:.9;'>Hover for the borrower profile</div>
+			    </div>
+			  </div>
+			  <div class='ve-over'>
+			    <div style='display:inline-flex;align-items:center;background:rgba(255,255,255,.18);padding:4px 11px;border-radius:999px;margin-bottom:12px;width:fit-content;'>
+			      <span class='t' style='font-size:12px;font-weight:500;letter-spacing:1.4px;'>BORROWER PROFILE</span>
+			    </div>
+			    <div class='t' style='font-size:15px;font-weight:400;line-height:1.55;'>The average borrower earns about <b>" & _incF & "</b> a year, carries a debt-to-income ratio of <b>" & _dtiF & "</b>, and borrows roughly <b>" & _avgF & "</b> per loan. Grades B and C make up <b>" & _bcF & "</b> of all loans.</div>
+			    <div style='margin-top:14px;height:2px;width:60px;border-radius:999px;background:linear-gradient(90deg,#f0c49b,#7a5240,transparent);'></div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 2b406a74-f538-4e7e-b783-19974fbfe60a
+
+	/// Page title block for the Loan Overview page (HTML Content visual): large serif title, dot-separated subtitle, copper gradient rule, and a small period label that follows the year slicer. Transparent background so it sits on the page colour.
+	measure 'Page Title HTML' =
+			VAR _y1 = MIN(dim_date[year])
+			VAR _y2 = MAX(dim_date[year])
+			VAR _period = IF(_y1 = _y2, FORMAT(_y1,"0"), FORMAT(_y1,"0") & " &ndash; " & FORMAT(_y2,"0"))
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .wrap{ height:100%; width:100%; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; padding:2px 0 0 0 }
+			  .top{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px }
+			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:38px; font-weight:600; color:#3b241b; line-height:1.02; letter-spacing:-.2px }
+			  .sub{ font-size:14px; font-weight:400; color:#6b5a4f; margin-top:6px; letter-spacing:.4px }
+			  .per{ font-size:12px; font-weight:500; letter-spacing:1.6px; color:#6b5a4f; padding-bottom:3px; white-space:nowrap }
+			  .per b{ color:#a4501a; font-weight:600 }
+			  .rule{ height:3px; width:100%; border-radius:999px; background:linear-gradient(90deg,#d9772b 0%,#e9a26a 55%,rgba(233,162,106,0) 100%); margin-bottom:2px }
+			</style>
+			<div class='wrap'>
+			  <div class='top'>
+			    <div>
+			      <div class='ttl'>Loan Overview</div>
+			      <div class='sub'>Volume &middot; Grade &middot; Status &middot; Purpose</div>
+			    </div>
+			    <div class='per'>PERIOD &nbsp;<b>" & _period & "</b></div>
+			  </div>
+			  <div class='rule'></div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 1483998c-a949-421a-bcee-cc2975e1167a
+
+	/// Risk Analysis hero card (HTML Content visual): large red Default Rate number with a dark red/near-black gradient background, plus a hover-reveal panel showing the worst grade and worst term to explain why. Same hover interaction pattern as the Overview page hero.
+	measure 'Risk Hero HTML' =
+			VAR _default = FORMAT([AVG Default Rate],"0.0%")
+			VAR _fully   = FORMAT([AVG Fully Paid Rate],"0.0%")
+			
+			VAR _worstGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Default Rate], DESC)
+			VAR _worstGrade  = MAXX(_worstGradeT, dim_grade[grade])
+			VAR _worstGradeR = FORMAT(CALCULATE([AVG Default Rate], dim_grade[grade] = _worstGrade), "0.0%")
+			
+			VAR _worstTermT = TOPN(1, VALUES(fact_loan[term_months]), [AVG Default Rate], DESC)
+			VAR _worstTerm  = MAXX(_worstTermT, fact_loan[term_months])
+			VAR _worstTermR = FORMAT(CALCULATE([AVG Default Rate], fact_loan[term_months] = _worstTerm), "0.0%")
+			
+			VAR _bestGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Default Rate], ASC)
+			VAR _bestGrade  = MAXX(_bestGradeT, dim_grade[grade])
+			VAR _bestGradeR = FORMAT(CALCULATE([AVG Default Rate], dim_grade[grade] = _bestGrade), "0.0%")
+			
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:14px;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .ve-wrap{ position:relative; width:100%; height:100%; }
+			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; background:linear-gradient(150deg,#3a1512 0%,#5a1f1a 55%,#7a2a20 100%); display:flex; flex-direction:column; justify-content:center; padding:22px 24px; }
+			  .tag{ display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.14); padding:4px 11px; border-radius:999px; width:fit-content; margin-bottom:14px; }
+			  .dot{ width:7px; height:7px; border-radius:50%; background:#ff6b5e; }
+			  .tagtxt{ font-size:11.5px; font-weight:600; letter-spacing:1.3px; color:#ffd9d3; }
+			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:64px; font-weight:700; color:#ffffff; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,.4); }
+			  .cap{ font-size:14px; font-weight:400; color:#f5d9d3; margin-top:8px; line-height:1.4; }
+			  .hint{ font-size:11.5px; color:#e0a89e; margin-top:16px; opacity:.85; }
+			  .panel{ position:absolute; inset:0; background:linear-gradient(150deg,#2b0f0d,#4a1a15); color:#fff; padding:22px 24px; display:flex; flex-direction:column; justify-content:center; gap:11px; opacity:0; transition:opacity .35s ease; pointer-events:none; }
+			  .ve-wrap:hover .panel{ opacity:1; pointer-events:auto; }
+			  .ptitle{ font-size:11.5px; font-weight:700; letter-spacing:1.2px; color:#ff9d90; text-transform:uppercase; margin-bottom:2px; }
+			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.16); padding-top:9px; }
+			  .rv{ font-size:20px; font-weight:700; color:#ff9d90; min-width:56px; font-family:Cormorant Garamond,Georgia,serif; }
+			  .rl{ font-size:13px; color:#f5e2dc; line-height:1.35; }
+			  .safe{ font-size:12px; color:#b7e8cd; margin-top:6px; }
+			</style>
+			<div class='ve-wrap'>
+			  <div class='face'>
+			    <div class='tag'><span class='dot'></span><span class='tagtxt'>PORTFOLIO RISK</span></div>
+			    <div class='num'>" & _default & "</div>
+			    <div class='cap'>of all loans ended in charge-off</div>
+			    <div class='hint'>Hover to see where the risk concentrates</div>
+			  </div>
+			  <div class='panel'>
+			    <div class='ptitle'>Where risk concentrates</div>
+			    <div class='row'><div class='rv'>" & _worstGradeR & "</div><div class='rl'>default rate on Grade " & _worstGrade & " loans &mdash; the riskiest grade</div></div>
+			    <div class='row'><div class='rv'>" & _worstTermR & "</div><div class='rl'>default rate on " & _worstTerm & "-month loans &mdash; the longer term</div></div>
+			    <div class='safe'>For comparison, Grade " & _bestGrade & " defaults at just " & _bestGradeR & ".</div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals - Risk
+		lineageTag: cbf56657-2d67-43f0-a989-0859dac82395
+
+	/// Default Rate vs Fully Paid Rate shown as a single horizontal proportion bar (HTML Content visual): teal segment for Fully Paid tapering into red for Default, with values labeled inline. Replaces two separate KPI cards.
+	measure 'Risk Outcome Split HTML' =
+			VAR _default = [AVG Default Rate]
+			VAR _fully   = [AVG Fully Paid Rate]
+			VAR _defPct  = FORMAT(_default,"0.0%")
+			VAR _fullPct = FORMAT(_fully,"0.0%")
+			VAR _defW    = FORMAT(_default*100,"0.0")
+			VAR _fullW   = FORMAT(_fully*100,"0.0")
+			
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .card{ height:100%; width:100%; box-sizing:border-box; background:#fff; border:1px solid #edf0f5; border-radius:14px; padding:18px 20px; display:flex; flex-direction:column; justify-content:center; }
+			  .hdr{ font-size:11.5px; font-weight:700; letter-spacing:.5px; color:#7a8194; margin-bottom:14px; }
+			  .bar{ position:relative; height:34px; width:100%; border-radius:999px; overflow:hidden; display:flex; background:#f2f4f8; box-shadow:inset 0 0 0 1px #edf0f5; }
+			  .seg{ height:100%; display:flex; align-items:center; }
+			  .seg.paid{ background:linear-gradient(90deg,#1c9a5b,#28b26c); justify-content:flex-start; padding-left:12px; width:" & _fullW & "%; }
+			  .seg.def{ background:linear-gradient(90deg,#e0574a,#d9432f); justify-content:flex-end; padding-right:12px; width:" & _defW & "%; }
+			  .segtxt{ font-size:13px; font-weight:700; color:#ffffff; white-space:nowrap; }
+			  .legend{ display:flex; justify-content:space-between; margin-top:10px; }
+			  .lgitem{ display:flex; align-items:center; gap:6px; }
+			  .sw{ width:9px; height:9px; border-radius:3px; }
+			  .sw.paid{ background:#1c9a5b; }
+			  .sw.def{ background:#d9432f; }
+			  .lgtxt{ font-size:11.5px; color:#5b6272; font-weight:500; }
+			</style>
+			<div class='card'>
+			  <div class='hdr'>LOAN OUTCOME SPLIT</div>
+			  <div class='bar'>
+			    <div class='seg paid'><span class='segtxt'>" & _fullPct & "</span></div>
+			    <div class='seg def'><span class='segtxt'>" & _defPct & "</span></div>
+			  </div>
+			  <div class='legend'>
+			    <div class='lgitem'><span class='sw paid'></span><span class='lgtxt'>Fully Paid</span></div>
+			    <div class='lgitem'><span class='sw def'></span><span class='lgtxt'>Charged Off / Default</span></div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals - Risk
+		lineageTag: 7e5c53fa-5d81-419b-8668-d7e3c50c8f6d
+
+	/// Dynamic insight line for the Default Rate by Purpose chart (HTML Content visual): states which purpose has the highest default rate and contrasts it with the purpose carrying the most loan volume, since the two are not the same.
+	measure 'Risk Purpose Insight HTML' =
+			VAR _worstT = TOPN(1, VALUES(dim_purpose[purpose]), [AVG Default Rate], DESC)
+			VAR _worst  = MAXX(_worstT, dim_purpose[purpose])
+			VAR _worstR = FORMAT(CALCULATE([AVG Default Rate], dim_purpose[purpose] = _worst), "0.1%")
+			
+			VAR _bigT = TOPN(1, VALUES(dim_purpose[purpose]), [Total Loan], DESC)
+			VAR _big  = MAXX(_bigT, dim_purpose[purpose])
+			VAR _bigR = FORMAT(CALCULATE([AVG Default Rate], dim_purpose[purpose] = _big), "0.1%")
+			VAR _bigLoans = CALCULATE([Total Loan], dim_purpose[purpose] = _big)
+			VAR _worstLoans = CALCULATE([Total Loan], dim_purpose[purpose] = _worst)
+			VAR _multiple = FORMAT(DIVIDE(_bigLoans, _worstLoans), "0") & "x"
+			
+			VAR _sameOne = _worst = _big
+			
+			VAR _html =
+			IF(
+			    _sameOne,
+			    "<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;display:flex;align-items:center;'><style>html,body{overflow:hidden!important;margin:0;padding:0;height:100vh;width:100%;background:transparent!important}</style><div style='font-size:13px;line-height:1.5;color:#5b6272;'><b style='color:#d9432f;'>" & UPPER(_worst) & "</b> loans default most often (" & _worstR & ") and also carry the most loan volume &mdash; the single largest source of portfolio risk.</div></div>",
+			    "<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;display:flex;align-items:center;'><style>html,body{overflow:hidden!important;margin:0;padding:0;height:100vh;width:100%;background:transparent!important}</style><div style='font-size:13px;line-height:1.5;color:#5b6272;'><b style='color:#d9432f;'>" & UPPER(_worst) & "</b> loans default most often (" & _worstR & "), but <b style='color:#3b241b;'>" & UPPER(_big) & "</b> carries " & _multiple & " more loan volume at " & _bigR & " default &mdash; the bigger portfolio risk in dollar terms.</div></div>"
+			)
+			RETURN _html
+		displayFolder: HTML Visuals - Risk
+		lineageTag: e84cb285-b4fe-4061-a174-5263d2f7d57b
+
+	/// Caption for the Default Rate Trend Over Years chart (HTML Content visual): flags that the most recent 1-2 years understate default rate because those loans have not had time to mature, so the line should not be read as risk improving.
+	measure 'Risk Trend Caution HTML' =
+			VAR _maxY = MAX(dim_date[year])
+			VAR _cautionYears = _maxY - 1
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;display:flex;align-items:center;'>
+			<style>html,body{overflow:hidden!important;margin:0;padding:0;height:100vh;width:100%;background:transparent!important}</style>
+			<div style='display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.5;color:#8a6a5a;background:#fdf3ee;border:1px solid #f0d9cd;border-radius:10px;padding:9px 12px;'>
+			<span style='font-size:14px;'>&#9888;</span>
+			<span><b style='color:#a4501a;'>" & _cautionYears & "&ndash;" & _maxY & " appear artificially low.</b> Loans issued that recently haven't had time to default &mdash; treat the drop as unmatured data, not improving risk.</span>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals - Risk
+		lineageTag: 43a189b9-7c7a-45ed-95a8-3e205db82b76
+
+	/// Risk Analysis multi-metric trend chart (HTML Content visual, self-contained SVG+JS): tabbed line chart switching between Default Rate, Interest Rate, Avg FICO, and Loan Volume by year. Shows PEAK/LOW callouts, YoY gain/drop markers, hover tooltip, and an auto-shown caution note on the Default Rate tab for the most recent unmatured years.
+	measure 'Risk Trend Multi HTML' =
+			VAR _tbl = ADDCOLUMNS(
+			    SUMMARIZE(dim_date, dim_date[year]),
+			    "DefRate", [AVG Default Rate],
+			    "IntRate", [AVG Interest Rate],
+			    "Fico", [Avg FICO Score],
+			    "AmtB", DIVIDE([Total Amount],1000000000)
+			)
+			VAR _tblF = FILTER(_tbl, NOT ISBLANK([DefRate]))
+			VAR _yearsCSV = CONCATENATEX(_tblF, FORMAT(dim_date[year],"0"), ",", dim_date[year], ASC)
+			VAR _defCSV   = CONCATENATEX(_tblF, FORMAT(ROUND([DefRate]*100,2),"0.00"), ",", dim_date[year], ASC)
+			VAR _intCSV   = CONCATENATEX(_tblF, FORMAT(ROUND([IntRate],2),"0.00"), ",", dim_date[year], ASC)
+			VAR _ficoCSV  = CONCATENATEX(_tblF, FORMAT(ROUND([Fico],0),"0"), ",", dim_date[year], ASC)
+			VAR _amtCSV   = CONCATENATEX(_tblF, FORMAT(ROUND([AmtB],2),"0.00"), ",", dim_date[year], ASC)
+			VAR _maxY = MAXX(_tblF, dim_date[year])
+			VAR _prevY = _maxY - 1
+			
+			VAR _style =
+			"<style>
+			*{box-sizing:border-box;margin:0;padding:0;}
+			html,body{overflow:hidden;height:100vh;width:100%;background:transparent!important;font-family:'Jost',system-ui,sans-serif;}
+			.tc{width:100%;height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#fff;border:1px solid #edf0f5;border-radius:14px;}
+			.tc-hdr{padding:16px 20px 6px;flex-shrink:0;display:flex;justify-content:space-between;align-items:flex-start;}
+			.tag{display:inline-flex;align-items:center;gap:5px;background:rgba(217,160,43,.12);padding:3px 10px;border-radius:999px;margin-bottom:6px;}
+			.tagtxt{font-size:9px;font-weight:600;letter-spacing:2px;color:#B8860F;}
+			.ttl{font-size:16px;font-weight:600;color:#3D2F28;}
+			.sub{font-size:11px;font-weight:300;color:#6B5D52;margin-top:1px;}
+			.tabs{display:flex;gap:6px;margin-top:8px;}
+			.tab{font-size:10.5px;font-weight:600;color:#7a8194;background:#f2f4f8;padding:5px 10px;border-radius:7px;cursor:pointer;transition:all .15s ease;}
+			.tab.active{color:#fff;background:#6B5D52;}
+			.hint{display:flex;align-items:center;gap:4px;justify-content:flex-end;}
+			.hinttxt{font-size:8px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:#737378;}
+			.legend{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:flex-end;}
+			.lgi{display:inline-flex;align-items:center;gap:3px;}
+			.lgbar{display:inline-block;width:2px;height:8px;border-radius:1px;}
+			.lgtxt{font-size:7px;font-weight:500;color:#3D2F28;letter-spacing:.5px;}
+			.summary{display:flex;align-items:center;gap:6px;margin-top:8px;}
+			.deltapill{display:flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;}
+			.deltaval{font-size:12px;font-weight:600;}
+			.rangeval{font-size:11px;font-weight:300;color:#737378;}
+			.arrowlbl{font-size:11px;font-weight:500;color:#6B5D52;}
+			.tc-chart{flex:1;position:relative;min-height:0;}
+			.tc-chart svg{width:100%;height:100%;display:block;}
+			.yr{font-family:'Jost',sans-serif;font-size:11px;fill:#98a0b3;text-anchor:middle;}
+			.yr-hi{font-weight:600;}
+			.grid{stroke:#EDF0F5;stroke-width:0.5;}
+			#hoverTip{position:absolute;pointer-events:none;opacity:0;transition:opacity .15s ease;font-family:'Jost',sans-serif;background:rgba(255,255,255,.97);border-radius:10px;padding:8px 12px;box-shadow:0 2px 12px rgba(16,24,40,.12);border:1px solid #edf0f5;}
+			#hoverTip .ht-val{font-size:12px;font-weight:700;color:#1a1d29;}
+			#hoverTip .ht-row{display:flex;align-items:center;gap:4px;margin-top:3px;}
+			#hoverTip .ht-prev{font-size:9px;font-weight:300;color:#98a0b3;}
+			.caution{margin:0 20px 14px;display:flex;gap:7px;align-items:flex-start;font-size:11px;line-height:1.4;color:#8a6a5a;background:#fdf3ee;border:1px solid #f0d9cd;border-radius:9px;padding:7px 10px;flex-shrink:0;}
+			</style>"
+			
+			VAR _js =
+			"<script>
+			(function(){
+			var years=[" & _yearsCSV & "];
+			var CHART_COLOR='#6B5D52';
+			var cBest='#4A7A3B', cWorst='#A8524B', cMuted='#737378';
+			var M={
+			 def:{name:'Default Rate',fmt:function(v){return v.toFixed(1)+'%';}, vals:[" & _defCSV & "]},
+			 int:{name:'Interest Rate',fmt:function(v){return v.toFixed(2)+'%';}, vals:[" & _intCSV & "]},
+			 fico:{name:'Avg FICO',fmt:function(v){return Math.round(v)+'';}, vals:[" & _ficoCSV & "]},
+			 amt:{name:'Loan Volume',fmt:function(v){return '$'+v.toFixed(1)+'B';}, vals:[" & _amtCSV & "]}
+			};
+			var order=['def','int','fico','amt'];
+			var active='def';
+			var maxY=" & _maxY & ", prevY=" & _prevY & ";
+			
+			var el=document.getElementById('chart');
+			var hoverTip=document.getElementById('hoverTip');
+			var cautionEl=document.getElementById('caution');
+			var summaryEl=document.getElementById('summary');
+			
+			function buildTabs(){
+			 var tb=document.getElementById('tabs');
+			 tb.innerHTML='';
+			 order.forEach(function(k){
+			  var d=document.createElement('div');
+			  d.className='tab'+(k===active?' active':'');
+			  d.textContent=M[k].name;
+			  d.addEventListener('click',function(){ active=k; buildTabs(); render(); });
+			  tb.appendChild(d);
+			 });
+			}
+			
+			function smoothPath(points){
+			 if(points.length<2) return '';
+			 var d='M'+points[0].x+','+points[0].y;
+			 for(var i=0;i<points.length-1;i++){
+			  var p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)];
+			  var t=0.35;
+			  var c1x=p1.x+(p2.x-p0.x)*t, c1y=p1.y+(p2.y-p0.y)*t;
+			  var c2x=p2.x-(p3.x-p1.x)*t, c2y=p2.y-(p3.y-p1.y)*t;
+			  d+='C'+c1x+','+c1y+' '+c2x+','+c2y+' '+p2.x+','+p2.y;
+			 }
+			 return d;
+			}
+			
+			function renderSummary(){
+			 var metric=M[active];
+			 var vals=metric.vals;
+			 var first=vals[0], last=vals[vals.length-1];
+			 var diff=last-first;
+			 var isUp=diff>=0;
+			 var pctChg = first!==0 ? Math.abs(diff/first*100).toFixed(1)+'%' : 'n/a';
+			 var arrow = isUp ? '\u25B2' : '\u25BC';
+			 var col = isUp ? cBest : cWorst;
+			 var bg = isUp ? 'rgba(74,122,59,.1)' : 'rgba(168,82,75,.1)';
+			 summaryEl.innerHTML =
+			  ""<div class='deltapill' style='background:""+bg+""'><span style='color:""+col+"";font-size:10px;'>""+arrow+""</span><span class='deltaval' style='color:""+col+""'>""+pctChg+""</span></div>"" +
+			  ""<span class='arrowlbl'>""+metric.fmt(first)+"" \u2192 ""+metric.fmt(last)+""</span>"" +
+			  ""<span class='rangeval'>(""+years[0]+"" \u2014 ""+years[years.length-1]+"")</span>"";
+			}
+			
+			function render(){
+			 el.innerHTML='';
+			 renderSummary();
+			 var metric=M[active];
+			 var vals=metric.vals;
+			 if(vals.length<2) return;
+			 var mx=Math.max.apply(null,vals), mn=Math.min.apply(null,vals);
+			 var bestidx=vals.indexOf(mx), worstidx=vals.indexOf(mn);
+			 var pad={l:38,r:34,t:38,b:34};
+			 var W=el.offsetWidth||500, H=el.offsetHeight||200;
+			 var cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+			 var range=mx-mn||1, dpad=range*0.22;
+			 var dmin=mn-dpad, dmax=mx+dpad;
+			 function xPos(i){ return pad.l+i*(cw/(vals.length-1)); }
+			 function yPos(v){ return pad.t+ch-(((v-dmin)/(dmax-dmin))*ch); }
+			 var ns='http://www.w3.org/2000/svg';
+			 var svg=document.createElementNS(ns,'svg');
+			 svg.setAttribute('viewBox','0 0 '+W+' '+H);
+			 svg.setAttribute('preserveAspectRatio','none');
+			 for(var g=0;g<4;g++){
+			  var gy=pad.t+(ch/3)*g;
+			  var gl=document.createElementNS(ns,'line');
+			  gl.setAttribute('x1',pad.l-6); gl.setAttribute('x2',W-pad.r+6);
+			  gl.setAttribute('y1',gy); gl.setAttribute('y2',gy);
+			  gl.setAttribute('class','grid');
+			  svg.appendChild(gl);
+			 }
+			 var pts=[];
+			 for(var i=0;i<vals.length;i++){ pts.push({x:xPos(i),y:yPos(vals[i])}); }
+			 var curveD=smoothPath(pts);
+			 var areaD=curveD+'L'+pts[pts.length-1].x+','+(pad.t+ch)+'L'+pts[0].x+','+(pad.t+ch)+'Z';
+			 var defs=document.createElementNS(ns,'defs');
+			 var grad=document.createElementNS(ns,'linearGradient');
+			 grad.setAttribute('id','ag'); grad.setAttribute('x1','0'); grad.setAttribute('y1','0'); grad.setAttribute('x2','0'); grad.setAttribute('y2','1');
+			 var s1=document.createElementNS(ns,'stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color',CHART_COLOR); s1.setAttribute('stop-opacity','0.09');
+			 var s2=document.createElementNS(ns,'stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color',CHART_COLOR); s2.setAttribute('stop-opacity','0.01');
+			 grad.appendChild(s1); grad.appendChild(s2); defs.appendChild(grad); svg.appendChild(defs);
+			 var area=document.createElementNS(ns,'path'); area.setAttribute('d',areaD); area.setAttribute('fill','url(#ag)'); svg.appendChild(area);
+			 var yoys=[];
+			 for(var j=1;j<vals.length;j++){ var pv=vals[j-1]; var yp=pv!==0?((vals[j]-pv)/Math.abs(pv)*100):0; yoys.push({i:j,pct:yp}); }
+			 var sorted=yoys.slice().sort(function(a,b){return b.pct-a.pct;});
+			 var mks = sorted.length>=4 ? sorted.slice(0,2).concat(sorted.slice(-2)) : sorted;
+			 var used={}; used[bestidx]=1; used[worstidx]=1;
+			 mks.forEach(function(m){
+			  if(used[m.i]) return;
+			  var isUp=m.pct>=0;
+			  var mc=isUp?cBest:cWorst;
+			  var mx2=pts[m.i].x, by=pad.t+ch;
+			  var tk=document.createElementNS(ns,'line');
+			  tk.setAttribute('x1',mx2); tk.setAttribute('x2',mx2); tk.setAttribute('y1',by); tk.setAttribute('y2',pts[m.i].y-14);
+			  tk.setAttribute('stroke',mc); tk.setAttribute('stroke-width','1'); tk.setAttribute('stroke-opacity','0.25'); tk.setAttribute('stroke-dasharray','3,2');
+			  svg.appendChild(tk);
+			  var ml=document.createElementNS(ns,'text');
+			  ml.setAttribute('x',mx2); ml.setAttribute('y',by+27); ml.setAttribute('text-anchor','middle');
+			  ml.setAttribute('font-family','Jost,sans-serif'); ml.setAttribute('font-size','7px'); ml.setAttribute('font-weight','600');
+			  ml.setAttribute('fill',mc); ml.setAttribute('fill-opacity','0.85');
+			  ml.textContent=(isUp?'+':'')+m.pct.toFixed(1)+'%';
+			  svg.appendChild(ml);
+			 });
+			 var line=document.createElementNS(ns,'path'); line.setAttribute('d',curveD); line.setAttribute('fill','none');
+			 line.setAttribute('stroke',CHART_COLOR); line.setAttribute('stroke-width','2'); line.setAttribute('stroke-linecap','round'); line.setAttribute('stroke-linejoin','round');
+			 svg.appendChild(line);
+			 for(var i=0;i<pts.length;i++){
+			  var isB=i===bestidx, isW=(i===worstidx && worstidx!==bestidx), isHi=isB||isW;
+			  var yr=document.createElementNS(ns,'text');
+			  yr.setAttribute('x',pts[i].x); yr.setAttribute('y',pad.t+ch+16);
+			  yr.setAttribute('class','yr'+(isHi?' yr-hi':''));
+			  if(isHi) yr.setAttribute('fill',isB?cBest:cWorst);
+			  yr.textContent=String.fromCharCode(39)+String(years[i]).slice(2);
+			  svg.appendChild(yr);
+			  if(!isHi){
+			   var vt=document.createElementNS(ns,'text');
+			   vt.setAttribute('x',pts[i].x); vt.setAttribute('y',pts[i].y-12); vt.setAttribute('text-anchor','middle');
+			   vt.setAttribute('font-family','Jost,sans-serif'); vt.setAttribute('font-size','10px'); vt.setAttribute('font-weight','400'); vt.setAttribute('fill',cMuted);
+			   vt.textContent=metric.fmt(vals[i]);
+			   svg.appendChild(vt);
+			  }
+			 }
+			 function addCallout(idx,color,label){
+			  var px=pts[idx].x, py=pts[idx].y, val=metric.fmt(vals[idx]), pillY=py-38;
+			  var vline=document.createElementNS(ns,'line');
+			  vline.setAttribute('x1',px); vline.setAttribute('y1',pillY+20); vline.setAttribute('x2',px); vline.setAttribute('y2',py-7);
+			  vline.setAttribute('stroke',color); vline.setAttribute('stroke-width','1'); vline.setAttribute('stroke-dasharray','2,2'); vline.setAttribute('stroke-opacity','0.3');
+			  svg.appendChild(vline);
+			  var lbl=document.createElementNS(ns,'text');
+			  lbl.setAttribute('x',px); lbl.setAttribute('y',pillY-5); lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('fill',color); lbl.setAttribute('fill-opacity','0.6');
+			  lbl.setAttribute('font-family','Jost,sans-serif'); lbl.setAttribute('font-size','7px'); lbl.setAttribute('font-weight','500'); lbl.setAttribute('letter-spacing','1.5');
+			  lbl.textContent=label; svg.appendChild(lbl);
+			  var pillW=58,pillH=20,pillR=10,pillX=px-pillW/2;
+			  var pill=document.createElementNS(ns,'rect');
+			  pill.setAttribute('x',pillX); pill.setAttribute('y',pillY); pill.setAttribute('width',pillW); pill.setAttribute('height',pillH); pill.setAttribute('rx',pillR);
+			  pill.setAttribute('fill',color); pill.setAttribute('fill-opacity','0.12'); pill.setAttribute('stroke',color); pill.setAttribute('stroke-width','0.8'); pill.setAttribute('stroke-opacity','0.25');
+			  svg.appendChild(pill);
+			  var t1=document.createElementNS(ns,'text');
+			  t1.setAttribute('x',px); t1.setAttribute('y',pillY+13.5); t1.setAttribute('text-anchor','middle'); t1.setAttribute('fill',color);
+			  t1.setAttribute('font-family','Jost,sans-serif'); t1.setAttribute('font-size','7px'); t1.setAttribute('font-weight','600');
+			  t1.textContent=val; svg.appendChild(t1);
+			  var ring=document.createElementNS(ns,'circle'); ring.setAttribute('cx',px); ring.setAttribute('cy',py); ring.setAttribute('r','7'); ring.setAttribute('fill','none'); ring.setAttribute('stroke',color); ring.setAttribute('stroke-width','1.5'); svg.appendChild(ring);
+			  var dot=document.createElementNS(ns,'circle'); dot.setAttribute('cx',px); dot.setAttribute('cy',py); dot.setAttribute('r','3'); dot.setAttribute('fill',color); svg.appendChild(dot);
+			  var wd=document.createElementNS(ns,'circle'); wd.setAttribute('cx',px); wd.setAttribute('cy',py); wd.setAttribute('r','1'); wd.setAttribute('fill','#fff'); svg.appendChild(wd);
+			 }
+			 addCallout(bestidx,cBest,'PEAK');
+			 if(worstidx!==bestidx) addCallout(worstidx,cWorst,'LOW');
+			 for(var i=0;i<pts.length;i++){
+			  (function(idx){
+			   var hz=document.createElementNS(ns,'circle');
+			   hz.setAttribute('cx',pts[idx].x); hz.setAttribute('cy',pts[idx].y); hz.setAttribute('r','14'); hz.setAttribute('fill','transparent'); hz.setAttribute('cursor','pointer');
+			   hz.addEventListener('mouseenter',function(){
+			    var v=vals[idx];
+			    var html=""<div class=ht-val>""+metric.fmt(v)+"" (""+years[idx]+"")</div>"";
+			    if(idx>0){
+			     var prev=vals[idx-1]; var diff=v-prev; var isUp=diff>=0;
+			     var ac=isUp?cBest:cWorst;
+			     var pct = prev!==0 ? Math.abs(diff/prev*100).toFixed(1)+'%' : 'n/a';
+			     html+=""<div class=ht-row><span style='font-size:10px;font-weight:600;color:""+ac+""'>""+(isUp?'\u25B2':'\u25BC')+' '+pct+""</span><span class=ht-prev>vs ""+years[idx-1]+""</span></div>"";
+			    }
+			    hoverTip.innerHTML=html; hoverTip.style.opacity='1';
+			    var rect=el.getBoundingClientRect(); var sx=rect.width/W, sy=rect.height/H;
+			    var tipX=pts[idx].x*sx-45, tipY=pts[idx].y*sy-56;
+			    if(tipX<4) tipX=4; if(tipX+100>rect.width) tipX=rect.width-104;
+			    hoverTip.style.left=tipX+'px'; hoverTip.style.top=tipY+'px';
+			   });
+			   hz.addEventListener('mouseleave',function(){ hoverTip.style.opacity='0'; });
+			   svg.appendChild(hz);
+			  })(i);
+			 }
+			 el.appendChild(svg);
+			 if(active==='def' && maxY && prevY){
+			  cautionEl.style.display='flex';
+			  cautionEl.innerHTML=""<span style='font-size:13px;'>\u26A0</span><span><b style='color:#A4501A;'>""+prevY+""\u2013""+maxY+"" appear artificially low.</b> Loans issued that recently have not had time to default \u2014 treat the drop as unmatured data, not improving risk.</span>"";
+			 }else{
+			  cautionEl.style.display='none';
+			 }
+			}
+			buildTabs();
+			render();
+			window.addEventListener('resize',render);
+			})();
+			</script>"
+			
+			VAR _html =
+			"<div class='tc'>" & _style &
+			"<div class='tc-hdr'>
+			<div>
+			<div class='tag'><span class='tagtxt'>RISK METRIC</span></div>
+			<div class='ttl'>Risk Trend Over Time</div>
+			<div class='sub'>Yearly portfolio view</div>
+			<div id='summary' class='summary'></div>
+			</div>
+			<div style='display:flex;flex-direction:column;align-items:flex-end;gap:4px;'>
+			<div class='hint'><span class='hinttxt'>Select the view</span></div>
+			<div id='tabs' class='tabs'></div>
+			<div class='legend'>
+			<span class='lgi'><span class='lgbar' style='background:#4A7A3B;'></span><span class='lgtxt'>YoY gain</span></span>
+			<span class='lgi'><span class='lgbar' style='background:#A8524B;'></span><span class='lgtxt'>YoY drop</span></span>
+			</div>
+			</div>
+			</div>
+			<div class='tc-chart' id='chart'><div id='hoverTip'></div></div>
+			<div id='caution' class='caution'></div>
+			</div>" & _js
+			RETURN _html
+		displayFolder: HTML Visuals - Risk
+		lineageTag: bfef1e9c-22c5-4c0d-9cbd-1a4b0edf4522
+
+	column Column
+		formatString: 0
+		lineageTag: 3421dc75-983b-47d9-bf12-35329a9f517a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 978046417af64d4ea1fe0366bf5d0ba4
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

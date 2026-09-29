@@ -1,0 +1,38 @@
+table dim_geography
+	lineageTag: 890c063e-28d3-4675-9eb3-b7988c2aedc7
+
+	column state_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 88af0a17-d523-4ada-989f-1878562fd86b
+		summarizeBy: none
+		sourceColumn: state_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column borrower_state
+		dataType: string
+		isNullable: false
+		sourceProviderType: varchar(5)
+		lineageTag: e87ed3d4-b5ba-4a70-85c2-616ca2ec10fd
+		summarizeBy: none
+		sourceColumn: borrower_state
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_geography = m
+		mode: directQuery
+		source =
+				let
+				  Source = Sql.Database("LAPTOP-2M8AORNT\SQLEXPRESS", "LendingClubDB"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "dim_geography"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

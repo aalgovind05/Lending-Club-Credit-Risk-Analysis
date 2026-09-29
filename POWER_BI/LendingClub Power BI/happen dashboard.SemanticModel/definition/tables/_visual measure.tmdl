@@ -1,0 +1,20 @@
+table '_visual measure'
+	lineageTag: 72cbe392-24d5-4f13-99e4-89b6f9cbc168
+
+	column Column
+		formatString: 0
+		lineageTag: 6f2ff162-0d36-4b14-82c0-90ff04dd2d4c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '_visual measure' = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 891878379d3c4554b7dae4c27e42b0a8
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

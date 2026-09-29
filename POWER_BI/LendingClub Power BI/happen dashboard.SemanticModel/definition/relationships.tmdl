@@ -1,0 +1,24 @@
+relationship 022cae30-adc3-f9a7-f492-f4b3f5f26c48
+	fromColumn: fact_loan.date_key
+	toColumn: dim_date.date_key
+
+relationship 34ef51c7-883e-99b5-34cd-847c2ed8f4f7
+	fromColumn: fact_loan.borrower_key
+	toColumn: dim_borrower.borrower_key
+
+relationship c5b08b76-485b-4603-3179-5ee76c0675dd
+	fromColumn: fact_loan.state_key
+	toColumn: dim_geography.state_key
+
+relationship db991aff-3059-ffdd-c219-d6838fd23088
+	fromColumn: fact_loan.grade_key
+	toColumn: dim_grade.grade_key
+
+relationship d0b0fcca-b3c9-fd2f-d18b-94420cfa9175
+	fromColumn: fact_loan.status_key
+	toColumn: dim_loan_status.status_key
+
+relationship bf6c20bf-30ae-8621-8145-c2ee1905faf8
+	fromColumn: fact_loan.purpose_key
+	toColumn: dim_purpose.purpose_key
+

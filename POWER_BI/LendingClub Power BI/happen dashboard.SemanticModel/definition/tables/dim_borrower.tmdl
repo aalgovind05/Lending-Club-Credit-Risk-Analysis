@@ -1,0 +1,55 @@
+table dim_borrower
+	lineageTag: afce5955-fc21-4da4-9702-139c56218876
+
+	column borrower_key
+		dataType: int64
+		isHidden
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 3de35124-bb5b-4513-8aed-4b81ad85775e
+		summarizeBy: none
+		sourceColumn: borrower_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column employment_length
+		dataType: string
+		sourceProviderType: varchar(20)
+		lineageTag: db8b0082-2d9f-460b-95e4-be843b7827eb
+		summarizeBy: none
+		sourceColumn: employment_length
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_ownership
+		dataType: string
+		sourceProviderType: varchar(20)
+		lineageTag: 0dcc93e9-94f1-42e3-9218-3633e1d41ced
+		summarizeBy: none
+		sourceColumn: home_ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	column verification_status
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: 862c047d-3a5b-4fcf-a4f6-d5d4311bde54
+		summarizeBy: none
+		sourceColumn: verification_status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_borrower = m
+		mode: directQuery
+		source =
+				let
+				  Source = Sql.Database("LAPTOP-2M8AORNT\SQLEXPRESS", "LendingClubDB"),
+				  #"Navigation 1" = Source{[Schema = "dbo", Item = "dim_borrower"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+
