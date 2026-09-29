@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "078a13c23b7c1015c52b",
   "position": {
-    "x": 34.457096876447785,
-    "y": 268.1661017775719,
+    "x": 34.883819959972179,
+    "y": 310.46599764375236,
     "z": 2000,
-    "height": 262.17356319036355,
-    "width": 1276.41071907537,
+    "height": 261.62864969979131,
+    "width": 1276.7478105349817,
     "tabOrder": 2000
   },
   "visual": {
@@ -176,7 +176,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#A1897E'"
+                      "Value": "'#6D574B'"
                     }
                   }
                 }
@@ -191,7 +191,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#7A5240'"
+                      "Value": "'#6D574B'"
                     }
                   }
                 }
@@ -299,7 +299,7 @@
             "enableBackground": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -307,6 +307,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'SingleLine'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
                 }
               }
             }
@@ -355,6 +362,13 @@
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "markerShape": {
+              "expr": {
+                "Literal": {
+                  "Value": "'square'"
                 }
               }
             }
@@ -458,18 +472,6 @@
                   "expr": {
                     "Literal": {
                       "Value": "false"
-                    }
-                  }
-                },
-                "lowerBound": {
-                  "expr": {
-                    "Measure": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "_Measures"
-                        }
-                      },
-                      "Property": "Total Amount - Fully Paid"
                     }
                   }
                 },
@@ -582,7 +584,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Yearly'"
+                  "Value": "'Yearly Loan value - 2015 bar shows highest increase'"
                 }
               }
             }

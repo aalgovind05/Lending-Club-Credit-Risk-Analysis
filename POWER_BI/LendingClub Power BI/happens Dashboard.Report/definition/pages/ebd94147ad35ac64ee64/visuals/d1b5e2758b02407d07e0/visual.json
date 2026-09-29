@@ -75,23 +75,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "fdf3c3e9d90aa0a5b8c3",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Measures"
-              }
-            },
-            "Property": "Page Title HTML"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

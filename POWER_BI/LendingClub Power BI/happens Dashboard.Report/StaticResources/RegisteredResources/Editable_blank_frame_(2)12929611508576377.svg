@@ -3,9 +3,9 @@
 <rect width="863" height="485" fill="#F6F1EB"/>
 <g filter="url(#filter0_d_58_25)">
 <rect width="863" height="485" rx="16" fill="#FBFBFC"/>
-<rect x="2" y="2" width="859" height="481" rx="14" stroke="url(#paint0_linear_58_25)" stroke-width="4"/>
+<rect x="2" y="2" width="859" height="481" rx="14" stroke="#4A2F24" stroke-width="4"/>
 </g>
-<path d="M202 0H636L616 19C613 22 609 23 604 23H235C229 23 225 21 222 18L202 0Z" fill="url(#paint1_linear_58_25)"/>
+<path d="M214 4H650L629.908 22.1739C626.894 25.0435 622.876 26 617.853 26H247.152C241.124 26 237.106 24.087 234.092 21.2174L214 4Z" fill="url(#paint0_linear_58_25)"/>
 </g>
 <defs>
 <filter id="filter0_d_58_25" x="-1" y="0" width="869" height="491" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -18,12 +18,7 @@
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_58_25"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_58_25" result="shape"/>
 </filter>
-<linearGradient id="paint0_linear_58_25" x1="3.73555e-10" y1="225.5" x2="856" y2="226.5" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7A5240"/>
-<stop offset="1" stop-color="#4A2F24"/>
-</linearGradient>
-<linearGradient id="paint1_linear_58_25" x1="202" y1="11.5" x2="636" y2="11.5" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7A5240"/>
+<linearGradient id="paint0_linear_58_25" x1="214" y1="15" x2="650" y2="15" gradientUnits="userSpaceOnUse">
 <stop offset="1" stop-color="#4A2F24"/>
 </linearGradient>
 <clipPath id="clip0_58_25">

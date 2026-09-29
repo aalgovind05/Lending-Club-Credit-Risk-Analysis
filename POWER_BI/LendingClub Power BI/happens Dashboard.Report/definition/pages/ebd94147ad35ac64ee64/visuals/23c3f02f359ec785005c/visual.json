@@ -78,7 +78,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#A1897E'"
+                      "Value": "'#6D574B'"
                     }
                   }
                 }
@@ -93,7 +93,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#7A5240'"
+                      "Value": "'#6D574B'"
                     }
                   }
                 }
@@ -285,7 +285,14 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Total Loan by grade Dashed Line shows Average'"
                 }
               }
             }
