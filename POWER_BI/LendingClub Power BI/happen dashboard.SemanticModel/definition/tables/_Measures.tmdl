@@ -36,6 +36,7 @@ table _Measures
 			        ALL(dim_loan_status)
 			    )
 			)
+		formatString: 0.0%
 		lineageTag: 9179dbd8-734d-41db-a33d-dd3807defc3e
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -47,6 +48,7 @@ table _Measures
 			            COUNTROWS(fact_loan),dim_loan_status[loan_status] = "Fully Paid"),
 			            COUNTROWS(fact_loan))
 			```
+		formatString: 0.0%
 		lineageTag: c8a3f05a-4200-48f5-8783-aacec88a10af
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -447,10 +449,9 @@ table _Measures
 		displayFolder: HTML Visuals
 		lineageTag: 1483998c-a949-421a-bcee-cc2975e1167a
 
-	/// Risk Analysis hero card (HTML Content visual): large red Default Rate number with a dark red/near-black gradient background, plus a hover-reveal panel showing the worst grade and worst term to explain why. Same hover interaction pattern as the Overview page hero.
+	/// Risk Analysis hero card (HTML Content visual): refined dark charcoal card with a single red accent stripe and a red Default Rate number — not a full red background. Hover reveals the worst grade and worst term to explain why. Same hover interaction pattern as the Overview page hero.
 	measure 'Risk Hero HTML' =
 			VAR _default = FORMAT([AVG Default Rate],"0.0%")
-			VAR _fully   = FORMAT([AVG Fully Paid Rate],"0.0%")
 			
 			VAR _worstGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Default Rate], DESC)
 			VAR _worstGrade  = MAXX(_worstGradeT, dim_grade[grade])
@@ -469,20 +470,20 @@ table _Measures
 			<style>
 			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
 			  .ve-wrap{ position:relative; width:100%; height:100%; }
-			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; background:linear-gradient(150deg,#3a1512 0%,#5a1f1a 55%,#7a2a20 100%); display:flex; flex-direction:column; justify-content:center; padding:22px 24px; }
-			  .tag{ display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.14); padding:4px 11px; border-radius:999px; width:fit-content; margin-bottom:14px; }
-			  .dot{ width:7px; height:7px; border-radius:50%; background:#ff6b5e; }
-			  .tagtxt{ font-size:11.5px; font-weight:600; letter-spacing:1.3px; color:#ffd9d3; }
-			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:64px; font-weight:700; color:#ffffff; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,.4); }
-			  .cap{ font-size:14px; font-weight:400; color:#f5d9d3; margin-top:8px; line-height:1.4; }
-			  .hint{ font-size:11.5px; color:#e0a89e; margin-top:16px; opacity:.85; }
-			  .panel{ position:absolute; inset:0; background:linear-gradient(150deg,#2b0f0d,#4a1a15); color:#fff; padding:22px 24px; display:flex; flex-direction:column; justify-content:center; gap:11px; opacity:0; transition:opacity .35s ease; pointer-events:none; }
+			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; background:linear-gradient(155deg,#241A16 0%,#2E211C 60%,#3A2A22 100%); display:flex; flex-direction:column; justify-content:center; padding:20px 22px 20px 26px; border-left:4px solid #D9432F; }
+			  .tag{ display:inline-flex; align-items:center; gap:7px; background:rgba(217,67,47,.14); padding:4px 10px; border-radius:999px; width:fit-content; margin-bottom:12px; }
+			  .dot{ width:6px; height:6px; border-radius:50%; background:#D9432F; }
+			  .tagtxt{ font-size:10.5px; font-weight:600; letter-spacing:1.3px; color:#f0a99e; }
+			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:52px; font-weight:700; color:#D9432F; line-height:1; }
+			  .cap{ font-size:13px; font-weight:400; color:#c9beb5; margin-top:7px; line-height:1.4; }
+			  .hint{ font-size:11px; color:#8a7c72; margin-top:14px; }
+			  .panel{ position:absolute; inset:0; background:linear-gradient(155deg,#1e1613,#2a1e19); color:#fff; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; gap:10px; opacity:0; transition:opacity .35s ease; pointer-events:none; border-left:4px solid #D9432F; box-sizing:border-box; }
 			  .ve-wrap:hover .panel{ opacity:1; pointer-events:auto; }
-			  .ptitle{ font-size:11.5px; font-weight:700; letter-spacing:1.2px; color:#ff9d90; text-transform:uppercase; margin-bottom:2px; }
-			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.16); padding-top:9px; }
-			  .rv{ font-size:20px; font-weight:700; color:#ff9d90; min-width:56px; font-family:Cormorant Garamond,Georgia,serif; }
-			  .rl{ font-size:13px; color:#f5e2dc; line-height:1.35; }
-			  .safe{ font-size:12px; color:#b7e8cd; margin-top:6px; }
+			  .ptitle{ font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
+			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.1); padding-top:8px; }
+			  .rv{ font-size:18px; font-weight:700; color:#f0a99e; min-width:52px; font-family:Cormorant Garamond,Georgia,serif; }
+			  .rl{ font-size:12.5px; color:#d8ccc3; line-height:1.3; }
+			  .safe{ font-size:11.5px; color:#9fc9ad; margin-top:4px; }
 			</style>
 			<div class='ve-wrap'>
 			  <div class='face'>
@@ -493,9 +494,9 @@ table _Measures
 			  </div>
 			  <div class='panel'>
 			    <div class='ptitle'>Where risk concentrates</div>
-			    <div class='row'><div class='rv'>" & _worstGradeR & "</div><div class='rl'>default rate on Grade " & _worstGrade & " loans &mdash; the riskiest grade</div></div>
-			    <div class='row'><div class='rv'>" & _worstTermR & "</div><div class='rl'>default rate on " & _worstTerm & "-month loans &mdash; the longer term</div></div>
-			    <div class='safe'>For comparison, Grade " & _bestGrade & " defaults at just " & _bestGradeR & ".</div>
+			    <div class='row'><div class='rv'>" & _worstGradeR & "</div><div class='rl'>Grade " & _worstGrade & " &mdash; the riskiest grade</div></div>
+			    <div class='row'><div class='rv'>" & _worstTermR & "</div><div class='rl'>" & _worstTerm & "-month loans &mdash; the longer term</div></div>
+			    <div class='safe'>Grade " & _bestGrade & " defaults at just " & _bestGradeR & ".</div>
 			  </div>
 			</div>
 			</div>"
@@ -503,14 +504,24 @@ table _Measures
 		displayFolder: HTML Visuals - Risk
 		lineageTag: cbf56657-2d67-43f0-a989-0859dac82395
 
-	/// Default Rate vs Fully Paid Rate shown as a single horizontal proportion bar (HTML Content visual): teal segment for Fully Paid tapering into red for Default, with values labeled inline. Replaces two separate KPI cards.
+	/// Default Rate vs Fully Paid Rate vs In-Progress, shown as an honest 3-segment horizontal proportion bar (HTML Content visual) that sums to 100%: green = Fully Paid/NCP Fully Paid, grey = Current/Late/Grace Period (still in progress), red = Charged Off/Default/NCP Charged Off.
 	measure 'Risk Outcome Split HTML' =
-			VAR _default = [AVG Default Rate]
-			VAR _fully   = [AVG Fully Paid Rate]
-			VAR _defPct  = FORMAT(_default,"0.0%")
-			VAR _fullPct = FORMAT(_fully,"0.0%")
-			VAR _defW    = FORMAT(_default*100,"0.0")
-			VAR _fullW   = FORMAT(_fully*100,"0.0")
+			VAR _total = COUNTROWS(fact_loan)
+			VAR _paid = CALCULATE(COUNTROWS(fact_loan), dim_loan_status[loan_status] IN {"Fully Paid","NCP Fully Paid"})
+			VAR _bad  = CALCULATE(COUNTROWS(fact_loan), dim_loan_status[loan_status] IN {"Charged Off","Default","NCP Charged Off"})
+			VAR _prog = _total - _paid - _bad
+			
+			VAR _paidPct = DIVIDE(_paid,_total)
+			VAR _progPct = DIVIDE(_prog,_total)
+			VAR _badPct  = DIVIDE(_bad,_total)
+			
+			VAR _paidF = FORMAT(_paidPct,"0.0%")
+			VAR _progF = FORMAT(_progPct,"0.0%")
+			VAR _badF  = FORMAT(_badPct,"0.0%")
+			
+			VAR _paidW = FORMAT(_paidPct*100,"0.0")
+			VAR _progW = FORMAT(_progPct*100,"0.0")
+			VAR _badW  = FORMAT(_badPct*100,"0.0")
 			
 			VAR _html =
 			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;'>
@@ -519,26 +530,31 @@ table _Measures
 			  .card{ height:100%; width:100%; box-sizing:border-box; background:#fff; border:1px solid #edf0f5; border-radius:14px; padding:18px 20px; display:flex; flex-direction:column; justify-content:center; }
 			  .hdr{ font-size:11.5px; font-weight:700; letter-spacing:.5px; color:#7a8194; margin-bottom:14px; }
 			  .bar{ position:relative; height:34px; width:100%; border-radius:999px; overflow:hidden; display:flex; background:#f2f4f8; box-shadow:inset 0 0 0 1px #edf0f5; }
-			  .seg{ height:100%; display:flex; align-items:center; }
-			  .seg.paid{ background:linear-gradient(90deg,#1c9a5b,#28b26c); justify-content:flex-start; padding-left:12px; width:" & _fullW & "%; }
-			  .seg.def{ background:linear-gradient(90deg,#e0574a,#d9432f); justify-content:flex-end; padding-right:12px; width:" & _defW & "%; }
-			  .segtxt{ font-size:13px; font-weight:700; color:#ffffff; white-space:nowrap; }
+			  .seg{ height:100%; display:flex; align-items:center; justify-content:center; }
+			  .seg.paid{ background:linear-gradient(90deg,#1c9a5b,#28b26c); width:" & _paidW & "%; }
+			  .seg.prog{ background:linear-gradient(90deg,#c7ccd6,#b3b9c7); width:" & _progW & "%; }
+			  .seg.bad{ background:linear-gradient(90deg,#e0574a,#d9432f); width:" & _badW & "%; }
+			  .segtxt{ font-size:12px; font-weight:700; color:#ffffff; white-space:nowrap; text-shadow:0 1px 2px rgba(0,0,0,.15); }
+			  .segtxt.dark{ color:#4a5265; text-shadow:none; }
 			  .legend{ display:flex; justify-content:space-between; margin-top:10px; }
 			  .lgitem{ display:flex; align-items:center; gap:6px; }
 			  .sw{ width:9px; height:9px; border-radius:3px; }
 			  .sw.paid{ background:#1c9a5b; }
-			  .sw.def{ background:#d9432f; }
-			  .lgtxt{ font-size:11.5px; color:#5b6272; font-weight:500; }
+			  .sw.prog{ background:#b3b9c7; }
+			  .sw.bad{ background:#d9432f; }
+			  .lgtxt{ font-size:11px; color:#5b6272; font-weight:500; }
 			</style>
 			<div class='card'>
-			  <div class='hdr'>LOAN OUTCOME SPLIT</div>
+			  <div class='hdr'>LOAN OUTCOME SPLIT &middot; ALL " & FORMAT(_total,"#,##0") & " LOANS</div>
 			  <div class='bar'>
-			    <div class='seg paid'><span class='segtxt'>" & _fullPct & "</span></div>
-			    <div class='seg def'><span class='segtxt'>" & _defPct & "</span></div>
+			    <div class='seg paid'><span class='segtxt'>" & _paidF & "</span></div>
+			    <div class='seg prog'><span class='segtxt dark'>" & _progF & "</span></div>
+			    <div class='seg bad'><span class='segtxt'>" & _badF & "</span></div>
 			  </div>
 			  <div class='legend'>
 			    <div class='lgitem'><span class='sw paid'></span><span class='lgtxt'>Fully Paid</span></div>
-			    <div class='lgitem'><span class='sw def'></span><span class='lgtxt'>Charged Off / Default</span></div>
+			    <div class='lgitem'><span class='sw prog'></span><span class='lgtxt'>In Progress (Current, Late)</span></div>
+			    <div class='lgitem'><span class='sw bad'></span><span class='lgtxt'>Charged Off / Default</span></div>
 			  </div>
 			</div>
 			</div>"
