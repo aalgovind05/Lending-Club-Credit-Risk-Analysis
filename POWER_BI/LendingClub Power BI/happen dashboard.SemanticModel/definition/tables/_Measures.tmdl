@@ -903,6 +903,57 @@ table _Measures
 		displayFolder: HTML Visuals - Risk
 		lineageTag: bfef1e9c-22c5-4c0d-9cbd-1a4b0edf4522
 
+	measure 'Purpose Volume Share %' = DIVIDE([Total Amount], CALCULATE([Total Amount], ALL(dim_purpose[purpose])))
+		formatString: 0.0%
+		lineageTag: 1ba849db-4f84-4cc2-96be-69d3f7e111e2
+
+	measure 'Purpose Default Rate Tooltip' = FORMAT([AVG Default Rate],"0.0%") & " default rate"
+		lineageTag: 35509480-8881-47ca-809c-0525fec3d05c
+
+	measure 'Risk Purpose Share Bars HTML' =
+			VAR _purposeTable =
+			    ADDCOLUMNS(
+			        ALLSELECTED(dim_purpose[purpose]),
+			        "__amount", CALCULATE([Total Amount]),
+			        "__share", CALCULATE([Purpose Volume Share %]),
+			        "__rate", CALCULATE([AVG Default Rate])
+			    )
+			VAR _maxAmount = MAXX(_purposeTable, [__amount])
+			VAR _rows =
+			    CONCATENATEX(
+			        _purposeTable,
+			        VAR _purpose = dim_purpose[purpose]
+			        VAR _amount = [__amount]
+			        VAR _share = [__share]
+			        VAR _rate = [__rate]
+			        VAR _barWidth = FORMAT(DIVIDE(_amount, _maxAmount, 0) * 100, "0.0")
+			        RETURN
+			            "<div class='row'>" &
+			                "<div class='top'><span class='purpose'>" & _purpose & "</span>" &
+			                "<span class='amount'>" & FORMAT(_amount, "$#,##0.00") & " &middot; " & FORMAT(_share, "0.0%") & "</span></div>" &
+			                "<div class='track'><div class='bar' style='width:" & _barWidth & "%'></div></div>" &
+			                "<div class='rate'>" & FORMAT(_rate, "0.0%") & " default rate</div>" &
+			            "</div>",
+			        "",
+			        [__amount], DESC
+			    )
+			RETURN
+			    "<div class='wrap'><style>" &
+			    "html,body{margin:0;width:100%;height:100%;background:transparent;font-family:Jost,Segoe UI,Arial,sans-serif;color:#3B241B;}" &
+			    ".wrap{box-sizing:border-box;width:100%;height:100%;overflow-y:auto;overflow-x:hidden;background:#fff;border:1px solid #EDF0F5;border-radius:10px;padding:18px 20px 12px;}" &
+			    ".title{font-size:20px;line-height:1.2;letter-spacing:.04em;font-weight:700;color:#3B241B;margin:0 0 12px;}" &
+			    ".row{margin:0 0 15px;}" &
+			    ".top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:0 0 6px;}" &
+			    ".purpose{font-size:15px;font-weight:650;color:#3B241B;}" &
+			    ".amount{font-size:13px;color:#8a8f9c;white-space:nowrap;text-align:right;}" &
+			    ".track{height:14px;border-radius:4px;background:#EDF0F5;overflow:hidden;}" &
+			    ".bar{height:100%;border-radius:4px;background:#241411;min-width:3px;}" &
+			    ".rate{font-size:13px;color:#8a8f9c;font-weight:600;margin-top:5px;}" &
+			    "::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#c9cdd2;border-radius:5px}::-webkit-scrollbar-track{background:transparent}" &
+			    "</style><div class='title'>PURPOSE VOLUME</div>" & _rows & "</div>"
+		displayFolder: HTML Visuals - Risk
+		lineageTag: 47404b59-00e6-4190-a44f-39cdf873582c
+
 	column Column
 		formatString: 0
 		lineageTag: 3421dc75-983b-47d9-bf12-35329a9f517a
