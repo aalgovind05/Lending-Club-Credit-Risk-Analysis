@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "cfad3d462bb42caecbc6",
+  "name": "4fe245805b0e74e663ea",
   "position": {
-    "x": 1196.5150246270457,
-    "y": 938.37475692325154,
-    "z": 10001,
-    "height": 258.14026770379411,
-    "width": 675.00191622546163,
-    "tabOrder": 10001
+    "x": 48,
+    "y": 48,
+    "z": 9000,
+    "height": 190,
+    "width": 1824,
+    "tabOrder": 10002
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Borrower Hero HTML"
+                  "Property": "Risk KPI Cards HTML"
                 }
               },
-              "queryRef": "_Measures.Borrower Hero HTML",
-              "nativeQueryRef": "Borrower Hero HTML"
+              "queryRef": "_Measures.Risk KPI Cards HTML",
+              "nativeQueryRef": "Risk KPI Cards HTML"
             }
           ]
         }

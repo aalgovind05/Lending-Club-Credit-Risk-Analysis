@@ -960,61 +960,162 @@ table _Measures
 			VAR _CreditAgeTxt = FORMAT(_CreditAge, "0.0")
 			VAR _Accounts = AVERAGE(fact_loan[total_accounts])
 			VAR _AccountsTxt = FORMAT(_Accounts, "0.0")
+			VAR _Open = AVERAGE(fact_loan[open_accounts])
+			VAR _OpenTxt = FORMAT(_Open, "0.0")
 			VAR _Util = AVERAGE(fact_loan[revolving_utilization_rate])
 			VAR _UtilTxt = FORMAT(_Util, "0.0") & "%"
-			VAR _Html =
-			"<div class='bh-card'>
-			  <style>
-			    html,body{margin:0;padding:0;width:100%;height:100vh;overflow:hidden;background:transparent;}
-			    .bh-card{position:relative;width:100%;height:100vh;border-radius:16px;overflow:hidden;font-family:'Segoe UI',sans-serif;background:#111;}
-			    .bh-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55;}
-			    .bh-overlay{position:absolute;inset:0;background:linear-gradient(135deg, rgba(15,92,92,0.88) 0%, rgba(15,92,92,0.55) 45%, rgba(15,92,92,0.15) 100%);}
-			    .bh-stage{position:relative;z-index:2;height:100%;box-sizing:border-box;}
-			    .bh-face{position:absolute;inset:28px 30px;display:flex;flex-direction:column;justify-content:space-between;color:#F5F7F7;transition:opacity 0.45s ease, transform 0.45s ease;}
-			    .bh-face-front{opacity:1;transform:translateY(0);}
-			    .bh-face-back{opacity:0;transform:translateY(10px);pointer-events:none;}
-			    .bh-card:hover .bh-face-front{opacity:0;transform:translateY(-10px);pointer-events:none;}
-			    .bh-card:hover .bh-face-back{opacity:1;transform:translateY(0);pointer-events:auto;}
-			    .bh-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);padding:6px 14px;border-radius:20px;font-size:12px;letter-spacing:1.5px;font-weight:700;width:fit-content;}
-			    .bh-tag .dot{width:8px;height:8px;border-radius:50%;background:#7FD1C0;}
-			    .bh-headline{font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;margin:14px 0 6px;line-height:1.1;}
-			    .bh-stat-row{display:flex;align-items:baseline;gap:10px;margin-top:8px;}
-			    .bh-stat{font-size:56px;font-weight:800;font-family:Georgia,serif;}
-			    .bh-stat-unit{font-size:18px;font-weight:600;opacity:0.85;}
-			    .bh-stat-label{font-size:14px;opacity:0.8;margin-top:2px;}
-			    .bh-para{font-size:13.5px;line-height:1.5;opacity:0.9;margin-top:14px;max-width:320px;}
-			    .bh-hint{font-size:11.5px;opacity:0.65;margin-top:16px;font-style:italic;}
-			    .bh-reveal-row{display:flex;justify-content:space-between;font-size:14px;padding:10px 0;border-top:1px solid rgba(255,255,255,0.18);}
-			    .bh-reveal-row:first-of-type{border-top:none;}
-			    .bh-reveal-val{font-weight:700;color:#8FE3D3;font-size:18px;}
-			  </style>
-			  <img src='https://i.ibb.co/PstrTKDv/pexels-cottonbro-3944405.jpg' />
-			  <div class='bh-overlay'></div>
-			  <div class='bh-stage'>
-			    <div class='bh-face bh-face-front'>
-			      <div>
-			        <div class='bh-tag'><span class='dot'></span>BORROWER PROFILE</div>
-			        <div class='bh-headline'>Who&#39;s Borrowing</div>
-			        <div class='bh-stat-row'><span class='bh-stat'>" & _CreditAgeTxt & "</span><span class='bh-stat-unit'>years</span></div>
-			        <div class='bh-stat-label'>average credit history at time of loan</div>
-			        <div class='bh-para'>Longer credit history gives underwriters more to go on — but grade and income still vary widely within that average.</div>
-			      </div>
-			      <div class='bh-hint'>Hover for account depth &amp; utilization</div>
-			    </div>
-			    <div class='bh-face bh-face-back'>
-			      <div>
-			        <div class='bh-tag'><span class='dot'></span>ACCOUNT DEPTH</div>
-			        <div class='bh-headline'>Behind the Average</div>
-			        <div class='bh-reveal-row'><span>Avg. total accounts on file</span><span class='bh-reveal-val'>" & _AccountsTxt & "</span></div>
-			        <div class='bh-reveal-row'><span>Avg. revolving utilization</span><span class='bh-reveal-val'>" & _UtilTxt & "</span></div>
-			      </div>
-			      <div class='bh-hint'>More accounts and higher utilization together signal thinner breathing room.</div>
+			VAR _img = "https://i.ibb.co/PstrTKDv/pexels-cottonbro-3944405.jpg"
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:14px;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  @keyframes imgIn{ 0%{opacity:0} 100%{opacity:1} }
+			  @keyframes imgDrift{ 0%{transform:scale(1.04) translateX(0)} 100%{transform:scale(1.04) translateX(-2%)} }
+			  .bg-img{ position:absolute; top:0; left:0; width:106%; height:100%; object-fit:cover; object-position:50% 35%; opacity:0; animation:imgIn 1.2s ease .2s forwards, imgDrift 26s ease-in-out 1s infinite alternate; }
+			  .ve-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:14px; }
+			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; }
+			  .overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(155deg,rgba(36,20,17,.55) 0%,rgba(30,16,14,.72) 45%,rgba(18,9,8,.9) 100%); }
+			  .content{ position:relative; z-index:1; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; height:100%; box-sizing:border-box; gap:6px; }
+			  .tag{ display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.14); padding:4px 11px; border-radius:999px; width:fit-content; }
+			  .dot{ width:6px; height:6px; border-radius:50%; background:#D9432F; }
+			  .tagtxt{ font-size:10.5px; font-weight:600; letter-spacing:1.5px; color:#f0a99e; }
+			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:25px; font-weight:700; color:#ffffff; line-height:1.08; text-shadow:0 1px 4px rgba(0,0,0,.4); margin-top:6px; }
+			  .subline{ font-size:12.5px; font-weight:400; color:#e6d3cc; margin-top:3px; }
+			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:44px; font-weight:700; color:#ffffff; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,.45); margin-top:6px; }
+			  .para{ font-size:12px; font-weight:300; color:#e6d8d2; line-height:1.5; margin-top:6px; max-width:96%; }
+			  .hint{ font-size:10.5px; color:#c9beb5; margin-top:8px; opacity:.85; }
+			  .panel{ position:absolute; inset:0; background:linear-gradient(155deg,#1e1613,#2a1a17); color:#fff; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; gap:9px; opacity:0; transition:opacity .35s ease; pointer-events:none; z-index:2; box-sizing:border-box; }
+			  .ve-wrap:hover .panel{ opacity:1; pointer-events:auto; }
+			  .ptitle{ font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
+			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.12); padding-top:8px; }
+			  .rv{ font-size:18px; font-weight:700; color:#f0a99e; min-width:52px; font-family:Cormorant Garamond,Georgia,serif; }
+			  .rl{ font-size:12px; color:#d8ccc3; line-height:1.3; }
+			  .safe{ font-size:11.5px; color:#9fc9ad; margin-top:4px; }
+			</style>
+			<div class='ve-wrap'>
+			  <div class='face'>
+			    <img class='bg-img' src='" & _img & "' />
+			    <div class='overlay'></div>
+			    <div class='content'>
+			      <div class='tag'><span class='dot'></span><span class='tagtxt'>BORROWER PROFILE</span></div>
+			      <div class='ttl'>Who&#39;s Borrowing</div>
+			      <div class='subline'>Average credit history across the book</div>
+			      <div class='num'>" & _CreditAgeTxt & " yrs</div>
+			      <div class='para'>That&#39;s the average age of a borrower&#39;s credit file at the time of the loan &mdash; more years on file generally means more data for underwriting, but individual grade and income still vary widely around that average.</div>
+			      <div class='hint'>Hover for account depth</div>
 			    </div>
 			  </div>
+			  <div class='panel'>
+			    <div class='ptitle'>Account depth</div>
+			    <div class='row'><div class='rv'>" & _AccountsTxt & "</div><div class='rl'>average total accounts on file per borrower</div></div>
+			    <div class='row'><div class='rv'>" & _OpenTxt & "</div><div class='rl'>average currently open accounts</div></div>
+			    <div class='row'><div class='rv'>" & _UtilTxt & "</div><div class='rl'>average revolving utilization across the book</div></div>
+			    <div class='safe'>More open accounts alongside higher utilization signal thinner breathing room, even at the same credit age.</div>
+			  </div>
+			</div>
 			</div>"
-			RETURN _Html
+			RETURN _html
 		displayFolder: HTML Visuals
 		lineageTag: f686ab86-de8c-4d81-9b7a-f723e064c608
+
+	/// Three strong Risk-Analysis KPI cards (Term Risk Gap, Charged-off Dollar Exposure, Credit Quality Gap) — white card style with sparkline + YoY comparison, flips to solid dark on hover to reveal explanation. Grade Risk Spread was dropped: it duplicated the Hero card's grade-risk story thematically even though the number differed.
+	measure 'Risk KPI Cards HTML' =
+			VAR _yrTbl = SUMMARIZE(dim_date, dim_date[year])
+			
+			VAR _t36 = CALCULATE([AVG Default Rate], fact_loan[term_months] = 36)
+			VAR _t60 = CALCULATE([AVG Default Rate], fact_loan[term_months] = 60)
+			VAR _tGapF = FORMAT((_t60 - _t36) * 100, "+0.0;-0.0") & " pts"
+			VAR _t36F = FORMAT(_t36, "0.0%")
+			VAR _t60F = FORMAT(_t60, "0.0%")
+			
+			VAR _defTbl = FILTER(ADDCOLUMNS(_yrTbl, "V", [AVG Default Rate]), NOT ISBLANK([V]))
+			VAR _defN = COUNTROWS(_defTbl)
+			VAR _defMin = MINX(_defTbl,[V])
+			VAR _defMax = MAXX(_defTbl,[V])
+			VAR _defRange = IF(_defMax=_defMin,1,_defMax-_defMin)
+			VAR _defRanked = ADDCOLUMNS(_defTbl, "Idx", RANKX(_defTbl, dim_date[year],,ASC,DENSE))
+			VAR _defPts = CONCATENATEX(_defRanked, FORMAT((([Idx]-1)/(_defN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_defMin)/_defRange)*22+2),"0.0"), " ", [Idx], ASC)
+			VAR _defFirstYr = MINX(_defTbl, dim_date[year])
+			VAR _defLastYr = MAXX(_defTbl, dim_date[year])
+			VAR _defPrevYr = _defLastYr - 1
+			VAR _defLastV = CALCULATE([AVG Default Rate], dim_date[year] = _defLastYr)
+			VAR _defPrevV = CALCULATE([AVG Default Rate], dim_date[year] = _defPrevYr)
+			VAR _defFirstV = CALCULATE([AVG Default Rate], dim_date[year] = _defFirstYr)
+			VAR _defYoYUp = _defLastV >= _defPrevV
+			VAR _defYoYArrow = IF(_defYoYUp,"▲","▼")
+			VAR _defYoYColor = IF(_defYoYUp,"#D9432F","#1C9A5B")
+			VAR _defYoYPct = FORMAT(ABS(DIVIDE(_defLastV-_defPrevV,_defPrevV))*100,"0.0") & "%"
+			VAR _defLongUp = _defLastV >= _defFirstV
+			VAR _defLongArrow = IF(_defLongUp,"▲","▼")
+			VAR _defLongColor = IF(_defLongUp,"#D9432F","#1C9A5B")
+			VAR _defLongPct = FORMAT(ABS(DIVIDE(_defLastV-_defFirstV,_defFirstV))*100,"0.0") & "%"
+			
+			VAR _badAmt = CALCULATE([Total Amount], dim_loan_status[loan_status] = "Charged Off")
+			VAR _badAmtB = FORMAT(DIVIDE(_badAmt,1000000000), "0.00") & "B"
+			VAR _badAmtPct = FORMAT(DIVIDE(_badAmt,[Total Amount]), "0.0%")
+			
+			VAR _amtTbl = FILTER(ADDCOLUMNS(_yrTbl,"V", DIVIDE([Total Amount],1000000000)), NOT ISBLANK([V]))
+			VAR _amtN = COUNTROWS(_amtTbl)
+			VAR _amtMin = MINX(_amtTbl,[V])
+			VAR _amtMax = MAXX(_amtTbl,[V])
+			VAR _amtRange = IF(_amtMax=_amtMin,1,_amtMax-_amtMin)
+			VAR _amtRanked = ADDCOLUMNS(_amtTbl,"Idx", RANKX(_amtTbl, dim_date[year],,ASC,DENSE))
+			VAR _amtPts = CONCATENATEX(_amtRanked, FORMAT((([Idx]-1)/(_amtN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_amtMin)/_amtRange)*22+2),"0.0"), " ", [Idx], ASC)
+			VAR _amtFirstYr = MINX(_amtTbl, dim_date[year])
+			VAR _amtLastYr = MAXX(_amtTbl, dim_date[year])
+			VAR _amtPrevYr = _amtLastYr - 1
+			VAR _amtLastV = CALCULATE(DIVIDE([Total Amount],1000000000), dim_date[year] = _amtLastYr)
+			VAR _amtPrevV = CALCULATE(DIVIDE([Total Amount],1000000000), dim_date[year] = _amtPrevYr)
+			VAR _amtFirstV = CALCULATE(DIVIDE([Total Amount],1000000000), dim_date[year] = _amtFirstYr)
+			VAR _amtYoYUp = _amtLastV >= _amtPrevV
+			VAR _amtYoYArrow = IF(_amtYoYUp,"▲","▼")
+			VAR _amtYoYPct = FORMAT(ABS(DIVIDE(_amtLastV-_amtPrevV,_amtPrevV))*100,"0.0") & "%"
+			VAR _amtLongUp = _amtLastV >= _amtFirstV
+			VAR _amtLongArrow = IF(_amtLongUp,"▲","▼")
+			VAR _amtLongPct = FORMAT(ABS(DIVIDE(_amtLastV-_amtFirstV,_amtFirstV))*100,"0.0") & "%"
+			VAR _amtColor = "#8a8f9c"
+			
+			VAR _ficoBad = CALCULATE([Avg FICO Score], dim_loan_status[loan_status] = "Charged Off")
+			VAR _ficoGood = CALCULATE([Avg FICO Score], dim_loan_status[loan_status] = "Fully Paid")
+			VAR _ficoBadF = FORMAT(_ficoBad, "0")
+			VAR _ficoGoodF = FORMAT(_ficoGood, "0")
+			VAR _ficoGapF = FORMAT(_ficoGood - _ficoBad, "0") & " pts"
+			
+			VAR _ficoTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[Avg FICO Score]), NOT ISBLANK([V]))
+			VAR _ficoN = COUNTROWS(_ficoTbl)
+			VAR _ficoMin = MINX(_ficoTbl,[V])
+			VAR _ficoMax = MAXX(_ficoTbl,[V])
+			VAR _ficoRange = IF(_ficoMax=_ficoMin,1,_ficoMax-_ficoMin)
+			VAR _ficoRanked = ADDCOLUMNS(_ficoTbl,"Idx",RANKX(_ficoTbl,dim_date[year],,ASC,DENSE))
+			VAR _ficoPts = CONCATENATEX(_ficoRanked, FORMAT((([Idx]-1)/(_ficoN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_ficoMin)/_ficoRange)*22+2),"0.0"), " ", [Idx], ASC)
+			VAR _ficoFirstYr = MINX(_ficoTbl,dim_date[year])
+			VAR _ficoLastYr = MAXX(_ficoTbl,dim_date[year])
+			VAR _ficoPrevYr = _ficoLastYr - 1
+			VAR _ficoLastV = CALCULATE([Avg FICO Score], dim_date[year]=_ficoLastYr)
+			VAR _ficoPrevV = CALCULATE([Avg FICO Score], dim_date[year]=_ficoPrevYr)
+			VAR _ficoFirstV = CALCULATE([Avg FICO Score], dim_date[year]=_ficoFirstYr)
+			VAR _ficoYoYUp = _ficoLastV >= _ficoPrevV
+			VAR _ficoYoYArrow = IF(_ficoYoYUp,"▲","▼")
+			VAR _ficoYoYColor = IF(_ficoYoYUp,"#1C9A5B","#D9432F")
+			VAR _ficoYoYPct = FORMAT(ABS(DIVIDE(_ficoLastV-_ficoPrevV,_ficoPrevV))*100,"0.0") & "%"
+			VAR _ficoLongUp = _ficoLastV >= _ficoFirstV
+			VAR _ficoLongArrow = IF(_ficoLongUp,"▲","▼")
+			VAR _ficoLongColor = IF(_ficoLongUp,"#1C9A5B","#D9432F")
+			VAR _ficoLongPct = FORMAT(ABS(DIVIDE(_ficoLastV-_ficoFirstV,_ficoFirstV))*100,"0.0") & "%"
+			
+			VAR _css = "<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:transparent!important}*{box-sizing:border-box}.rk{font-family:Jost,'Segoe UI',sans-serif;width:100%;height:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.c{position:relative;overflow:hidden;border-radius:14px;background:#fff;border:1px solid #EDF0F5;box-shadow:0 1px 3px rgba(16,24,40,.06);transition:box-shadow .2s ease}.c:hover{box-shadow:0 6px 18px rgba(16,24,40,.14)}.front{position:relative;z-index:1;padding:16px 18px;height:100%;box-sizing:border-box;display:flex;flex-direction:column}.q{position:absolute;top:14px;right:14px;width:16px;height:16px;border-radius:50%;border:1px solid #cfd4de;color:#9aa1b1;font-size:9.5px;font-weight:600;display:flex;align-items:center;justify-content:center}.lbl{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#6b7280}.val{font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:700;color:#1f2430;margin-top:6px;line-height:1}.cmp{font-size:10.5px;color:#8a8f9c;margin-top:7px;line-height:1.5}.cmp b{color:#1f2430;font-weight:600}.spark{margin-top:auto;padding-top:8px;width:100%;height:26px}.back{position:absolute;inset:0;z-index:2;background:#181513;padding:18px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(4px);transition:.22s ease;pointer-events:none}.c:hover .back{opacity:1;transform:none;pointer-events:auto}.backl{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:#D9432F;font-weight:700}.backp{font-size:12px;line-height:1.6;color:#f0ece7;margin-top:8px}@media(max-width:700px){.rk{gap:8px}.front{padding:12px}.val{font-size:24px}.cmp{font-size:9.5px}}</style>"
+			
+			RETURN _css & "<div class='rk'>" &
+			
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Term Risk Gap</div><div class='val'>" & _tGapF & "</div><div class='cmp'>" & _defLastYr & ": <b>" & FORMAT(_defLastV,"0.0%") & "</b> <span style='color:" & _defYoYColor & "'>" & _defYoYArrow & " " & _defYoYPct & "</span></div><div class='cmp'>Since " & _defFirstYr & ": <span style='color:" & _defLongColor & "'>" & _defLongArrow & " " & _defLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _defPts & "' fill='none' stroke='#D9432F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>Term breakdown</div><div class='backp'>60-month loans default at " & _t60F & ", versus " & _t36F & " for 36-month loans. Longer terms carry materially more risk per dollar lent.</div></div></div>" &
+			
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Charged-off Exposure</div><div class='val'>$" & _badAmtB & "</div><div class='cmp'>" & _amtLastYr & ": <b>$" & FORMAT(_amtLastV,"0.0") & "B</b> <span style='color:" & _amtColor & "'>" & _amtYoYArrow & " " & _amtYoYPct & "</span></div><div class='cmp'>Since " & _amtFirstYr & ": <span style='color:" & _amtColor & "'>" & _amtLongArrow & " " & _amtLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _amtPts & "' fill='none' stroke='#8a8f9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>Dollar exposure</div><div class='backp'>$" & _badAmtB & " in loan principal is tied to charged-off or defaulted loans — " & _badAmtPct & " of total originated volume.</div></div></div>" &
+			
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Credit Quality Gap</div><div class='val'>" & _ficoGapF & "</div><div class='cmp'>" & _ficoLastYr & ": <b>" & FORMAT(_ficoLastV,"0") & "</b> <span style='color:" & _ficoYoYColor & "'>" & _ficoYoYArrow & " " & _ficoYoYPct & "</span></div><div class='cmp'>Since " & _ficoFirstYr & ": <span style='color:" & _ficoLongColor & "'>" & _ficoLongArrow & " " & _ficoLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _ficoPts & "' fill='none' stroke='#1C9A5B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>Score gap</div><div class='backp'>Fully paid borrowers average " & _ficoGoodF & " FICO, versus " & _ficoBadF & " for charged-off borrowers. FICO alone doesn’t fully separate outcomes — grade and term matter too.</div></div></div>" &
+			
+			"</div>"
+		displayFolder: HTML Visuals - Risk
+		lineageTag: 8d4d4bd8-038b-419a-9e0b-650253925feb
 
 	column Column
 		formatString: 0

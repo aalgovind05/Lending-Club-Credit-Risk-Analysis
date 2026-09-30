@@ -3,6 +3,32 @@
   "name": "e278dc39340851372773",
   "displayName": "Risk Analysis",
   "displayOption": "FitToPage",
-  "height": 1230,
-  "width": 1920
+  "height": 1260,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "''"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "Literal": {
+                    "Value": "''"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
 }

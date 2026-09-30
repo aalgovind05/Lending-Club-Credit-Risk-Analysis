@@ -1,79 +1,92 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "001a3264716b0b1237d2",
+  "name": "5d1f52840ab132c0037e",
   "position": {
-    "x": 48.837347943961049,
-    "y": 1016.863351833189,
-    "z": 2000,
-    "height": 231.97740273381498,
-    "width": 981.97953187321684,
-    "tabOrder": 1100
+    "x": 1267.2727272727273,
+    "y": 930.90909090909088,
+    "z": 10001,
+    "height": 301.25,
+    "width": 535,
+    "tabOrder": 10001
   },
   "visual": {
-    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
-    "query": {
-      "queryState": {
-        "content": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Risk Outcome Split HTML"
+    "visualType": "shape",
+    "objects": {
+      "shape": [
+        {
+          "properties": {
+            "tileShape": {
+              "expr": {
+                "Literal": {
+                  "Value": "'rectangle'"
                 }
-              },
-              "queryRef": "_Measures.Risk Outcome Split HTML",
-              "nativeQueryRef": "Risk Outcome Split HTML",
-              "active": true
+              }
+            },
+            "roundEdge": {
+              "expr": {
+                "Literal": {
+                  "Value": "22L"
+                }
+              }
             }
-          ]
+          }
         }
-      }
+      ],
+      "rotation": [
+        {
+          "properties": {
+            "shapeAngle": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "fill": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outline": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "background": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "border": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ],
       "dropShadow": [
         {
           "properties": {
@@ -96,5 +109,6 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  }
+  },
+  "howCreated": "InsertVisualButton"
 }
