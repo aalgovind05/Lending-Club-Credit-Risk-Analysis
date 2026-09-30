@@ -18,7 +18,11 @@
             {
               "field": {
                 "Measure": {
-                  "Expression": { "SourceRef": { "Entity": "_Measures" } },
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
                   "Property": "Risk Purpose Share Bars HTML"
                 }
               },
@@ -34,21 +38,39 @@
       "title": [
         {
           "properties": {
-            "show": { "expr": { "Literal": { "Value": "false" } } }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ],
       "background": [
         {
           "properties": {
-            "show": { "expr": { "Literal": { "Value": "false" } } }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ],
       "border": [
         {
           "properties": {
-            "show": { "expr": { "Literal": { "Value": "false" } } }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ]

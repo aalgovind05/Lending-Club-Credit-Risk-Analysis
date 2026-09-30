@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "5d97a33867c7944c0164",
+  "name": "018174259b760ebb0327",
   "position": {
     "x": 48,
-    "y": 1120,
-    "z": 1600,
-    "height": 90,
-    "width": 1824,
-    "tabOrder": 1600
+    "y": 78,
+    "z": 1000,
+    "height": 320,
+    "width": 430,
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Risk Purpose Insight HTML"
+                  "Property": "Risk Hero HTML"
                 }
               },
-              "queryRef": "_Measures.Risk Purpose Insight HTML",
-              "nativeQueryRef": "Risk Purpose Insight HTML",
+              "queryRef": "_Measures.Risk Hero HTML",
+              "nativeQueryRef": "Risk Hero HTML",
               "active": true
             }
           ]

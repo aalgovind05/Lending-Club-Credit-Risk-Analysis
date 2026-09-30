@@ -392,7 +392,7 @@ table _Measures
 			  <div style='position:relative;height:100%;'>
 			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:#4a2f24;'></div>
 			    <img class='bg-img' style='object-position:50% 40%;' src='" & _img & "' />
-			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,rgba(74,47,36,.94) 0%,rgba(74,47,36,.84) 55%,rgba(74,47,36,.6) 100%);'></div>
+			    <div style='position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,rgba(74,47,36,.70) 0%,rgba(74,47,36,.48) 55%,rgba(74,47,36,.28) 100%);'></div>
 			    <div style='position:relative;padding:16px 22px;display:flex;flex-direction:column;justify-content:center;height:100%;box-sizing:border-box;gap:5px;'>
 			      <div style='display:inline-flex;align-items:center;background:rgba(255,255,255,.18);padding:4px 11px;border-radius:999px;width:fit-content;'>
 			        <span class='t' style='font-size:12px;font-weight:500;letter-spacing:1.4px;'>PORTFOLIO &middot; " & _period & "</span>
@@ -953,6 +953,68 @@ table _Measures
 			    "</style><div class='title'>PURPOSE VOLUME</div>" & _rows & "</div>"
 		displayFolder: HTML Visuals - Risk
 		lineageTag: 47404b59-00e6-4190-a44f-39cdf873582c
+
+	/// Borrower Profile hero card (HTML Content visual): flat-lay wallet/card photo with teal gradient overlay, headline, Avg Credit Age as big stat, hover-reveal panel showing avg total accounts and avg revolving utilization (fields unused elsewhere on the page).
+	measure 'Borrower Hero HTML' =
+			VAR _CreditAge = [Avg Credit Age (Years)]
+			VAR _CreditAgeTxt = FORMAT(_CreditAge, "0.0")
+			VAR _Accounts = AVERAGE(fact_loan[total_accounts])
+			VAR _AccountsTxt = FORMAT(_Accounts, "0.0")
+			VAR _Util = AVERAGE(fact_loan[revolving_utilization_rate])
+			VAR _UtilTxt = FORMAT(_Util, "0.0") & "%"
+			VAR _Html =
+			"<div class='bh-card'>
+			  <style>
+			    html,body{margin:0;padding:0;width:100%;height:100vh;overflow:hidden;background:transparent;}
+			    .bh-card{position:relative;width:100%;height:100vh;border-radius:16px;overflow:hidden;font-family:'Segoe UI',sans-serif;background:#111;}
+			    .bh-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55;}
+			    .bh-overlay{position:absolute;inset:0;background:linear-gradient(135deg, rgba(15,92,92,0.88) 0%, rgba(15,92,92,0.55) 45%, rgba(15,92,92,0.15) 100%);}
+			    .bh-stage{position:relative;z-index:2;height:100%;box-sizing:border-box;}
+			    .bh-face{position:absolute;inset:28px 30px;display:flex;flex-direction:column;justify-content:space-between;color:#F5F7F7;transition:opacity 0.45s ease, transform 0.45s ease;}
+			    .bh-face-front{opacity:1;transform:translateY(0);}
+			    .bh-face-back{opacity:0;transform:translateY(10px);pointer-events:none;}
+			    .bh-card:hover .bh-face-front{opacity:0;transform:translateY(-10px);pointer-events:none;}
+			    .bh-card:hover .bh-face-back{opacity:1;transform:translateY(0);pointer-events:auto;}
+			    .bh-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);padding:6px 14px;border-radius:20px;font-size:12px;letter-spacing:1.5px;font-weight:700;width:fit-content;}
+			    .bh-tag .dot{width:8px;height:8px;border-radius:50%;background:#7FD1C0;}
+			    .bh-headline{font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:700;margin:14px 0 6px;line-height:1.1;}
+			    .bh-stat-row{display:flex;align-items:baseline;gap:10px;margin-top:8px;}
+			    .bh-stat{font-size:56px;font-weight:800;font-family:Georgia,serif;}
+			    .bh-stat-unit{font-size:18px;font-weight:600;opacity:0.85;}
+			    .bh-stat-label{font-size:14px;opacity:0.8;margin-top:2px;}
+			    .bh-para{font-size:13.5px;line-height:1.5;opacity:0.9;margin-top:14px;max-width:320px;}
+			    .bh-hint{font-size:11.5px;opacity:0.65;margin-top:16px;font-style:italic;}
+			    .bh-reveal-row{display:flex;justify-content:space-between;font-size:14px;padding:10px 0;border-top:1px solid rgba(255,255,255,0.18);}
+			    .bh-reveal-row:first-of-type{border-top:none;}
+			    .bh-reveal-val{font-weight:700;color:#8FE3D3;font-size:18px;}
+			  </style>
+			  <img src='https://i.ibb.co/PstrTKDv/pexels-cottonbro-3944405.jpg' />
+			  <div class='bh-overlay'></div>
+			  <div class='bh-stage'>
+			    <div class='bh-face bh-face-front'>
+			      <div>
+			        <div class='bh-tag'><span class='dot'></span>BORROWER PROFILE</div>
+			        <div class='bh-headline'>Who&#39;s Borrowing</div>
+			        <div class='bh-stat-row'><span class='bh-stat'>" & _CreditAgeTxt & "</span><span class='bh-stat-unit'>years</span></div>
+			        <div class='bh-stat-label'>average credit history at time of loan</div>
+			        <div class='bh-para'>Longer credit history gives underwriters more to go on — but grade and income still vary widely within that average.</div>
+			      </div>
+			      <div class='bh-hint'>Hover for account depth &amp; utilization</div>
+			    </div>
+			    <div class='bh-face bh-face-back'>
+			      <div>
+			        <div class='bh-tag'><span class='dot'></span>ACCOUNT DEPTH</div>
+			        <div class='bh-headline'>Behind the Average</div>
+			        <div class='bh-reveal-row'><span>Avg. total accounts on file</span><span class='bh-reveal-val'>" & _AccountsTxt & "</span></div>
+			        <div class='bh-reveal-row'><span>Avg. revolving utilization</span><span class='bh-reveal-val'>" & _UtilTxt & "</span></div>
+			      </div>
+			      <div class='bh-hint'>More accounts and higher utilization together signal thinner breathing room.</div>
+			    </div>
+			  </div>
+			</div>"
+			RETURN _Html
+		displayFolder: HTML Visuals
+		lineageTag: f686ab86-de8c-4d81-9b7a-f723e064c608
 
 	column Column
 		formatString: 0

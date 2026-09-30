@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "d6e7f8091a2b3c4d5e6f",
+  "name": "b25cffa85d8cb7892dc4",
   "position": {
-    "x": 502,
-    "y": 78,
-    "z": 1500,
-    "height": 320,
-    "width": 670,
-    "tabOrder": 1500
+    "x": 1196,
+    "y": 422,
+    "z": 1400,
+    "height": 334,
+    "width": 676,
+    "tabOrder": 1400
   },
   "visual": {
-    "visualType": "columnChart",
+    "visualType": "barChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fact_loan"
+                      "Entity": "dim_purpose"
                     }
                   },
-                  "Property": "term_months"
+                  "Property": "purpose"
                 }
               },
-              "queryRef": "fact_loan.term_months",
-              "nativeQueryRef": "term_months",
+              "queryRef": "dim_purpose.purpose",
+              "nativeQueryRef": "purpose",
               "active": true
             }
           ]
@@ -51,19 +51,29 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Measures"
+                  }
+                },
+                "Property": "AVG Default Rate"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
     "objects": {
       "categoryAxis": [
         {
           "properties": {
-            "axisType": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Categorical'"
-                }
-              }
-            },
             "show": {
               "expr": {
                 "Literal": {
@@ -131,13 +141,6 @@
                   "Value": "0L"
                 }
               }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "14D"
-                }
-              }
             }
           }
         }
@@ -158,84 +161,13 @@
       "dataPoint": [
         {
           "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#8A7468'"
-                    }
-                  }
-                }
+            "fillRule": {
+              "linearGradient2": {
+                "min": {},
+                "max": {},
+                "nullColoringStrategy": {}
               }
             }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "fact_loan"
-                          }
-                        },
-                        "Property": "term_months"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "36L"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#3B241B'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "fact_loan"
-                          }
-                        },
-                        "Property": "term_months"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "60L"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
           }
         }
       ]
@@ -416,7 +348,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Default Rate by Term'"
+                  "Value": "'Default Rate by Purpose'"
                 }
               }
             }
@@ -425,5 +357,111 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filterc4d5e6f708192a3b4c5d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_purpose"
+              }
+            },
+            "Property": "purpose"
+          }
+        },
+        "type": "TopN",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "subquery",
+              "Expression": {
+                "Subquery": {
+                  "Query": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "dim_purpose",
+                        "Type": 0
+                      }
+                    ],
+                    "Select": [
+                      {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "p"
+                            }
+                          },
+                          "Property": "purpose"
+                        },
+                        "Name": "field"
+                      }
+                    ],
+                    "OrderBy": [
+                      {
+                        "Direction": 2,
+                        "Expression": {
+                          "Aggregation": {
+                            "Expression": {
+                              "Column": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "p"
+                                  }
+                                },
+                                "Property": "purpose"
+                              }
+                            },
+                            "Function": 5
+                          }
+                        }
+                      }
+                    ],
+                    "Top": 8
+                  }
+                }
+              },
+              "Type": 2
+            },
+            {
+              "Name": "p",
+              "Entity": "dim_purpose",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "p"
+                          }
+                        },
+                        "Property": "purpose"
+                      }
+                    }
+                  ],
+                  "Table": {
+                    "SourceRef": {
+                      "Source": "subquery"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
   }
 }
