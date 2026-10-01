@@ -42,6 +42,16 @@ table dim_borrower
 
 		annotation SummarizationSetBy = Automatic
 
+	column employment_length_sort =
+			SWITCH(dim_borrower[employment_length], "< 1 year", 1, "1 year", 2, "2 years", 3, "3 years", 4, "4 years", 5, "5 years", 6, "6 years", 7, "7 years", 8, "8 years", 9, "9 years", 10, "10+ years", 11, 12)
+			dataType: int64
+			isHidden
+			lineageTag: 8acb4651-7e55-46bb-9e78-d24078958132
+			summarizeBy: none
+			
+			annotation SummarizationSetBy = Automatic
+		lineageTag: 6d411f28-7eb7-4d42-aa3b-bc4180dfad8b
+
 	partition dim_borrower = m
 		mode: directQuery
 		source =

@@ -546,7 +546,7 @@ table _Measures
 			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;'>
 			<style>
 			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
-			  .card{ height:100%; width:100%; box-sizing:border-box; background:#fff; border:1px solid #edf0f5; border-radius:14px; padding:18px 20px; display:flex; flex-direction:column; justify-content:center; }
+			  .card{ height:100%; width:100%; box-sizing:border-box; background:#fff; border:1px solid #edf0f5; border-radius:14px; padding:20px 22px 30px; display:flex; flex-direction:column; justify-content:center; }
 			  .hdr{ font-size:11.5px; font-weight:700; letter-spacing:.5px; color:#7a8194; margin-bottom:14px; }
 			  .bar{ position:relative; height:34px; width:100%; border-radius:999px; overflow:hidden; display:flex; background:#f2f4f8; box-shadow:inset 0 0 0 1px #edf0f5; }
 			  .seg{ height:100%; display:flex; align-items:center; justify-content:center; }
@@ -562,6 +562,10 @@ table _Measures
 			  .sw.prog{ background:#b3b9c7; }
 			  .sw.bad{ background:#d9432f; }
 			  .lgtxt{ font-size:11px; color:#5b6272; font-weight:500; }
+			  .insight{ margin-top:18px; padding-top:16px; border-top:1px solid #edf0f5; }
+			  .iline{ font-size:14.5px; line-height:1.6; color:#3f4657; font-weight:400; }
+			  .iline b{ color:#1f2430; font-weight:700; }
+			  .iline .r{ color:#d9432f; font-weight:700; }
 			</style>
 			<div class='card'>
 			  <div class='hdr'>LOAN OUTCOME SPLIT &middot; ALL " & FORMAT(_total,"#,##0") & " LOANS</div>
@@ -574,6 +578,9 @@ table _Measures
 			    <div class='lgitem'><span class='sw paid'></span><span class='lgtxt'>Fully Paid</span></div>
 			    <div class='lgitem'><span class='sw prog'></span><span class='lgtxt'>In Progress (Current, Late)</span></div>
 			    <div class='lgitem'><span class='sw bad'></span><span class='lgtxt'>Charged Off / Default</span></div>
+			  </div>
+			  <div class='insight'>
+			    <div class='iline'>Today's <span class='r'>" & _badF & "</span> charged-off share is a floor, not final: <b>" & _progF & "</b> of loans are still In Progress and yet to mature.</div>
 			  </div>
 			</div>
 			</div>"
@@ -954,70 +961,6 @@ table _Measures
 		displayFolder: HTML Visuals - Risk
 		lineageTag: 47404b59-00e6-4190-a44f-39cdf873582c
 
-	/// Borrower Profile hero card (HTML Content visual): flat-lay wallet/card photo with teal gradient overlay, headline, Avg Credit Age as big stat, hover-reveal panel showing avg total accounts and avg revolving utilization (fields unused elsewhere on the page).
-	measure 'Borrower Hero HTML' =
-			VAR _CreditAge = [Avg Credit Age (Years)]
-			VAR _CreditAgeTxt = FORMAT(_CreditAge, "0.0")
-			VAR _Accounts = AVERAGE(fact_loan[total_accounts])
-			VAR _AccountsTxt = FORMAT(_Accounts, "0.0")
-			VAR _Open = AVERAGE(fact_loan[open_accounts])
-			VAR _OpenTxt = FORMAT(_Open, "0.0")
-			VAR _Util = AVERAGE(fact_loan[revolving_utilization_rate])
-			VAR _UtilTxt = FORMAT(_Util, "0.0") & "%"
-			VAR _img = "https://i.ibb.co/PstrTKDv/pexels-cottonbro-3944405.jpg"
-			VAR _html =
-			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:14px;cursor:pointer;'>
-			<style>
-			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
-			  @keyframes imgIn{ 0%{opacity:0} 100%{opacity:1} }
-			  @keyframes imgDrift{ 0%{transform:scale(1.04) translateX(0)} 100%{transform:scale(1.04) translateX(-2%)} }
-			  .bg-img{ position:absolute; top:0; left:0; width:106%; height:100%; object-fit:cover; object-position:50% 35%; opacity:0; animation:imgIn 1.2s ease .2s forwards, imgDrift 26s ease-in-out 1s infinite alternate; }
-			  .ve-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:14px; }
-			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; }
-			  .overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(155deg,rgba(36,20,17,.55) 0%,rgba(30,16,14,.72) 45%,rgba(18,9,8,.9) 100%); }
-			  .content{ position:relative; z-index:1; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; height:100%; box-sizing:border-box; gap:6px; }
-			  .tag{ display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.14); padding:4px 11px; border-radius:999px; width:fit-content; }
-			  .dot{ width:6px; height:6px; border-radius:50%; background:#D9432F; }
-			  .tagtxt{ font-size:10.5px; font-weight:600; letter-spacing:1.5px; color:#f0a99e; }
-			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:25px; font-weight:700; color:#ffffff; line-height:1.08; text-shadow:0 1px 4px rgba(0,0,0,.4); margin-top:6px; }
-			  .subline{ font-size:12.5px; font-weight:400; color:#e6d3cc; margin-top:3px; }
-			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:44px; font-weight:700; color:#ffffff; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,.45); margin-top:6px; }
-			  .para{ font-size:12px; font-weight:300; color:#e6d8d2; line-height:1.5; margin-top:6px; max-width:96%; }
-			  .hint{ font-size:10.5px; color:#c9beb5; margin-top:8px; opacity:.85; }
-			  .panel{ position:absolute; inset:0; background:linear-gradient(155deg,#1e1613,#2a1a17); color:#fff; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; gap:9px; opacity:0; transition:opacity .35s ease; pointer-events:none; z-index:2; box-sizing:border-box; }
-			  .ve-wrap:hover .panel{ opacity:1; pointer-events:auto; }
-			  .ptitle{ font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
-			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.12); padding-top:8px; }
-			  .rv{ font-size:18px; font-weight:700; color:#f0a99e; min-width:52px; font-family:Cormorant Garamond,Georgia,serif; }
-			  .rl{ font-size:12px; color:#d8ccc3; line-height:1.3; }
-			  .safe{ font-size:11.5px; color:#9fc9ad; margin-top:4px; }
-			</style>
-			<div class='ve-wrap'>
-			  <div class='face'>
-			    <img class='bg-img' src='" & _img & "' />
-			    <div class='overlay'></div>
-			    <div class='content'>
-			      <div class='tag'><span class='dot'></span><span class='tagtxt'>BORROWER PROFILE</span></div>
-			      <div class='ttl'>Who&#39;s Borrowing</div>
-			      <div class='subline'>Average credit history across the book</div>
-			      <div class='num'>" & _CreditAgeTxt & " yrs</div>
-			      <div class='para'>That&#39;s the average age of a borrower&#39;s credit file at the time of the loan &mdash; more years on file generally means more data for underwriting, but individual grade and income still vary widely around that average.</div>
-			      <div class='hint'>Hover for account depth</div>
-			    </div>
-			  </div>
-			  <div class='panel'>
-			    <div class='ptitle'>Account depth</div>
-			    <div class='row'><div class='rv'>" & _AccountsTxt & "</div><div class='rl'>average total accounts on file per borrower</div></div>
-			    <div class='row'><div class='rv'>" & _OpenTxt & "</div><div class='rl'>average currently open accounts</div></div>
-			    <div class='row'><div class='rv'>" & _UtilTxt & "</div><div class='rl'>average revolving utilization across the book</div></div>
-			    <div class='safe'>More open accounts alongside higher utilization signal thinner breathing room, even at the same credit age.</div>
-			  </div>
-			</div>
-			</div>"
-			RETURN _html
-		displayFolder: HTML Visuals
-		lineageTag: f686ab86-de8c-4d81-9b7a-f723e064c608
-
 	/// Three strong Risk-Analysis KPI cards (Term Risk Gap, Charged-off Dollar Exposure, Credit Quality Gap) — white card style with sparkline + YoY comparison, flips to solid dark on hover to reveal explanation. Grade Risk Spread was dropped: it duplicated the Hero card's grade-risk story thematically even though the number differed.
 	measure 'Risk KPI Cards HTML' =
 			VAR _yrTbl = SUMMARIZE(dim_date, dim_date[year])
@@ -1116,6 +1059,386 @@ table _Measures
 			"</div>"
 		displayFolder: HTML Visuals - Risk
 		lineageTag: 8d4d4bd8-038b-419a-9e0b-650253925feb
+
+	measure 'Top 10 State Loan Amount' =
+			VAR _rank = RANKX(ALL(dim_geography[borrower_state]), CALCULATE([Total Amount]),,DESC,DENSE)
+			RETURN IF(_rank <= 10, [Total Amount])
+		displayFolder: Borrower Profile
+		lineageTag: 12da14af-8cb9-40c1-9f3c-e80e984e6b1f
+
+	/// Three Borrower Profile KPI cards (Avg Annual Income, Avg FICO Score, Avg DTI) — white card style with sparkline + YoY vs prior year and vs first year, flips to a dark teal panel on hover to reveal a deeper stat (income gap by grade, reported FICO band, high-DTI share). Matches the Risk KPI Cards HTML visual language.
+	measure 'Borrower KPI Cards HTML' =
+			VAR _yrTbl = SUMMARIZE(dim_date, dim_date[year])
+			
+			VAR _incVal = [AVG Annual Income]
+			VAR _incTxt = "$" & FORMAT(_incVal,"#,##0")
+			VAR _incTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[AVG Annual Income]), NOT ISBLANK([V]))
+			VAR _incN = COUNTROWS(_incTbl)
+			VAR _incMin = MINX(_incTbl,[V])
+			VAR _incMax = MAXX(_incTbl,[V])
+			VAR _incRange = IF(_incMax=_incMin,1,_incMax-_incMin)
+			VAR _incRanked = ADDCOLUMNS(_incTbl,"Idx",RANKX(_incTbl,dim_date[year],,ASC,DENSE))
+			VAR _incPts = CONCATENATEX(_incRanked, FORMAT((([Idx]-1)/(_incN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_incMin)/_incRange)*22+2),"0.0"), " ", [Idx], ASC)
+			VAR _incFirstYr = MINX(_incTbl,dim_date[year])
+			VAR _incLastYr = MAXX(_incTbl,dim_date[year])
+			VAR _incPrevYr = _incLastYr - 1
+			VAR _incLastV = CALCULATE([AVG Annual Income], dim_date[year]=_incLastYr)
+			VAR _incPrevV = CALCULATE([AVG Annual Income], dim_date[year]=_incPrevYr)
+			VAR _incFirstV = CALCULATE([AVG Annual Income], dim_date[year]=_incFirstYr)
+			VAR _incYoYUp = _incLastV >= _incPrevV
+			VAR _incYoYArrow = IF(_incYoYUp,"▲","▼")
+			VAR _incYoYColor = IF(_incYoYUp,"#1C9A5B","#D9432F")
+			VAR _incYoYPct = FORMAT(ABS(DIVIDE(_incLastV-_incPrevV,_incPrevV))*100,"0.0") & "%"
+			VAR _incLongUp = _incLastV >= _incFirstV
+			VAR _incLongArrow = IF(_incLongUp,"▲","▼")
+			VAR _incLongColor = IF(_incLongUp,"#1C9A5B","#D9432F")
+			VAR _incLongPct = FORMAT(ABS(DIVIDE(_incLastV-_incFirstV,_incFirstV))*100,"0.0") & "%"
+			
+			VAR _bestGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Annual Income], DESC)
+			VAR _bestGrade = MAXX(_bestGradeT, dim_grade[grade])
+			VAR _bestVal = CALCULATE([AVG Annual Income], dim_grade[grade]=_bestGrade)
+			VAR _worstGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Annual Income], ASC)
+			VAR _worstGrade = MAXX(_worstGradeT, dim_grade[grade])
+			VAR _worstVal = CALCULATE([AVG Annual Income], dim_grade[grade]=_worstGrade)
+			VAR _incGapTxt = "$" & FORMAT(_bestVal - _worstVal,"#,##0")
+			
+			VAR _ficoVal = [Avg FICO Score]
+			VAR _ficoTxt = FORMAT(_ficoVal,"0")
+			VAR _ficoTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[Avg FICO Score]), NOT ISBLANK([V]))
+			VAR _ficoN = COUNTROWS(_ficoTbl)
+			VAR _ficoMin = MINX(_ficoTbl,[V])
+			VAR _ficoMax = MAXX(_ficoTbl,[V])
+			VAR _ficoRange = IF(_ficoMax=_ficoMin,1,_ficoMax-_ficoMin)
+			VAR _ficoRanked = ADDCOLUMNS(_ficoTbl,"Idx",RANKX(_ficoTbl,dim_date[year],,ASC,DENSE))
+			VAR _ficoPts = CONCATENATEX(_ficoRanked, FORMAT((([Idx]-1)/(_ficoN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_ficoMin)/_ficoRange)*22+2),"0.0"), " ", [Idx], ASC)
+			VAR _ficoFirstYr = MINX(_ficoTbl,dim_date[year])
+			VAR _ficoLastYr = MAXX(_ficoTbl,dim_date[year])
+			VAR _ficoPrevYr = _ficoLastYr - 1
+			VAR _ficoLastV = CALCULATE([Avg FICO Score], dim_date[year]=_ficoLastYr)
+			VAR _ficoPrevV = CALCULATE([Avg FICO Score], dim_date[year]=_ficoPrevYr)
+			VAR _ficoFirstV = CALCULATE([Avg FICO Score], dim_date[year]=_ficoFirstYr)
+			VAR _ficoYoYUp = _ficoLastV >= _ficoPrevV
+			VAR _ficoYoYArrow = IF(_ficoYoYUp,"▲","▼")
+			VAR _ficoYoYColor = IF(_ficoYoYUp,"#1C9A5B","#D9432F")
+			VAR _ficoYoYPct = FORMAT(ABS(DIVIDE(_ficoLastV-_ficoPrevV,_ficoPrevV))*100,"0.0") & "%"
+			VAR _ficoLongUp = _ficoLastV >= _ficoFirstV
+			VAR _ficoLongArrow = IF(_ficoLongUp,"▲","▼")
+			VAR _ficoLongColor = IF(_ficoLongUp,"#1C9A5B","#D9432F")
+			VAR _ficoLongPct = FORMAT(ABS(DIVIDE(_ficoLastV-_ficoFirstV,_ficoFirstV))*100,"0.0") & "%"
+			
+			VAR _ficoLow = AVERAGE(fact_loan[fico_range_low])
+			VAR _ficoHigh = AVERAGE(fact_loan[fico_range_high])
+			VAR _ficoBandTxt = FORMAT(_ficoLow,"0") & "–" & FORMAT(_ficoHigh,"0")
+			
+			VAR _dtiVal = [AVG DTI]
+			VAR _dtiTxt = FORMAT(_dtiVal,"0.0%")
+			VAR _dtiTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[AVG DTI]), NOT ISBLANK([V]))
+			VAR _dtiN = COUNTROWS(_dtiTbl)
+			VAR _dtiMin = MINX(_dtiTbl,[V])
+			VAR _dtiMax = MAXX(_dtiTbl,[V])
+			VAR _dtiRange = IF(_dtiMax=_dtiMin,1,_dtiMax-_dtiMin)
+			VAR _dtiRanked = ADDCOLUMNS(_dtiTbl,"Idx",RANKX(_dtiTbl,dim_date[year],,ASC,DENSE))
+			VAR _dtiPts = CONCATENATEX(_dtiRanked, FORMAT((([Idx]-1)/(_dtiN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_dtiMin)/_dtiRange)*22+2),"0.0"), " ", [Idx], ASC)
+			VAR _dtiFirstYr = MINX(_dtiTbl,dim_date[year])
+			VAR _dtiLastYr = MAXX(_dtiTbl,dim_date[year])
+			VAR _dtiPrevYr = _dtiLastYr - 1
+			VAR _dtiLastV = CALCULATE([AVG DTI], dim_date[year]=_dtiLastYr)
+			VAR _dtiPrevV = CALCULATE([AVG DTI], dim_date[year]=_dtiPrevYr)
+			VAR _dtiFirstV = CALCULATE([AVG DTI], dim_date[year]=_dtiFirstYr)
+			VAR _dtiYoYUp = _dtiLastV >= _dtiPrevV
+			VAR _dtiYoYArrow = IF(_dtiYoYUp,"▲","▼")
+			VAR _dtiYoYColor = IF(_dtiYoYUp,"#D9432F","#1C9A5B")
+			VAR _dtiYoYPct = FORMAT(ABS(DIVIDE(_dtiLastV-_dtiPrevV,_dtiPrevV))*100,"0.0") & "%"
+			VAR _dtiLongUp = _dtiLastV >= _dtiFirstV
+			VAR _dtiLongArrow = IF(_dtiLongUp,"▲","▼")
+			VAR _dtiLongColor = IF(_dtiLongUp,"#D9432F","#1C9A5B")
+			VAR _dtiLongPct = FORMAT(ABS(DIVIDE(_dtiLastV-_dtiFirstV,_dtiFirstV))*100,"0.0") & "%"
+			
+			VAR _highDtiShare = DIVIDE(CALCULATE(COUNTROWS(fact_loan), fact_loan[win_dti] > 36), COUNTROWS(fact_loan))
+			VAR _highDtiTxt = FORMAT(_highDtiShare,"0.0%")
+			
+			VAR _css = "<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:transparent!important}*{box-sizing:border-box}.bk{font-family:Jost,'Segoe UI',sans-serif;width:100%;height:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.c{position:relative;overflow:hidden;border-radius:14px;background:#fff;border:1px solid #EDF0F5;box-shadow:0 1px 3px rgba(16,24,40,.06);transition:box-shadow .2s ease}.c:hover{box-shadow:0 6px 18px rgba(16,24,40,.14)}.front{position:relative;z-index:1;padding:16px 18px;height:100%;box-sizing:border-box;display:flex;flex-direction:column}.q{position:absolute;top:14px;right:14px;width:16px;height:16px;border-radius:50%;border:1px solid #cfd4de;color:#9aa1b1;font-size:9.5px;font-weight:600;display:flex;align-items:center;justify-content:center}.lbl{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#6b7280}.val{font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:700;color:#1f2430;margin-top:6px;line-height:1}.cmp{font-size:10.5px;color:#8a8f9c;margin-top:7px;line-height:1.5}.cmp b{color:#1f2430;font-weight:600}.spark{margin-top:auto;padding-top:8px;width:100%;height:26px}.back{position:absolute;inset:0;z-index:2;background:linear-gradient(155deg,#132623,#0d1b19);padding:18px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(4px);transition:.22s ease;pointer-events:none}.c:hover .back{opacity:1;transform:none;pointer-events:auto}.backl{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:#4FBFBF;font-weight:700}.backp{font-size:12px;line-height:1.6;color:#e3f0ef;margin-top:8px}@media(max-width:700px){.bk{gap:8px}.front{padding:12px}.val{font-size:24px}.cmp{font-size:9.5px}}</style>"
+			
+			RETURN _css & "<div class='bk'>" &
+			
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Avg Annual Income</div><div class='val'>" & _incTxt & "</div><div class='cmp'>" & _incLastYr & ": <b>$" & FORMAT(_incLastV,"#,##0") & "</b> <span style='color:" & _incYoYColor & "'>" & _incYoYArrow & " " & _incYoYPct & "</span></div><div class='cmp'>Since " & _incFirstYr & ": <span style='color:" & _incLongColor & "'>" & _incLongArrow & " " & _incLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _incPts & "' fill='none' stroke='#1B6B6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>Income gap, Grade " & _bestGrade & " vs " & _worstGrade & "</div><div class='backp'>Grade " & _bestGrade & " borrowers earn " & _incGapTxt & " more per year on average than Grade " & _worstGrade & " borrowers — across the current borrower selection.</div></div></div>" &
+			
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Avg FICO Score</div><div class='val'>" & _ficoTxt & "</div><div class='cmp'>" & _ficoLastYr & ": <b>" & FORMAT(_ficoLastV,"0") & "</b> <span style='color:" & _ficoYoYColor & "'>" & _ficoYoYArrow & " " & _ficoYoYPct & "</span></div><div class='cmp'>Since " & _ficoFirstYr & ": <span style='color:" & _ficoLongColor & "'>" & _ficoLongArrow & " " & _ficoLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _ficoPts & "' fill='none' stroke='#1C9A5B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>Reported score band</div><div class='backp'>Typical low–high FICO range reported across borrowers is " & _ficoBandTxt & ", before it's rounded to one average score.</div></div></div>" &
+			
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Avg DTI</div><div class='val'>" & _dtiTxt & "</div><div class='cmp'>" & _dtiLastYr & ": <b>" & FORMAT(_dtiLastV,"0.0%") & "</b> <span style='color:" & _dtiYoYColor & "'>" & _dtiYoYArrow & " " & _dtiYoYPct & "</span></div><div class='cmp'>Since " & _dtiFirstYr & ": <span style='color:" & _dtiLongColor & "'>" & _dtiLongArrow & " " & _dtiLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _dtiPts & "' fill='none' stroke='#D9432F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>High-DTI share</div><div class='backp'>" & _highDtiTxt & " of borrowers carry a debt-to-income ratio above 36% — a common affordability-risk line.</div></div></div>" &
+			
+			"</div>"
+		displayFolder: HTML Visuals
+		lineageTag: 6f524d24-1be3-4ecf-975a-0130a9be738a
+
+	/// Borrower Profile hero card (HTML Content visual): flat-lay wallet/card photo with teal gradient overlay, headline, Avg Credit Age as big stat, hover-reveal panel showing avg total accounts and avg revolving utilization (fields unused elsewhere on the page).
+	measure 'Borrower Hero HTML' =
+			VAR _CreditAge = [Avg Credit Age (Years)]
+			VAR _CreditAgeTxt = FORMAT(_CreditAge, "0.0")
+			VAR _Accounts = AVERAGE(fact_loan[total_accounts])
+			VAR _AccountsTxt = FORMAT(_Accounts, "0.0")
+			VAR _Open = AVERAGE(fact_loan[open_accounts])
+			VAR _OpenTxt = FORMAT(_Open, "0.0")
+			VAR _Util = AVERAGE(fact_loan[revolving_utilization_rate])
+			VAR _UtilTxt = FORMAT(_Util, "0.0") & "%"
+			VAR _img = "https://i.ibb.co/PstrTKDv/pexels-cottonbro-3944405.jpg"
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:14px;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  @keyframes imgIn{ 0%{opacity:0} 100%{opacity:1} }
+			  @keyframes imgDrift{ 0%{transform:scale(1.04) translateX(0)} 100%{transform:scale(1.04) translateX(-2%)} }
+			  .bg-img{ position:absolute; top:0; left:0; width:106%; height:100%; object-fit:cover; object-position:50% 35%; opacity:0; animation:imgIn 1.2s ease .2s forwards, imgDrift 26s ease-in-out 1s infinite alternate; }
+			  .ve-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:14px; }
+			  .face{ position:relative; height:100%; width:100%; box-sizing:border-box; }
+			  .overlay{ position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(155deg,rgba(36,20,17,.55) 0%,rgba(30,16,14,.72) 45%,rgba(18,9,8,.9) 100%); }
+			  .content{ position:relative; z-index:1; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; height:100%; box-sizing:border-box; gap:6px; }
+			  .tag{ display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.14); padding:4px 11px; border-radius:999px; width:fit-content; }
+			  .dot{ width:6px; height:6px; border-radius:50%; background:#D9432F; }
+			  .tagtxt{ font-size:10.5px; font-weight:600; letter-spacing:1.5px; color:#f0a99e; }
+			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:25px; font-weight:700; color:#ffffff; line-height:1.08; text-shadow:0 1px 4px rgba(0,0,0,.4); margin-top:6px; }
+			  .subline{ font-size:12.5px; font-weight:400; color:#e6d3cc; margin-top:3px; }
+			  .num{ font-family:Cormorant Garamond,Georgia,serif; font-size:44px; font-weight:700; color:#ffffff; line-height:1; text-shadow:0 2px 6px rgba(0,0,0,.45); margin-top:6px; }
+			  .para{ font-size:12px; font-weight:300; color:#e6d8d2; line-height:1.5; margin-top:6px; max-width:96%; }
+			  .hint{ font-size:10.5px; color:#c9beb5; margin-top:8px; opacity:.85; }
+			  .panel{ position:absolute; inset:0; background:linear-gradient(155deg,#1e1613,#2a1a17); color:#fff; padding:20px 22px; display:flex; flex-direction:column; justify-content:center; gap:9px; opacity:0; transition:opacity .35s ease; pointer-events:none; z-index:2; box-sizing:border-box; }
+			  .ve-wrap:hover .panel{ opacity:1; pointer-events:auto; }
+			  .ptitle{ font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
+			  .row{ display:flex; align-items:baseline; gap:10px; border-top:1px solid rgba(255,255,255,.12); padding-top:8px; }
+			  .rv{ font-size:18px; font-weight:700; color:#f0a99e; min-width:52px; font-family:Cormorant Garamond,Georgia,serif; }
+			  .rl{ font-size:12px; color:#d8ccc3; line-height:1.3; }
+			  .safe{ font-size:11.5px; color:#9fc9ad; margin-top:4px; }
+			</style>
+			<div class='ve-wrap'>
+			  <div class='face'>
+			    <img class='bg-img' src='" & _img & "' />
+			    <div class='overlay'></div>
+			    <div class='content'>
+			      <div class='tag'><span class='dot'></span><span class='tagtxt'>BORROWER PROFILE</span></div>
+			      <div class='ttl'>Who&#39;s Borrowing</div>
+			      <div class='subline'>Average credit history across the book</div>
+			      <div class='num'>" & _CreditAgeTxt & " yrs</div>
+			      <div class='para'>That&#39;s the average age of a borrower&#39;s credit file at the time of the loan &mdash; more years on file generally means more data for underwriting, but individual grade and income still vary widely around that average.</div>
+			      <div class='hint'>Hover for account depth</div>
+			    </div>
+			  </div>
+			  <div class='panel'>
+			    <div class='ptitle'>Account depth</div>
+			    <div class='row'><div class='rv'>" & _AccountsTxt & "</div><div class='rl'>average total accounts on file per borrower</div></div>
+			    <div class='row'><div class='rv'>" & _OpenTxt & "</div><div class='rl'>average currently open accounts</div></div>
+			    <div class='row'><div class='rv'>" & _UtilTxt & "</div><div class='rl'>average revolving utilization across the book</div></div>
+			    <div class='safe'>More open accounts alongside higher utilization signal thinner breathing room, even at the same credit age.</div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: f686ab86-de8c-4d81-9b7a-f723e064c608
+
+	measure 'Borrower Credit Profile HTML' =
+			VAR _grades = ALLSELECTED(dim_grade[grade])
+			VAR _minFico = MINX(_grades, CALCULATE([Avg FICO Score]))
+			VAR _maxFico = MAXX(_grades, CALCULATE([Avg FICO Score]))
+			VAR _minIncome = MINX(_grades, CALCULATE([AVG Annual Income]))
+			VAR _maxIncome = MAXX(_grades, CALCULATE([AVG Annual Income]))
+			VAR _rows =
+				CONCATENATEX(
+					_grades,
+					VAR _grade = dim_grade[grade]
+					VAR _fico = CALCULATE([Avg FICO Score])
+					VAR _income = CALCULATE([AVG Annual Income])
+					VAR _ficoWidth = FORMAT(IF(_maxFico = _minFico, 100, 16 + 84 * DIVIDE(_fico - _minFico, _maxFico - _minFico)), "0")
+					VAR _incomeWidth = FORMAT(IF(_maxIncome = _minIncome, 100, 16 + 84 * DIVIDE(_income - _minIncome, _maxIncome - _minIncome)), "0")
+					RETURN "<div class='cp-row' title='Grade " & _grade & " · FICO " & FORMAT(_fico, "0") & " · Avg income " & FORMAT(_income, "$#,##0") & "'><div class='cp-grade'>" & _grade & "</div><div class='cp-metric'><span class='cp-value'>" & FORMAT(_fico, "0") & "</span><span class='cp-track'><span class='cp-fill cp-fico' style='width:" & _ficoWidth & "%'></span></span></div><div class='cp-metric'><span class='cp-value'>" & FORMAT(_income, "$#,##0") & "</span><span class='cp-track'><span class='cp-fill cp-income' style='width:" & _incomeWidth & "%'></span></span></div></div>",
+					"",
+					dim_grade[grade], ASC
+				)
+			RETURN
+				"<div class='cp-wrap'><style>.cp-wrap{font-family:Segoe UI,Arial,sans-serif;width:100%;height:100vh;box-sizing:border-box;background:#fff;border:1px solid #E5E8E8;border-radius:14px;padding:17px 22px;color:#2B2E2E}.cp-title{font-size:15px;font-weight:700;letter-spacing:.5px;color:#1B6B6B}.cp-sub{font-size:11px;color:#718080;margin-top:4px;margin-bottom:13px}.cp-head,.cp-row{display:grid;grid-template-columns:44px 1fr 1.25fr;align-items:center;column-gap:18px}.cp-head{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:#718080;padding-bottom:6px;border-bottom:1px solid #E9EEEE}.cp-row{height:26px;border-bottom:1px solid #F0F3F3;transition:background .18s ease;padding:0 4px}.cp-row:hover{background:#F3F7F7}.cp-grade{font-size:12px;font-weight:700;color:#1B6B6B}.cp-metric{display:grid;grid-template-columns:66px 1fr;align-items:center;gap:8px}.cp-value{font-size:11px;color:#3D5555;font-weight:600}.cp-track{display:block;height:7px;border-radius:8px;background:#EDF2F2;overflow:hidden}.cp-fill{display:block;height:100%;border-radius:8px;transition:width .35s ease}.cp-fico{background:#1B6B6B}.cp-income{background:#5C9A9A}</style><div class='cp-title'>CREDIT PROFILE BY GRADE</div><div class='cp-sub'>Credit quality and earning capacity across the lending tiers · hover a row for detail</div><div class='cp-head'><span>Grade</span><span>Average FICO</span><span>Average income</span></div><div class='cp-rows'>" & _rows & "</div></div>"
+		displayFolder: HTML Visuals
+		lineageTag: 6c3b2001-cfe5-4b4d-ae91-6e46bf5b2a91
+
+	measure 'Borrower Risk Factors HTML' =
+			VAR _employmentBase = FILTER(ALLSELECTED(dim_borrower[employment_length]), NOT ISBLANK(dim_borrower[employment_length]))
+			VAR _homeBase = FILTER(ALLSELECTED(dim_borrower[home_ownership]), NOT ISBLANK(dim_borrower[home_ownership]))
+			VAR _employment = ADDCOLUMNS(_employmentBase, "__rate", CALCULATE([AVG Default Rate]), "__loans", CALCULATE([Total Loan]))
+			VAR _home = ADDCOLUMNS(_homeBase, "__rate", CALCULATE([AVG Default Rate]), "__loans", CALCULATE([Total Loan]))
+			VAR _maxEmployment = MAXX(_employment, [__rate])
+			VAR _maxHome = MAXX(_home, [__rate])
+			VAR _employmentRows =
+				CONCATENATEX(
+					_employment,
+					VAR _category = dim_borrower[employment_length]
+					VAR _rate = [__rate]
+					VAR _loans = [__loans]
+					VAR _width = FORMAT(100 * DIVIDE(_rate, _maxEmployment, 0), "0.0")
+					RETURN "<div class='rf-row' title='" & _category & " · " & FORMAT(_loans, "#,##0") & " loans · " & FORMAT(_rate, "0.0%") & " default rate'><span class='rf-label'>" & _category & "</span><span class='rf-track'><span class='rf-fill' style='width:" & _width & "%'></span></span><span class='rf-rate'>" & FORMAT(_rate, "0.0%") & "</span></div>",
+					"",
+					[__rate], DESC
+				)
+			VAR _homeRows =
+				CONCATENATEX(
+					_home,
+					VAR _category = dim_borrower[home_ownership]
+					VAR _rate = [__rate]
+					VAR _loans = [__loans]
+					VAR _width = FORMAT(100 * DIVIDE(_rate, _maxHome, 0), "0.0")
+					RETURN "<div class='rf-row' title='" & _category & " · " & FORMAT(_loans, "#,##0") & " loans · " & FORMAT(_rate, "0.0%") & " default rate'><span class='rf-label'>" & _category & "</span><span class='rf-track'><span class='rf-fill' style='width:" & _width & "%'></span></span><span class='rf-rate'>" & FORMAT(_rate, "0.0%") & "</span></div>",
+					"",
+					[__rate], DESC
+				)
+			RETURN
+				"<div class='rf-wrap'><style>.rf-wrap{font-family:Segoe UI,Arial,sans-serif;width:100%;height:100vh;box-sizing:border-box;background:#fff;border:1px solid #E5E8E8;border-radius:14px;padding:17px 22px;color:#2B2E2E}.rf-title{font-size:15px;font-weight:700;letter-spacing:.5px;color:#1B6B6B}.rf-sub{font-size:11px;color:#718080;margin-top:4px;margin-bottom:13px}.rf-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}.rf-section-title{font-size:11px;font-weight:700;color:#334D4D;margin-bottom:7px}.rf-section-title span{font-size:10px;font-weight:400;color:#879595;margin-left:5px}.rf-row{display:grid;grid-template-columns:135px 1fr 48px;align-items:center;gap:10px;height:18px;border-bottom:1px solid #F0F3F3;padding:0 3px;transition:background .16s ease}.rf-row:hover{background:#F3F7F7}.rf-label{font-size:10px;color:#506565;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rf-track{display:block;height:7px;background:#EDF2F2;border-radius:8px;overflow:hidden}.rf-fill{display:block;height:100%;border-radius:8px;background:#1B6B6B;transition:width .3s ease}.rf-row:hover .rf-fill{background:#5C9A9A}.rf-rate{font-size:10px;color:#445B5B;text-align:right;font-weight:600}</style><div class='rf-title'>BORROWER RISK FACTORS</div><div class='rf-sub'>Default rate and loan volume by borrower characteristic · hover a category for loan count</div><div class='rf-cols'><div><div class='rf-section-title'>Employment length <span>sorted highest risk first</span></div>" & _employmentRows & "</div><div><div class='rf-section-title'>Home ownership <span>sorted highest risk first</span></div>" & _homeRows & "</div></div></div>"
+		displayFolder: HTML Visuals
+		lineageTag: 26a4e651-f4a6-49aa-b603-c9ff80990439
+
+	measure 'Verification Status HTML' =
+			VAR _verified = CALCULATE([Total Loan], KEEPFILTERS(dim_borrower[verification_status] = "Verified"))
+			VAR _source = CALCULATE([Total Loan], KEEPFILTERS(dim_borrower[verification_status] = "Source Verified"))
+			VAR _not = CALCULATE([Total Loan], KEEPFILTERS(dim_borrower[verification_status] = "Not Verified"))
+			VAR _total = _verified + _source + _not
+			VAR _pV = DIVIDE(_verified,_total,0)
+			VAR _pS = DIVIDE(_source,_total,0)
+			VAR _pN = DIVIDE(_not,_total,0)
+			VAR _rateV = CALCULATE([AVG Default Rate], KEEPFILTERS(dim_borrower[verification_status] = "Verified"))
+			VAR _rateS = CALCULATE([AVG Default Rate], KEEPFILTERS(dim_borrower[verification_status] = "Source Verified"))
+			VAR _rateN = CALCULATE([AVG Default Rate], KEEPFILTERS(dim_borrower[verification_status] = "Not Verified"))
+			RETURN
+			"<div style='font-family:Segoe UI,Arial,sans-serif;width:100%;height:100vh;box-sizing:border-box;padding:18px 20px;background:#FFFFFF;border-radius:14px;'><style>.vs-seg{height:18px;transition:opacity .2s ease}.vs-seg:hover{opacity:.75}.vs-row{display:grid;grid-template-columns:10px 1fr auto;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #EEF1F1}.vs-dot{height:9px;width:9px;border-radius:50%}.vs-name{font-size:12px;color:#2B2E2E;font-weight:600}.vs-meta{font-size:11px;color:#5C7373;text-align:right}.vs-rate{font-size:10px;color:#5C7373;font-weight:400}</style><div style='font-size:12px;color:#1B6B6B;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px'>Verification Status</div><div style='display:flex;overflow:hidden;border-radius:99px;height:18px;margin-bottom:14px'><div class='vs-seg' title='Verified: " & FORMAT(_verified,"#,##0") & " loans · " & FORMAT(_pV,"0.0%") & "' style='width:" & FORMAT(_pV*100,"0.0") & "%;background:#1B6B6B'></div><div class='vs-seg' title='Source Verified: " & FORMAT(_source,"#,##0") & " loans · " & FORMAT(_pS,"0.0%") & "' style='width:" & FORMAT(_pS*100,"0.0") & "%;background:#5C9A9A'></div><div class='vs-seg' title='Not Verified: " & FORMAT(_not,"#,##0") & " loans · " & FORMAT(_pN,"0.0%") & "' style='width:" & FORMAT(_pN*100,"0.0") & "%;background:#C7D9D9'></div></div><div class='vs-row'><span class='vs-dot' style='background:#1B6B6B'></span><div><div class='vs-name'>Verified</div><div class='vs-rate'>Default rate " & FORMAT(_rateV,"0.0%") & "</div></div><div class='vs-meta'>" & FORMAT(_verified,"#,##0") & " · " & FORMAT(_pV,"0.0%") & "</div></div><div class='vs-row'><span class='vs-dot' style='background:#5C9A9A'></span><div><div class='vs-name'>Source Verified</div><div class='vs-rate'>Default rate " & FORMAT(_rateS,"0.0%") & "</div></div><div class='vs-meta'>" & FORMAT(_source,"#,##0") & " · " & FORMAT(_pS,"0.0%") & "</div></div><div class='vs-row' style='border-bottom:0'><span class='vs-dot' style='background:#C7D9D9'></span><div><div class='vs-name'>Not Verified</div><div class='vs-rate'>Default rate " & FORMAT(_rateN,"0.0%") & "</div></div><div class='vs-meta'>" & FORMAT(_not,"#,##0") & " · " & FORMAT(_pN,"0.0%") & "</div></div></div>"
+		displayFolder: HTML Visuals
+		lineageTag: e7156774-8ee1-4f59-9fee-8ab0fd8c1522
+
+	/// KPI hover card: Avg Annual Income (front) / income gap between best and worst grade (hover reveal).
+	measure 'KPI Income HTML' =
+			VAR _avg = [AVG Annual Income]
+			VAR _avgTxt = "$" & FORMAT(_avg, "#,##0")
+			VAR _bestGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Annual Income], DESC)
+			VAR _bestGrade = MAXX(_bestGradeT, dim_grade[grade])
+			VAR _bestVal = CALCULATE([AVG Annual Income], dim_grade[grade] = _bestGrade)
+			VAR _worstGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Annual Income], ASC)
+			VAR _worstGrade = MAXX(_worstGradeT, dim_grade[grade])
+			VAR _worstVal = CALCULATE([AVG Annual Income], dim_grade[grade] = _worstGrade)
+			VAR _gapTxt = "$" & FORMAT(_bestVal - _worstVal, "#,##0")
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:10px;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .kpi-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:10px; background:linear-gradient(155deg,#241411,#1e130f); }
+			  .kpi-face{ position:absolute; inset:0; padding:16px 18px; display:flex; flex-direction:column; justify-content:center; box-sizing:border-box; transition:opacity .35s ease, transform .35s ease; }
+			  .kpi-front{ opacity:1; transform:translateY(0); }
+			  .kpi-back{ opacity:0; transform:translateY(8px); pointer-events:none; }
+			  .kpi-wrap:hover .kpi-front{ opacity:0; transform:translateY(-8px); pointer-events:none; }
+			  .kpi-wrap:hover .kpi-back{ opacity:1; transform:translateY(0); pointer-events:auto; }
+			  .kpi-label{ font-size:10.5px; font-weight:700; letter-spacing:1.3px; color:#f0a99e; text-transform:uppercase; }
+			  .kpi-value{ font-family:Cormorant Garamond,Georgia,serif; font-size:32px; font-weight:700; color:#fff; margin-top:6px; text-shadow:0 2px 6px rgba(0,0,0,.4); }
+			  .kpi-sub{ font-size:11px; color:#c9beb5; margin-top:4px; }
+			  .kpi-hint{ font-size:9.5px; color:#a79a92; margin-top:8px; opacity:.8; }
+			  .kpi-back-title{ font-size:10px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
+			  .kpi-back-val{ font-family:Cormorant Garamond,Georgia,serif; font-size:24px; font-weight:700; color:#f0a99e; margin-top:6px; }
+			  .kpi-back-txt{ font-size:11px; color:#d8ccc3; line-height:1.4; margin-top:4px; }
+			</style>
+			<div class='kpi-wrap'>
+			  <div class='kpi-face kpi-front'>
+			    <div class='kpi-label'>Avg Annual Income</div>
+			    <div class='kpi-value'>" & _avgTxt & "</div>
+			    <div class='kpi-sub'>Across current borrower selection</div>
+			    <div class='kpi-hint'>Hover for income gap by grade</div>
+			  </div>
+			  <div class='kpi-face kpi-back'>
+			    <div class='kpi-back-title'>Income gap, Grade " & _bestGrade & " vs " & _worstGrade & "</div>
+			    <div class='kpi-back-val'>" & _gapTxt & "</div>
+			    <div class='kpi-back-txt'>Grade " & _bestGrade & " borrowers earn this much more on average than Grade " & _worstGrade & " borrowers.</div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 1f574fc7-b9d0-497e-ad2a-1c478f9c1a67
+
+	/// KPI hover card: Avg FICO Score (front) / reported FICO band width (hover reveal).
+	measure 'KPI FICO HTML' =
+			VAR _fico = [Avg FICO Score]
+			VAR _ficoTxt = FORMAT(_fico, "0")
+			VAR _low = AVERAGE(fact_loan[fico_range_low])
+			VAR _high = AVERAGE(fact_loan[fico_range_high])
+			VAR _bandTxt = FORMAT(_low, "0") & "–" & FORMAT(_high, "0")
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:10px;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .kpi-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:10px; background:linear-gradient(155deg,#241411,#1e130f); }
+			  .kpi-face{ position:absolute; inset:0; padding:16px 18px; display:flex; flex-direction:column; justify-content:center; box-sizing:border-box; transition:opacity .35s ease, transform .35s ease; }
+			  .kpi-front{ opacity:1; transform:translateY(0); }
+			  .kpi-back{ opacity:0; transform:translateY(8px); pointer-events:none; }
+			  .kpi-wrap:hover .kpi-front{ opacity:0; transform:translateY(-8px); pointer-events:none; }
+			  .kpi-wrap:hover .kpi-back{ opacity:1; transform:translateY(0); pointer-events:auto; }
+			  .kpi-label{ font-size:10.5px; font-weight:700; letter-spacing:1.3px; color:#f0a99e; text-transform:uppercase; }
+			  .kpi-value{ font-family:Cormorant Garamond,Georgia,serif; font-size:32px; font-weight:700; color:#fff; margin-top:6px; text-shadow:0 2px 6px rgba(0,0,0,.4); }
+			  .kpi-sub{ font-size:11px; color:#c9beb5; margin-top:4px; }
+			  .kpi-hint{ font-size:9.5px; color:#a79a92; margin-top:8px; opacity:.8; }
+			  .kpi-back-title{ font-size:10px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
+			  .kpi-back-val{ font-family:Cormorant Garamond,Georgia,serif; font-size:24px; font-weight:700; color:#f0a99e; margin-top:6px; }
+			  .kpi-back-txt{ font-size:11px; color:#d8ccc3; line-height:1.4; margin-top:4px; }
+			</style>
+			<div class='kpi-wrap'>
+			  <div class='kpi-face kpi-front'>
+			    <div class='kpi-label'>Avg FICO Score</div>
+			    <div class='kpi-value'>" & _ficoTxt & "</div>
+			    <div class='kpi-sub'>Average borrower credit score</div>
+			    <div class='kpi-hint'>Hover for reported score band</div>
+			  </div>
+			  <div class='kpi-face kpi-back'>
+			    <div class='kpi-back-title'>Reported score band</div>
+			    <div class='kpi-back-val'>" & _bandTxt & "</div>
+			    <div class='kpi-back-txt'>Typical low–high FICO range reported across borrowers, before it&#39;s rounded to one score.</div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 2865d2bc-c1d4-432e-8cc1-4b6f13353cba
+
+	/// KPI hover card: Avg DTI (front) / share of borrowers above a 36% high-DTI threshold (hover reveal). Verify win_dti is on a 0-100 scale, not 0-1, before trusting the 36 threshold.
+	measure 'KPI DTI HTML' =
+			VAR _dti = [AVG DTI]
+			VAR _dtiTxt = FORMAT(_dti, "0.0%")
+			VAR _highShare = DIVIDE(CALCULATE(COUNTROWS(fact_loan), fact_loan[win_dti] > 36), COUNTROWS(fact_loan))
+			VAR _highShareTxt = FORMAT(_highShare, "0.0%")
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;position:relative;overflow:hidden;height:100vh;width:100%;border-radius:10px;cursor:pointer;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .kpi-wrap{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:10px; background:linear-gradient(155deg,#241411,#1e130f); }
+			  .kpi-face{ position:absolute; inset:0; padding:16px 18px; display:flex; flex-direction:column; justify-content:center; box-sizing:border-box; transition:opacity .35s ease, transform .35s ease; }
+			  .kpi-front{ opacity:1; transform:translateY(0); }
+			  .kpi-back{ opacity:0; transform:translateY(8px); pointer-events:none; }
+			  .kpi-wrap:hover .kpi-front{ opacity:0; transform:translateY(-8px); pointer-events:none; }
+			  .kpi-wrap:hover .kpi-back{ opacity:1; transform:translateY(0); pointer-events:auto; }
+			  .kpi-label{ font-size:10.5px; font-weight:700; letter-spacing:1.3px; color:#f0a99e; text-transform:uppercase; }
+			  .kpi-value{ font-family:Cormorant Garamond,Georgia,serif; font-size:32px; font-weight:700; color:#fff; margin-top:6px; text-shadow:0 2px 6px rgba(0,0,0,.4); }
+			  .kpi-sub{ font-size:11px; color:#c9beb5; margin-top:4px; }
+			  .kpi-hint{ font-size:9.5px; color:#a79a92; margin-top:8px; opacity:.8; }
+			  .kpi-back-title{ font-size:10px; font-weight:700; letter-spacing:1.2px; color:#f0a99e; text-transform:uppercase; }
+			  .kpi-back-val{ font-family:Cormorant Garamond,Georgia,serif; font-size:24px; font-weight:700; color:#f0a99e; margin-top:6px; }
+			  .kpi-back-txt{ font-size:11px; color:#d8ccc3; line-height:1.4; margin-top:4px; }
+			</style>
+			<div class='kpi-wrap'>
+			  <div class='kpi-face kpi-front'>
+			    <div class='kpi-label'>Avg DTI</div>
+			    <div class='kpi-value'>" & _dtiTxt & "</div>
+			    <div class='kpi-sub'>Average debt-to-income ratio</div>
+			    <div class='kpi-hint'>Hover for high-DTI share</div>
+			  </div>
+			  <div class='kpi-face kpi-back'>
+			    <div class='kpi-back-title'>High-DTI share</div>
+			    <div class='kpi-back-val'>" & _highShareTxt & "</div>
+			    <div class='kpi-back-txt'>Share of borrowers carrying a debt-to-income ratio above 36% — a common affordability-risk line.</div>
+			  </div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 3e233791-d2dc-40bc-bceb-1267cce1dda4
 
 	column Column
 		formatString: 0

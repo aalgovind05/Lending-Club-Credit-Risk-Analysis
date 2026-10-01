@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "2314be7b3127b1d80d42",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "9600c7037dc45c03d01b",
   "position": {
-    "x": 1196,
-    "y": 78,
-    "z": 1300,
-    "height": 320,
-    "width": 676,
-    "tabOrder": 1300
+    "x": 602,
+    "y": 801,
+    "z": 5000,
+    "height": 250,
+    "width": 1286,
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "barChart",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_grade"
+                      "Entity": "dim_geography"
                     }
                   },
-                  "Property": "grade"
+                  "Property": "borrower_state"
                 }
               },
-              "queryRef": "dim_grade.grade",
-              "nativeQueryRef": "grade",
+              "queryRef": "dim_geography.borrower_state",
+              "nativeQueryRef": "borrower_state",
               "active": true
             }
           ]
@@ -42,11 +42,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "AVG Default Rate"
+                  "Property": "Top 10 State Loan Amount"
                 }
               },
-              "queryRef": "_Measures.AVG Default Rate",
-              "nativeQueryRef": "AVG Default Rate",
+              "queryRef": "_Measures.Top 10 State Loan Amount",
+              "nativeQueryRef": "Top 10 State Loan Amount",
               "active": true
             }
           ]
@@ -56,16 +56,16 @@
         "sort": [
           {
             "field": {
-              "Column": {
+              "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "dim_grade"
+                    "Entity": "_Measures"
                   }
                 },
-                "Property": "grade"
+                "Property": "Top 10 State Loan Amount"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ]
       }
@@ -124,7 +124,7 @@
             "valueCustomFormatString": {
               "expr": {
                 "Literal": {
-                  "Value": "'0.0%'"
+                  "Value": "'$#,##0'"
                 }
               }
             },
@@ -166,22 +166,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#B7A99E'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#918074'"
+                      "Value": "'#1B6B6B'"
                     }
                   }
                 }
@@ -198,15 +183,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_geography"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "borrower_state"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'C'"
+                        "Value": "'CA'"
                       }
                     }
                   }
@@ -222,7 +207,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#7E6B5F'"
+                      "Value": "'#368080'"
                     }
                   }
                 }
@@ -239,15 +224,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_geography"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "borrower_state"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'D'"
+                        "Value": "'TX'"
                       }
                     }
                   }
@@ -263,7 +248,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#6B584D'"
+                      "Value": "'#529494'"
                     }
                   }
                 }
@@ -280,15 +265,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_geography"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "borrower_state"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'E'"
+                        "Value": "'NY'"
                       }
                     }
                   }
@@ -304,7 +289,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#55443A'"
+                      "Value": "'#6EA8A8'"
                     }
                   }
                 }
@@ -321,15 +306,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_geography"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "borrower_state"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'F'"
+                        "Value": "'FL'"
                       }
                     }
                   }
@@ -345,7 +330,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#3B241B'"
+                      "Value": "'#8BBABA'"
                     }
                   }
                 }
@@ -362,15 +347,220 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_geography"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "borrower_state"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'G'"
+                        "Value": "'IL'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#A9CCCC'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_geography"
+                          }
+                        },
+                        "Property": "borrower_state"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'NJ'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#B5D1D1'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_geography"
+                          }
+                        },
+                        "Property": "borrower_state"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'GA'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#BED6D6'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_geography"
+                          }
+                        },
+                        "Property": "borrower_state"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'PA'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C2D8D8'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_geography"
+                          }
+                        },
+                        "Property": "borrower_state"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'OH'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C7D9D9'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_geography"
+                          }
+                        },
+                        "Property": "borrower_state"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'VA'"
                       }
                     }
                   }
@@ -557,7 +747,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Default Rate by Grade'"
+                  "Value": "'Top 10 States by Loan Amount'"
                 }
               }
             }

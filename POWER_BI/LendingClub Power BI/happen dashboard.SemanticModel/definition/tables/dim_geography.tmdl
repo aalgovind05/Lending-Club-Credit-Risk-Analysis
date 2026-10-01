@@ -25,6 +25,31 @@ table dim_geography
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Full US state/territory name derived from the 2-letter borrower_state code, for use in Map/Filled Map visuals (Bing geocoding needs a full name, not an abbreviation). Falls back to the original code for anything unmapped.
+	column 'State Full Name' =
+			SWITCH(
+			    dim_geography[borrower_state],
+			    "AL","Alabama","AK","Alaska","AZ","Arizona","AR","Arkansas","CA","California",
+			    "CO","Colorado","CT","Connecticut","DE","Delaware","DC","District of Columbia",
+			    "FL","Florida","GA","Georgia","HI","Hawaii","ID","Idaho","IL","Illinois",
+			    "IN","Indiana","IA","Iowa","KS","Kansas","KY","Kentucky","LA","Louisiana",
+			    "ME","Maine","MD","Maryland","MA","Massachusetts","MI","Michigan","MN","Minnesota",
+			    "MS","Mississippi","MO","Missouri","MT","Montana","NE","Nebraska","NV","Nevada",
+			    "NH","New Hampshire","NJ","New Jersey","NM","New Mexico","NY","New York","NC","North Carolina",
+			    "ND","North Dakota","OH","Ohio","OK","Oklahoma","OR","Oregon","PA","Pennsylvania",
+			    "RI","Rhode Island","SC","South Carolina","SD","South Dakota","TN","Tennessee","TX","Texas",
+			    "UT","Utah","VT","Vermont","VA","Virginia","WA","Washington","WV","West Virginia",
+			    "WI","Wisconsin","WY","Wyoming",
+			    "PR","Puerto Rico","VI","U.S. Virgin Islands","GU","Guam","AS","American Samoa","MP","Northern Mariana Islands",
+			    "AE","Armed Forces Europe","AA","Armed Forces Americas","AP","Armed Forces Pacific",
+			    dim_geography[borrower_state]
+			)
+		dataType: string
+		displayFolder: Geography
+		lineageTag: 241a009a-09c5-42e3-86f5-c0c0056c96c7
+		dataCategory: StateOrProvince
+		summarizeBy: none
+
 	partition dim_geography = m
 		mode: directQuery
 		source =

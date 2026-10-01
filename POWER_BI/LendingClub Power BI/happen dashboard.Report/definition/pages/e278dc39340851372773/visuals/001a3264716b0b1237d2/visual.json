@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "001a3264716b0b1237d2",
   "position": {
-    "x": 48.837347943961049,
-    "y": 1016.863351833189,
+    "x": 30.909090909090907,
+    "y": 978.18181818181813,
     "z": 2000,
-    "height": 231.97740273381498,
-    "width": 981.97953187321684,
+    "height": 249.09090909090907,
+    "width": 1023.6363636363635,
     "tabOrder": 1100
   },
   "visual": {
@@ -80,7 +80,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -88,6 +88,41 @@
               "expr": {
                 "Literal": {
                   "Value": "'Bottom'"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "90L"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "3L"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "70L"
                 }
               }
             }

@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "16e808e921446992beb5",
+  "name": "6d61298ddbec4824557e",
   "position": {
-    "x": 31.39543796397496,
-    "y": 24.418673971980525,
-    "z": 2000,
-    "height": 427.32679450965918,
-    "width": 535.46663638557288,
-    "tabOrder": 2000
+    "x": 32,
+    "y": 471,
+    "z": 3000,
+    "height": 310,
+    "width": 1856,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Borrower Hero HTML"
+                  "Property": "Borrower Risk Factors HTML"
                 }
               },
-              "queryRef": "_Measures.Borrower Hero HTML",
-              "nativeQueryRef": "Borrower Hero HTML"
+              "queryRef": "_Measures.Borrower Risk Factors HTML",
+              "nativeQueryRef": "Borrower Risk Factors HTML"
             }
           ]
         }
