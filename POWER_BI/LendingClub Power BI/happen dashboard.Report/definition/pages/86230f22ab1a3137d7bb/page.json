@@ -27,10 +27,21 @@
     "background": [
       {
         "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#0d1b19'"
+                  }
+                }
+              }
+            }
+          },
           "transparency": {
             "expr": {
               "Literal": {
-                "Value": "2D"
+                "Value": "0D"
               }
             }
           }
@@ -40,6 +51,17 @@
     "outspace": [
       {
         "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#0d1b19'"
+                  }
+                }
+              }
+            }
+          },
           "transparency": {
             "expr": {
               "Literal": {
