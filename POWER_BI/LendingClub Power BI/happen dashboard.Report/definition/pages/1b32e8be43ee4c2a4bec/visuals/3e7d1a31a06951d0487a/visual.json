@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "cd791410b0069ecb8c64",
+  "name": "3e7d1a31a06951d0487a",
   "position": {
-    "x": 31.896688118706038,
-    "y": 1250.8058412264011,
-    "z": 4000,
-    "height": 300,
-    "width": 920,
-    "tabOrder": 4000
+    "x": 507,
+    "y": 300,
+    "z": 3000,
+    "height": 280,
+    "width": 659,
+    "tabOrder": 3000
   },
   "visual": {
-    "visualType": "clusteredColumnChart",
+    "visualType": "clusteredBarChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_grade"
+                      "Entity": "dim_borrower"
                     }
                   },
-                  "Property": "grade"
+                  "Property": "employment_length"
                 }
               },
-              "queryRef": "dim_grade.grade",
-              "nativeQueryRef": "grade",
+              "queryRef": "dim_borrower.employment_length",
+              "nativeQueryRef": "employment_length",
               "active": true
             }
           ]
@@ -42,11 +42,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Avg FICO Score"
+                  "Property": "AVG Default Rate"
                 }
               },
-              "queryRef": "_Measures.Avg FICO Score",
-              "nativeQueryRef": "Avg FICO Score"
+              "queryRef": "_Measures.AVG Default Rate",
+              "nativeQueryRef": "AVG Default Rate"
             }
           ]
         }
@@ -55,16 +55,16 @@
         "sort": [
           {
             "field": {
-              "Column": {
+              "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "dim_grade"
+                    "Entity": "_Measures"
                   }
                 },
-                "Property": "grade"
+                "Property": "AVG Default Rate"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ]
       }
@@ -95,15 +95,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'A'"
+                        "Value": "'Unknown'"
                       }
                     }
                   }
@@ -136,15 +136,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'B'"
+                        "Value": "'10+ years'"
                       }
                     }
                   }
@@ -160,7 +160,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#529494'"
+                      "Value": "'#599898'"
                     }
                   }
                 }
@@ -177,15 +177,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'C'"
+                        "Value": "'9 years'"
                       }
                     }
                   }
@@ -201,7 +201,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#6EA8A8'"
+                      "Value": "'#599898'"
                     }
                   }
                 }
@@ -218,15 +218,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'D'"
+                        "Value": "'8 years'"
                       }
                     }
                   }
@@ -242,7 +242,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#8BBABA'"
+                      "Value": "'#599898'"
                     }
                   }
                 }
@@ -259,15 +259,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'E'"
+                        "Value": "'7 years'"
                       }
                     }
                   }
@@ -283,7 +283,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#A9CCCC'"
+                      "Value": "'#599898'"
                     }
                   }
                 }
@@ -300,15 +300,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'F'"
+                        "Value": "'6 years'"
                       }
                     }
                   }
@@ -324,7 +324,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#C7D9D9'"
+                      "Value": "'#599898'"
                     }
                   }
                 }
@@ -341,21 +341,241 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "employment_length"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'G'"
+                        "Value": "'5 years'"
                       }
                     }
                   }
                 }
               }
             ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#599898'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_borrower"
+                          }
+                        },
+                        "Property": "employment_length"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'4 years'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#599898'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_borrower"
+                          }
+                        },
+                        "Property": "employment_length"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'3 years'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#599898'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_borrower"
+                          }
+                        },
+                        "Property": "employment_length"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'2 years'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#599898'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_borrower"
+                          }
+                        },
+                        "Property": "employment_length"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'1 year'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#599898'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "dim_borrower"
+                          }
+                        },
+                        "Property": "employment_length"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'< 1 year'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1B6B6B'"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       ],
@@ -390,7 +610,27 @@
             "labelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "0L"
+                  "Value": "1L"
+                }
+              }
+            },
+            "valueCustomFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'0.0%'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "gridlineShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -438,7 +678,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'FICO Score by Grade'"
+                  "Value": "'Employment Length vs Default Rate'"
                 }
               }
             }
