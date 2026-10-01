@@ -104,24 +104,8 @@
           "properties": {
             "fillRule": {
               "linearGradient2": {
-                "min": {
-                  "color": {
-                    "expr": {
-                      "Literal": {
-                        "Value": "'minColor'"
-                      }
-                    }
-                  }
-                },
-                "max": {
-                  "color": {
-                    "expr": {
-                      "Literal": {
-                        "Value": "'maxColor'"
-                      }
-                    }
-                  }
-                },
+                "min": {},
+                "max": {},
                 "nullColoringStrategy": {
                   "strategy": {
                     "expr": {
