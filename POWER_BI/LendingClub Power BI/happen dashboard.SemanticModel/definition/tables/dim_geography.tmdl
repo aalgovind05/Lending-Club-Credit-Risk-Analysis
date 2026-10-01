@@ -50,6 +50,14 @@ table dim_geography
 		dataCategory: StateOrProvince
 		summarizeBy: none
 
+	/// State Full Name plus ', United States' suffix, purpose-built for the Map/Filled Map Location field so Bing's geocoder doesn't mismatch a bare state name against a same-named place elsewhere in the world. Use this instead of State Full Name if bubbles land in the wrong place or don't resolve.
+	column 'State Full Name (Geocode)' = dim_geography[State Full Name] & ", United States"
+		dataType: string
+		displayFolder: Geography
+		lineageTag: 3200dbef-c0e3-48ba-ba5a-f267bcbafb4a
+		dataCategory: Place
+		summarizeBy: none
+
 	partition dim_geography = m
 		mode: directQuery
 		source =

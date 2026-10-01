@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "01f5d9a6c1ed9a086863",
+  "name": "e6a9f16a7570202d8050",
   "position": {
-    "x": 99.4188868859207,
-    "y": 99.4188868859207,
-    "z": 6000,
-    "height": 591.28074832152845,
-    "width": 777.90918510737959,
-    "tabOrder": 6000
+    "x": 1000.1890060079965,
+    "y": 603.75873938979282,
+    "z": 8000,
+    "height": 590.08873019606165,
+    "width": 886.27226272690348,
+    "tabOrder": 8000
   },
   "visual": {
     "visualType": "shapeMap",
@@ -41,11 +41,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Total Amount - Fully Paid"
+                  "Property": "AVG Default Rate"
                 }
               },
-              "queryRef": "_Measures.Total Amount - Fully Paid",
-              "nativeQueryRef": "Total Amount - Fully Paid"
+              "queryRef": "_Measures.AVG Default Rate",
+              "nativeQueryRef": "AVG Default Rate"
             }
           ]
         }
@@ -104,8 +104,24 @@
           "properties": {
             "fillRule": {
               "linearGradient2": {
-                "min": {},
-                "max": {},
+                "min": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'minColor'"
+                      }
+                    }
+                  }
+                },
+                "max": {
+                  "color": {
+                    "expr": {
+                      "Literal": {
+                        "Value": "'maxColor'"
+                      }
+                    }
+                  }
+                },
                 "nullColoringStrategy": {
                   "strategy": {
                     "expr": {
@@ -114,6 +130,66 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "section": {
+              "expr": {
+                "Literal": {
+                  "Value": "'86230f22ab1a3137d7bb'"
+                }
+              }
+            },
+            "themedBackground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "showTooltipFieldsOnly": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "keepLayerOrder": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

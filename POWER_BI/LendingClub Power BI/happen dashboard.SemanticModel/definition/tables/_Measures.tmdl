@@ -1131,7 +1131,7 @@ table _Measures
 			VAR _ficoBandTxt = FORMAT(_ficoLow,"0") & "–" & FORMAT(_ficoHigh,"0")
 			
 			VAR _dtiVal = [AVG DTI]
-			VAR _dtiTxt = FORMAT(_dtiVal,"0.0%")
+			VAR _dtiTxt = FORMAT(_dtiVal,"0.0") & "%"
 			VAR _dtiTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[AVG DTI]), NOT ISBLANK([V]))
 			VAR _dtiN = COUNTROWS(_dtiTbl)
 			VAR _dtiMin = MINX(_dtiTbl,[V])
@@ -1165,7 +1165,7 @@ table _Measures
 			
 			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Avg FICO Score</div><div class='val'>" & _ficoTxt & "</div><div class='cmp'>" & _ficoLastYr & ": <b>" & FORMAT(_ficoLastV,"0") & "</b> <span style='color:" & _ficoYoYColor & "'>" & _ficoYoYArrow & " " & _ficoYoYPct & "</span></div><div class='cmp'>Since " & _ficoFirstYr & ": <span style='color:" & _ficoLongColor & "'>" & _ficoLongArrow & " " & _ficoLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _ficoPts & "' fill='none' stroke='#1C9A5B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>Reported score band</div><div class='backp'>Typical low–high FICO range reported across borrowers is " & _ficoBandTxt & ", before it's rounded to one average score.</div></div></div>" &
 			
-			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Avg DTI</div><div class='val'>" & _dtiTxt & "</div><div class='cmp'>" & _dtiLastYr & ": <b>" & FORMAT(_dtiLastV,"0.0%") & "</b> <span style='color:" & _dtiYoYColor & "'>" & _dtiYoYArrow & " " & _dtiYoYPct & "</span></div><div class='cmp'>Since " & _dtiFirstYr & ": <span style='color:" & _dtiLongColor & "'>" & _dtiLongArrow & " " & _dtiLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _dtiPts & "' fill='none' stroke='#D9432F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>High-DTI share</div><div class='backp'>" & _highDtiTxt & " of borrowers carry a debt-to-income ratio above 36% — a common affordability-risk line.</div></div></div>" &
+			"<div class='c'><div class='front'><span class='q'>?</span><div class='lbl'>Avg DTI</div><div class='val'>" & _dtiTxt & "</div><div class='cmp'>" & _dtiLastYr & ": <b>" & FORMAT(_dtiLastV,"0.0") & "%</b> <span style='color:" & _dtiYoYColor & "'>" & _dtiYoYArrow & " " & _dtiYoYPct & "</span></div><div class='cmp'>Since " & _dtiFirstYr & ": <span style='color:" & _dtiLongColor & "'>" & _dtiLongArrow & " " & _dtiLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _dtiPts & "' fill='none' stroke='#D9432F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></div><div class='back'><div class='backl'>High-DTI share</div><div class='backp'>" & _highDtiTxt & " of borrowers carry a debt-to-income ratio above 36% — a common affordability-risk line.</div></div></div>" &
 			
 			"</div>"
 		displayFolder: HTML Visuals
@@ -1401,7 +1401,7 @@ table _Measures
 	/// KPI hover card: Avg DTI (front) / share of borrowers above a 36% high-DTI threshold (hover reveal). Verify win_dti is on a 0-100 scale, not 0-1, before trusting the 36 threshold.
 	measure 'KPI DTI HTML' =
 			VAR _dti = [AVG DTI]
-			VAR _dtiTxt = FORMAT(_dti, "0.0%")
+			VAR _dtiTxt = FORMAT(_dti, "0.0") & "%"
 			VAR _highShare = DIVIDE(CALCULATE(COUNTROWS(fact_loan), fact_loan[win_dti] > 36), COUNTROWS(fact_loan))
 			VAR _highShareTxt = FORMAT(_highShare, "0.0%")
 			VAR _html =
@@ -1439,6 +1439,26 @@ table _Measures
 			RETURN _html
 		displayFolder: HTML Visuals
 		lineageTag: 3e233791-d2dc-40bc-bceb-1267cce1dda4
+
+	/// Content for the State Details tooltip page shown on hover over the USA Shape Map (Borrower Profile page). Dark teal card: state name, risk badge (default rate vs portfolio average), then a 2x3 grid — Total Amount, Total Loans, Avg Income, Avg FICO, Avg DTI, Avg Interest Rate. Designed for a ~320x240 tooltip canvas.
+	measure 'State Tooltip HTML' =
+			VAR _state = SELECTEDVALUE(dim_geography[State Full Name], "Select a state")
+			VAR _amt = [Total Amount]
+			VAR _amtTxt = IF(_amt>=1000000000, FORMAT(_amt/1000000000,"0.00") & "B", IF(_amt>=1000000, FORMAT(_amt/1000000,"0.0") & "M", "$" & FORMAT(_amt,"#,##0")))
+			VAR _cntTxt = FORMAT([Total Loan],"#,##0")
+			VAR _incTxt = "$" & FORMAT([AVG Annual Income],"#,##0")
+			VAR _ficoTxt = FORMAT([Avg FICO Score],"0")
+			VAR _dtiTxt = FORMAT([AVG DTI],"0.0") & "%"
+			VAR _rateTxt = FORMAT([AVG Interest Rate],"0.0") & "%"
+			VAR _def = [AVG Default Rate]
+			VAR _defTxt = FORMAT(_def,"0.0%")
+			VAR _overallDef = CALCULATE([AVG Default Rate], ALL(dim_geography))
+			VAR _defColor = IF(_def > _overallDef * 1.1, "#E8604C", IF(_def < _overallDef * 0.9, "#4FD69C", "#E0B35C"))
+			VAR _defLabel = IF(_def > _overallDef * 1.1, "Above-average risk", IF(_def < _overallDef * 0.9, "Below-average risk", "Near-average risk"))
+			VAR _css = "<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#0d1b19!important}*{box-sizing:border-box}.tp{font-family:Jost,'Segoe UI',sans-serif;width:100%;height:100%;background:linear-gradient(155deg,#132623,#0d1b19);padding:16px 18px;color:#fff;display:flex;flex-direction:column}.hd{display:flex;align-items:flex-start;justify-content:space-between}.st{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;font-weight:700;color:#fff;line-height:1.1}.sub{font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:#7fb8ae;margin-top:3px}.badge{font-size:9px;font-weight:700;letter-spacing:.3px;padding:4px 9px;border-radius:20px;white-space:nowrap}.grid{margin-top:14px;display:grid;grid-template-columns:1fr 1fr 1fr;row-gap:12px}.cell{display:flex;flex-direction:column}.k{font-size:8.5px;letter-spacing:.6px;text-transform:uppercase;color:#7fb8ae}.v{font-size:15px;font-weight:700;color:#fff;margin-top:2px}</style>"
+			RETURN _css & "<div class='tp'><div class='hd'><div><div class='st'>" & _state & "</div><div class='sub'>Borrower snapshot</div></div><div class='badge' style='background:" & _defColor & "22;color:" & _defColor & ";border:1px solid " & _defColor & "55'>" & _defTxt & " · " & _defLabel & "</div></div><div class='grid'><div class='cell'><div class='k'>Total Amount</div><div class='v'>" & _amtTxt & "</div></div><div class='cell'><div class='k'>Total Loans</div><div class='v'>" & _cntTxt & "</div></div><div class='cell'><div class='k'>Avg Interest</div><div class='v'>" & _rateTxt & "</div></div><div class='cell'><div class='k'>Avg Income</div><div class='v'>" & _incTxt & "</div></div><div class='cell'><div class='k'>Avg FICO</div><div class='v'>" & _ficoTxt & "</div></div><div class='cell'><div class='k'>Avg DTI</div><div class='v'>" & _dtiTxt & "</div></div></div></div>"
+		displayFolder: HTML Visuals
+		lineageTag: f2881427-c47d-4ae9-a9ed-61936e13556e
 
 	column Column
 		formatString: 0

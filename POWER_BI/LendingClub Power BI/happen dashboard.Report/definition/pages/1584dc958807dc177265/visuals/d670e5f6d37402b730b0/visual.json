@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "a1b2c3d4e5f607182930",
+  "name": "d670e5f6d37402b730b0",
   "position": {
-    "x": 31.896688118706038,
-    "y": 1250.8058412264011,
-    "z": 4000,
+    "x": 0,
+    "y": 840.70556541446626,
+    "z": 7000,
     "height": 300,
     "width": 920,
-    "tabOrder": 4000
+    "tabOrder": 7000
   },
   "visual": {
-    "visualType": "clusteredColumnChart",
+    "visualType": "clusteredBarChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_grade"
+                      "Entity": "dim_borrower"
                     }
                   },
-                  "Property": "grade"
+                  "Property": "home_ownership"
                 }
               },
-              "queryRef": "dim_grade.grade",
-              "nativeQueryRef": "grade",
+              "queryRef": "dim_borrower.home_ownership",
+              "nativeQueryRef": "home_ownership",
               "active": true
             }
           ]
@@ -42,11 +42,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Avg FICO Score"
+                  "Property": "AVG Default Rate"
                 }
               },
-              "queryRef": "_Measures.Avg FICO Score",
-              "nativeQueryRef": "Avg FICO Score"
+              "queryRef": "_Measures.AVG Default Rate",
+              "nativeQueryRef": "AVG Default Rate"
             }
           ]
         }
@@ -55,16 +55,16 @@
         "sort": [
           {
             "field": {
-              "Column": {
+              "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "dim_grade"
+                    "Entity": "_Measures"
                   }
                 },
-                "Property": "grade"
+                "Property": "AVG Default Rate"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ]
       }
@@ -95,15 +95,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "home_ownership"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'A'"
+                        "Value": "'OTHER'"
                       }
                     }
                   }
@@ -136,15 +136,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "home_ownership"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'B'"
+                        "Value": "'NONE'"
                       }
                     }
                   }
@@ -177,15 +177,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "home_ownership"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'C'"
+                        "Value": "'RENT'"
                       }
                     }
                   }
@@ -218,15 +218,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "home_ownership"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'D'"
+                        "Value": "'OWN'"
                       }
                     }
                   }
@@ -259,15 +259,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "home_ownership"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'E'"
+                        "Value": "'MORTGAGE'"
                       }
                     }
                   }
@@ -300,56 +300,15 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Entity": "dim_grade"
+                            "Entity": "dim_borrower"
                           }
                         },
-                        "Property": "grade"
+                        "Property": "home_ownership"
                       }
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'F'"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C7D9D9'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "dim_grade"
-                          }
-                        },
-                        "Property": "grade"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "'G'"
+                        "Value": "'ANY'"
                       }
                     }
                   }
@@ -390,7 +349,27 @@
             "labelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "0L"
+                  "Value": "1L"
+                }
+              }
+            },
+            "valueCustomFormatString": {
+              "expr": {
+                "Literal": {
+                  "Value": "'0.0%'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "gridlineShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -438,7 +417,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'FICO Score by Grade'"
+                  "Value": "'Home Ownership vs Default Rate'"
                 }
               }
             }

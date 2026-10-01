@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "d64a3bf17a6405236361",
+  "name": "04ba4a26025353e06b6d",
   "position": {
-    "x": 30.909090909090907,
-    "y": 585.45454545454538,
-    "z": 3000,
-    "height": 392.72727272727269,
-    "width": 1023.6363636363635,
-    "tabOrder": 2000
+    "x": 0.064997541211425869,
+    "y": 0,
+    "z": 0,
+    "height": 240.06670800282225,
+    "width": 320,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,12 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Risk Trend Multi HTML"
+                  "Property": "State Tooltip HTML"
                 }
               },
-              "queryRef": "_Measures.Risk Trend Multi HTML",
-              "nativeQueryRef": "Risk Trend Multi HTML",
-              "active": true
+              "queryRef": "_Measures.State Tooltip HTML",
+              "nativeQueryRef": "State Tooltip HTML"
             }
           ]
         }
@@ -57,6 +56,13 @@
                   "Value": "false"
                 }
               }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
             }
           }
         }
@@ -74,7 +80,7 @@
           }
         }
       ],
-      "dropShadow": [
+      "visualHeader": [
         {
           "properties": {
             "show": {
@@ -83,66 +89,31 @@
                   "Value": "false"
                 }
               }
-            },
-            "preset": {
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "showTooltipFieldsOnly": {
               "expr": {
                 "Literal": {
-                  "Value": "'Bottom'"
+                  "Value": "false"
                 }
               }
             },
-            "angle": {
+            "showSentenceFormat": {
               "expr": {
                 "Literal": {
-                  "Value": "270L"
-                }
-              }
-            },
-            "shadowDistance": {
-              "expr": {
-                "Literal": {
-                  "Value": "10L"
-                }
-              }
-            },
-            "shadowBlur": {
-              "expr": {
-                "Literal": {
-                  "Value": "15L"
-                }
-              }
-            },
-            "shadowSpread": {
-              "expr": {
-                "Literal": {
-                  "Value": "0L"
+                  "Value": "false"
                 }
               }
             },
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "70L"
-                }
-              }
-            },
-            "position": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Inner'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "visualHeader": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
+                  "Value": "100D"
                 }
               }
             }

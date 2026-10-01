@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "96147816be1b01ab094d",
+  "name": "f9e2898285b9d3b4828e",
   "position": {
-    "x": 32,
-    "y": 801,
-    "z": 4000,
-    "height": 250,
-    "width": 550,
-    "tabOrder": 4000
+    "x": 601.74589430952,
+    "y": 24.418673971980525,
+    "z": 0,
+    "height": 211.04711075783166,
+    "width": 1285.4687655249747,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Verification Status HTML"
+                  "Property": "Borrower KPI Cards HTML"
                 }
               },
-              "queryRef": "_Measures.Verification Status HTML",
-              "nativeQueryRef": "Verification Status HTML"
+              "queryRef": "_Measures.Borrower KPI Cards HTML",
+              "nativeQueryRef": "Borrower KPI Cards HTML"
             }
           ]
         }
