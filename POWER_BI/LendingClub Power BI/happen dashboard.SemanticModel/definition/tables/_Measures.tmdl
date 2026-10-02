@@ -1066,79 +1066,95 @@ table _Measures
 		displayFolder: Borrower Profile
 		lineageTag: 12da14af-8cb9-40c1-9f3c-e80e984e6b1f
 
-	/// Two Borrower Profile KPI cards (Avg Annual Income, Avg DTI) — consumer-dashboard style: rounded white card, circular 'i' info icon, large bold value, pill-style trend chips (vs prior year, vs first year), sparkline with an accent marker dot at the latest point. FICO card removed — Avg FICO Score now lives only on the Risk Analysis page (KPI Cards HTML) to avoid duplicating the same stat across pages.
+	/// Two Borrower Profile KPI cards (Avg Annual Income, Avg DTI) — right-side sparkline layout. Quarterly sparklines (28-36 points) for wavy lines. Fixed: dim_date[quarter] is String type so sort key now uses VALUE(RIGHT(quarter,1)) instead of integer arithmetic.
 	measure 'Borrower KPI Cards HTML' =
-			VAR _yrTbl = SUMMARIZE(dim_date, dim_date[year])
+			-- Sort key: year*10 + quarter number extracted from string (handles Q1/Q2/Q3/Q4)
+			VAR _qBase = ADDCOLUMNS(
+			    SUMMARIZE(dim_date, dim_date[year], dim_date[quarter]),
+			    "sk", dim_date[year] * 10 + VALUE(RIGHT(dim_date[quarter], 1))
+			)
 			
-			VAR _incVal = [AVG Annual Income]
-			VAR _incTxt = "$" & FORMAT(_incVal,"#,##0")
-			VAR _incTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[AVG Annual Income]), NOT ISBLANK([V]))
-			VAR _incN = COUNTROWS(_incTbl)
-			VAR _incMin = MINX(_incTbl,[V])
-			VAR _incMax = MAXX(_incTbl,[V])
-			VAR _incRange = IF(_incMax=_incMin,1,_incMax-_incMin)
-			VAR _incRanked = ADDCOLUMNS(_incTbl,"Idx",RANKX(_incTbl,dim_date[year],,ASC,DENSE))
-			VAR _incPts = CONCATENATEX(_incRanked, FORMAT((([Idx]-1)/(_incN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_incMin)/_incRange)*22+2),"0.0"), " ", [Idx], ASC)
-			VAR _incLastX = FORMAT((( _incN-1)/(_incN-1))*100,"0.0")
-			VAR _incLastYV = FORMAT(26-(((MAXX(FILTER(_incRanked,[Idx]=_incN),[V])-_incMin)/_incRange)*22+2),"0.0")
-			VAR _incFirstYr = MINX(_incTbl,dim_date[year])
-			VAR _incLastYr = MAXX(_incTbl,dim_date[year])
-			VAR _incPrevYr = _incLastYr - 1
-			VAR _incLastV = CALCULATE([AVG Annual Income], dim_date[year]=_incLastYr)
-			VAR _incPrevV = CALCULATE([AVG Annual Income], dim_date[year]=_incPrevYr)
-			VAR _incFirstV = CALCULATE([AVG Annual Income], dim_date[year]=_incFirstYr)
-			VAR _incYoYUp = _incLastV >= _incPrevV
-			VAR _incYoYArrow = IF(_incYoYUp,"▲","▼")
-			VAR _incYoYColor = IF(_incYoYUp,"#1C9A5B","#D9432F")
-			VAR _incYoYPct = FORMAT(ABS(DIVIDE(_incLastV-_incPrevV,_incPrevV))*100,"0.0") & "%"
-			VAR _incLongUp = _incLastV >= _incFirstV
-			VAR _incLongArrow = IF(_incLongUp,"▲","▼")
-			VAR _incLongColor = IF(_incLongUp,"#1C9A5B","#D9432F")
-			VAR _incLongPct = FORMAT(ABS(DIVIDE(_incLastV-_incFirstV,_incFirstV))*100,"0.0") & "%"
+			-- ============ INCOME SPARKLINE (quarterly) ============
+			VAR _iqRaw = FILTER(ADDCOLUMNS(_qBase, "v", [AVG Annual Income]), NOT ISBLANK([v]))
+			VAR _iqRk  = ADDCOLUMNS(_iqRaw, "r", RANKX(_iqRaw, [sk],, ASC, DENSE))
+			VAR _iqN   = COUNTROWS(_iqRk)
+			VAR _iqMin = MINX(_iqRk, [v])
+			VAR _iqMax = MAXX(_iqRk, [v])
+			VAR _iqRng = IF(_iqMax = _iqMin, 1, _iqMax - _iqMin)
+			VAR _iqPts = CONCATENATEX(
+			    _iqRk,
+			    FORMAT(([r]-1)/(_iqN-1)*100, "0.0") & "," &
+			    FORMAT(58 - (([v]-_iqMin)/_iqRng)*52, "0.0"),
+			    " ", [r], ASC)
+			VAR _iqLastRaw = MAXX(FILTER(_iqRk, [r] = _iqN), [v])
+			VAR _iqLastY   = FORMAT(58 - ((_iqLastRaw - _iqMin)/_iqRng)*52, "0.0")
 			
-			VAR _bestGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Annual Income], DESC)
-			VAR _bestGrade = MAXX(_bestGradeT, dim_grade[grade])
-			VAR _bestVal = CALCULATE([AVG Annual Income], dim_grade[grade]=_bestGrade)
-			VAR _worstGradeT = TOPN(1, VALUES(dim_grade[grade]), [AVG Annual Income], ASC)
-			VAR _worstGrade = MAXX(_worstGradeT, dim_grade[grade])
-			VAR _worstVal = CALCULATE([AVG Annual Income], dim_grade[grade]=_worstGrade)
-			VAR _incGapTxt = "$" & FORMAT(_bestVal - _worstVal,"#,##0")
+			-- ============ INCOME CHIPS (yearly) ============
+			VAR _yTbl    = SUMMARIZE(dim_date, dim_date[year])
+			VAR _iYTbl   = FILTER(ADDCOLUMNS(_yTbl, "v", [AVG Annual Income]), NOT ISBLANK([v]))
+			VAR _iLastYr = MAXX(_iYTbl, dim_date[year])
+			VAR _iFirstYr= MINX(_iYTbl, dim_date[year])
+			VAR _iLastV  = CALCULATE([AVG Annual Income], dim_date[year] = _iLastYr)
+			VAR _iPrevV  = CALCULATE([AVG Annual Income], dim_date[year] = _iLastYr - 1)
+			VAR _iFirstV = CALCULATE([AVG Annual Income], dim_date[year] = _iFirstYr)
+			VAR _iYoYUp  = _iLastV >= _iPrevV
+			VAR _iYoYClr = IF(_iYoYUp, "#1C9A5B", "#D9432F")
+			VAR _iYoYTxt = FORMAT(ABS(DIVIDE(_iLastV-_iPrevV,_iPrevV))*100,"0.0") & "%"
+			VAR _iYoYArr = IF(_iYoYUp, "▲", "▼")
+			VAR _iLongUp = _iLastV >= _iFirstV
+			VAR _iLongClr= IF(_iLongUp, "#1C9A5B", "#D9432F")
+			VAR _iLongTxt= FORMAT(ABS(DIVIDE(_iLastV-_iFirstV,_iFirstV))*100,"0.0") & "%"
+			VAR _iLongArr= IF(_iLongUp, "▲", "▼")
+			VAR _incTxt  = "$" & FORMAT([AVG Annual Income],"#,##0")
+			VAR _bestGrade  = MAXX(TOPN(1,VALUES(dim_grade[grade]),[AVG Annual Income],DESC),dim_grade[grade])
+			VAR _worstGrade = MAXX(TOPN(1,VALUES(dim_grade[grade]),[AVG Annual Income],ASC), dim_grade[grade])
+			VAR _incGapTxt  = "$" & FORMAT(
+			    CALCULATE([AVG Annual Income],dim_grade[grade]=_bestGrade) -
+			    CALCULATE([AVG Annual Income],dim_grade[grade]=_worstGrade),"#,##0")
 			
-			VAR _dtiVal = [AVG DTI]
-			VAR _dtiTxt = FORMAT(_dtiVal,"0.0") & "%"
-			VAR _dtiTbl = FILTER(ADDCOLUMNS(_yrTbl,"V",[AVG DTI]), NOT ISBLANK([V]))
-			VAR _dtiN = COUNTROWS(_dtiTbl)
-			VAR _dtiMin = MINX(_dtiTbl,[V])
-			VAR _dtiMax = MAXX(_dtiTbl,[V])
-			VAR _dtiRange = IF(_dtiMax=_dtiMin,1,_dtiMax-_dtiMin)
-			VAR _dtiRanked = ADDCOLUMNS(_dtiTbl,"Idx",RANKX(_dtiTbl,dim_date[year],,ASC,DENSE))
-			VAR _dtiPts = CONCATENATEX(_dtiRanked, FORMAT((([Idx]-1)/(_dtiN-1))*100,"0.0") & "," & FORMAT(26-((([V]-_dtiMin)/_dtiRange)*22+2),"0.0"), " ", [Idx], ASC)
-			VAR _dtiLastYV = FORMAT(26-(((MAXX(FILTER(_dtiRanked,[Idx]=_dtiN),[V])-_dtiMin)/_dtiRange)*22+2),"0.0")
-			VAR _dtiFirstYr = MINX(_dtiTbl,dim_date[year])
-			VAR _dtiLastYr = MAXX(_dtiTbl,dim_date[year])
-			VAR _dtiPrevYr = _dtiLastYr - 1
-			VAR _dtiLastV = CALCULATE([AVG DTI], dim_date[year]=_dtiLastYr)
-			VAR _dtiPrevV = CALCULATE([AVG DTI], dim_date[year]=_dtiPrevYr)
-			VAR _dtiFirstV = CALCULATE([AVG DTI], dim_date[year]=_dtiFirstYr)
-			VAR _dtiYoYUp = _dtiLastV >= _dtiPrevV
-			VAR _dtiYoYArrow = IF(_dtiYoYUp,"▲","▼")
-			VAR _dtiYoYColor = IF(_dtiYoYUp,"#D9432F","#1C9A5B")
-			VAR _dtiYoYPct = FORMAT(ABS(DIVIDE(_dtiLastV-_dtiPrevV,_dtiPrevV))*100,"0.0") & "%"
-			VAR _dtiLongUp = _dtiLastV >= _dtiFirstV
-			VAR _dtiLongArrow = IF(_dtiLongUp,"▲","▼")
-			VAR _dtiLongColor = IF(_dtiLongUp,"#D9432F","#1C9A5B")
-			VAR _dtiLongPct = FORMAT(ABS(DIVIDE(_dtiLastV-_dtiFirstV,_dtiFirstV))*100,"0.0") & "%"
+			-- ============ DTI SPARKLINE (quarterly) ============
+			VAR _dqRaw = FILTER(ADDCOLUMNS(_qBase, "v", [AVG DTI]), NOT ISBLANK([v]))
+			VAR _dqRk  = ADDCOLUMNS(_dqRaw, "r", RANKX(_dqRaw, [sk],, ASC, DENSE))
+			VAR _dqN   = COUNTROWS(_dqRk)
+			VAR _dqMin = MINX(_dqRk, [v])
+			VAR _dqMax = MAXX(_dqRk, [v])
+			VAR _dqRng = IF(_dqMax = _dqMin, 1, _dqMax - _dqMin)
+			VAR _dqPts = CONCATENATEX(
+			    _dqRk,
+			    FORMAT(([r]-1)/(_dqN-1)*100, "0.0") & "," &
+			    FORMAT(58 - (([v]-_dqMin)/_dqRng)*52, "0.0"),
+			    " ", [r], ASC)
+			VAR _dqLastRaw = MAXX(FILTER(_dqRk, [r] = _dqN), [v])
+			VAR _dqLastY   = FORMAT(58 - ((_dqLastRaw - _dqMin)/_dqRng)*52, "0.0")
 			
-			VAR _highDtiShare = DIVIDE(CALCULATE(COUNTROWS(fact_loan), fact_loan[win_dti] > 36), COUNTROWS(fact_loan))
-			VAR _highDtiTxt = FORMAT(_highDtiShare,"0.0%")
+			-- ============ DTI CHIPS (yearly) ============
+			VAR _dYTbl   = FILTER(ADDCOLUMNS(_yTbl, "v", [AVG DTI]), NOT ISBLANK([v]))
+			VAR _dLastYr = MAXX(_dYTbl, dim_date[year])
+			VAR _dFirstYr= MINX(_dYTbl, dim_date[year])
+			VAR _dLastV  = CALCULATE([AVG DTI], dim_date[year] = _dLastYr)
+			VAR _dPrevV  = CALCULATE([AVG DTI], dim_date[year] = _dLastYr - 1)
+			VAR _dFirstV = CALCULATE([AVG DTI], dim_date[year] = _dFirstYr)
+			VAR _dYoYUp  = _dLastV >= _dPrevV
+			VAR _dYoYClr = IF(_dYoYUp, "#D9432F", "#1C9A5B")
+			VAR _dYoYTxt = FORMAT(ABS(DIVIDE(_dLastV-_dPrevV,_dPrevV))*100,"0.0") & "%"
+			VAR _dYoYArr = IF(_dYoYUp, "▲", "▼")
+			VAR _dLongUp = _dLastV >= _dFirstV
+			VAR _dLongClr= IF(_dLongUp, "#D9432F", "#1C9A5B")
+			VAR _dLongTxt= FORMAT(ABS(DIVIDE(_dLastV-_dFirstV,_dFirstV))*100,"0.0") & "%"
+			VAR _dLongArr= IF(_dLongUp, "▲", "▼")
+			VAR _dtiTxt  = FORMAT([AVG DTI],"0.0") & "%"
+			VAR _highDti = FORMAT(DIVIDE(CALCULATE(COUNTROWS(fact_loan),fact_loan[win_dti]>36),COUNTROWS(fact_loan)),"0.0%")
 			
-			VAR _css = "<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:transparent!important}*{box-sizing:border-box}.bk{font-family:Jost,'Segoe UI',sans-serif;width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;gap:16px}.c{position:relative;overflow:hidden;border-radius:14px;background:#fff;border:1px solid #EDF0F5;box-shadow:0 1px 3px rgba(16,24,40,.06);transition:box-shadow .2s ease,transform .2s ease}.c:hover{box-shadow:0 10px 24px rgba(16,24,40,.14);transform:translateY(-2px)}.front{position:relative;z-index:1;padding:18px 20px;height:100%;box-sizing:border-box;display:flex;flex-direction:column}.ic{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;background:#F2F4F8;color:#6b7280;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}.lbl{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#7a8194}.val{font-family:'Cormorant Garamond',Georgia,serif;font-size:38px;font-weight:700;color:#1a1d29;margin-top:7px;line-height:1}.cmp{font-size:11px;color:#8a8f9c;margin-top:8px;line-height:1.7}.cmp b{color:#1a1d29;font-weight:600}.chip{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:999px;font-weight:700;font-size:10.5px}.spark{margin-top:auto;padding-top:10px;width:100%;height:30px}.dot{filter:drop-shadow(0 0 3px rgba(0,0,0,.15))}.back{position:absolute;inset:0;z-index:2;background:linear-gradient(155deg,#132623,#0d1b19);padding:20px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(4px);transition:.22s ease;pointer-events:none}.c:hover .back{opacity:1;transform:none;pointer-events:auto}.backl{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#4FBFBF;font-weight:700}.backp{font-size:12.5px;line-height:1.6;color:#e3f0ef;margin-top:9px}@media(max-width:700px){.bk{gap:8px}.front{padding:14px}.val{font-size:28px}.cmp{font-size:10px}}</style>"
+			-- ============ CSS ============
+			VAR _css = "<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:transparent!important}*{box-sizing:border-box}.bk{font-family:Jost,'Segoe UI',sans-serif;width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;gap:14px}.c{position:relative;overflow:hidden;border-radius:14px;background:#fff;border:1px solid #EDF0F5;box-shadow:0 1px 3px rgba(16,24,40,.06);transition:box-shadow .2s ease,transform .2s ease;display:flex;flex-direction:row;align-items:stretch}.c:hover{box-shadow:0 10px 24px rgba(16,24,40,.14);transform:translateY(-2px)}.cl{flex:1;padding:16px 8px 16px 18px;display:flex;flex-direction:column;justify-content:center;min-width:0;position:relative;z-index:1}.cr{width:90px;flex-shrink:0;padding:10px 12px 10px 4px;display:flex;align-items:stretch;position:relative;z-index:1}.ic{position:absolute;top:10px;right:10px;width:19px;height:19px;border-radius:50%;background:#F2F4F8;color:#6b7280;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:3}.lbl{font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:#7a8194}.val{font-family:'Cormorant Garamond',Georgia,serif;font-size:32px;font-weight:700;color:#1a1d29;margin-top:4px;line-height:1;white-space:nowrap}.chips{display:flex;flex-direction:column;gap:5px;margin-top:9px}.chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:999px;font-weight:700;font-size:10px;width:fit-content}.spark{width:100%;height:100%;overflow:visible}.dot{filter:drop-shadow(0 0 2px rgba(0,0,0,.25))}.back{position:absolute;inset:0;z-index:2;background:linear-gradient(155deg,#132623,#0d1b19);padding:18px 20px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(5px);transition:.22s ease;pointer-events:none}.c:hover .back{opacity:1;transform:none;pointer-events:auto}.backl{font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:#4FBFBF;font-weight:700}.backp{font-size:12px;line-height:1.65;color:#e3f0ef;margin-top:8px}</style>"
 			
-			RETURN _css & "<div class='bk'>" &
+			-- ============ HTML ============
+			RETURN _css &
+			"<div class='bk'>" &
 			
-			"<div class='c'><div class='front'><span class='ic'>i</span><div class='lbl'>Avg Annual Income</div><div class='val'>" & _incTxt & "</div><div class='cmp'>" & _incLastYr & ": <b>$" & FORMAT(_incLastV,"#,##0") & "</b> <span class='chip' style='background:" & _incYoYColor & "1a;color:" & _incYoYColor & "'>" & _incYoYArrow & " " & _incYoYPct & "</span></div><div class='cmp'>Since " & _incFirstYr & " <span class='chip' style='background:" & _incLongColor & "1a;color:" & _incLongColor & "'>" & _incLongArrow & " " & _incLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _incPts & "' fill='none' stroke='#1B6B6B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/><circle class='dot' cx='" & _incLastX & "' cy='" & _incLastYV & "' r='3' fill='#E8A33D' stroke='#fff' stroke-width='1.4'/></svg></div><div class='back'><div class='backl'>Income gap, Grade " & _bestGrade & " vs " & _worstGrade & "</div><div class='backp'>Grade " & _bestGrade & " borrowers earn " & _incGapTxt & " more per year on average than Grade " & _worstGrade & " borrowers — across the current borrower selection.</div></div></div>" &
+			"<div class='c'><div class='cl'><div class='lbl'>Avg Annual Income</div><div class='val'>" & _incTxt & "</div><div class='chips'><span class='chip' style='background:" & _iYoYClr & "18;color:" & _iYoYClr & "'>" & _iYoYArr & " " & _iYoYTxt & " YoY</span><span class='chip' style='background:" & _iLongClr & "18;color:" & _iLongClr & "'>" & _iLongArr & " " & _iLongTxt & " since " & _iFirstYr & "</span></div></div><div class='cr'><svg class='spark' viewBox='0 0 100 64' preserveAspectRatio='none'><polyline points='" & _iqPts & "' fill='none' stroke='#1B6B6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><circle class='dot' cx='100' cy='" & _iqLastY & "' r='3.2' fill='#E8A33D' stroke='#fff' stroke-width='1.5'/></svg></div><span class='ic'>i</span><div class='back'><div class='backl'>Income gap · Grade " & _bestGrade & " vs " & _worstGrade & "</div><div class='backp'>Grade " & _bestGrade & " borrowers earn " & _incGapTxt & " more per year than Grade " & _worstGrade & " — across the current selection.</div></div></div>" &
 			
-			"<div class='c'><div class='front'><span class='ic'>i</span><div class='lbl'>Avg DTI</div><div class='val'>" & _dtiTxt & "</div><div class='cmp'>" & _dtiLastYr & ": <b>" & FORMAT(_dtiLastV,"0.0") & "%</b> <span class='chip' style='background:" & _dtiYoYColor & "1a;color:" & _dtiYoYColor & "'>" & _dtiYoYArrow & " " & _dtiYoYPct & "</span></div><div class='cmp'>Since " & _dtiFirstYr & " <span class='chip' style='background:" & _dtiLongColor & "1a;color:" & _dtiLongColor & "'>" & _dtiLongArrow & " " & _dtiLongPct & "</span></div><svg class='spark' viewBox='0 0 100 26' preserveAspectRatio='none'><polyline points='" & _dtiPts & "' fill='none' stroke='#D9432F' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/><circle class='dot' cx='" & _incLastX & "' cy='" & _dtiLastYV & "' r='3' fill='#E8A33D' stroke='#fff' stroke-width='1.4'/></svg></div><div class='back'><div class='backl'>High-DTI share</div><div class='backp'>" & _highDtiTxt & " of borrowers carry a debt-to-income ratio above 36% — a common affordability-risk line.</div></div></div>" &
+			"<div class='c'><div class='cl'><div class='lbl'>Avg DTI</div><div class='val'>" & _dtiTxt & "</div><div class='chips'><span class='chip' style='background:" & _dYoYClr & "18;color:" & _dYoYClr & "'>" & _dYoYArr & " " & _dYoYTxt & " YoY</span><span class='chip' style='background:" & _dLongClr & "18;color:" & _dLongClr & "'>" & _dLongArr & " " & _dLongTxt & " since " & _dFirstYr & "</span></div></div><div class='cr'><svg class='spark' viewBox='0 0 100 64' preserveAspectRatio='none'><polyline points='" & _dqPts & "' fill='none' stroke='#D9432F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><circle class='dot' cx='100' cy='" & _dqLastY & "' r='3.2' fill='#E8A33D' stroke='#fff' stroke-width='1.5'/></svg></div><span class='ic'>i</span><div class='back'><div class='backl'>High-DTI share</div><div class='backp'>" & _highDti & " of borrowers carry a DTI above 36% — a common affordability-risk threshold.</div></div></div>" &
 			
 			"</div>"
 		displayFolder: HTML Visuals
