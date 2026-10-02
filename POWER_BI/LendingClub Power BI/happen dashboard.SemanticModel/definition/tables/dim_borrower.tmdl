@@ -205,6 +205,31 @@ table dim_borrower
 			"
 		lineageTag: 7be496ed-b814-4162-be26-88684e4d8b51
 
+	/// Balanced-size version of the supplied falling-balls HTML visual. Keeps the original animation and labels while resizing the canvas and circle-radius range for the Borrower Profile layout.
+	measure 'Employment Balls Balanced HTML' =
+			VAR _sourceHtml = [Falling Circles HTML]
+			VAR _responsiveCanvas =
+				SUBSTITUTE(
+					SUBSTITUTE(_sourceHtml, "max-width:900px;", "max-width:100%;"),
+					"const W = 900, H = 500;",
+					"const W = 960, H = 560;"
+				)
+			VAR _balancedCircles =
+				SUBSTITUTE(
+					_responsiveCanvas,
+					"const minR = 30, maxR = 68;",
+					"const minR = 42, maxR = 88;"
+				)
+			VAR _balancedSpawn =
+				SUBSTITUTE(
+					_balancedCircles,
+					"y: -40 - i * 95,",
+					"y: -70 - i * 110,"
+				)
+			RETURN _balancedSpawn
+		displayFolder: HTML Visuals - Borrower Profile
+		lineageTag: 9125410e-eead-46e1-8ee3-a304213cedf3
+
 	column borrower_key
 		dataType: int64
 		isHidden

@@ -3,6 +3,41 @@
   "name": "1b32e8be43ee4c2a4bec",
   "displayName": "Borrower Profile",
   "displayOption": "FitToPage",
-  "height": 1200,
-  "width": 1920
+  "height": 1400,
+  "width": 1970,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Borrower page bc.svg'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "Borrower_page_bc7376133821327492.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fit'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
 }

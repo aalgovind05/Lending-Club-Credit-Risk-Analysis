@@ -1,0 +1,35 @@
+<svg width="1970" height="1400" viewBox="0 0 1970 1400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_74_5)">
+<rect width="1970" height="1400" fill="white"/>
+<g filter="url(#filter0_d_74_5)">
+<rect width="1970" height="1400" rx="16" fill="url(#paint0_linear_74_5)"/>
+<rect width="1970" height="1400" rx="16" fill="url(#paint1_radial_74_5)"/>
+<rect x="7.5" y="7.5" width="1955" height="1385" rx="8.5" stroke="#2A7473" stroke-width="15"/>
+</g>
+<path d="M593 4H1377L1340.87 46.1304C1335.45 52.7826 1328.23 55 1319.19 55H652.613C641.774 55 634.548 50.5652 629.129 43.913L593 4Z" fill="#155E63"/>
+</g>
+<defs>
+<filter id="filter0_d_74_5" x="-1" y="0" width="1976" height="1406" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="2" dy="3"/>
+<feGaussianBlur stdDeviation="1.5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.290196 0 0 0 0 0.282353 0 0 0 0 0.372549 0 0 0 0.168627 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_74_5"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_74_5" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_74_5" x1="985" y1="0" x2="985" y2="1400" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F7F9F8"/>
+<stop offset="1" stop-color="#E8F2F0"/>
+</linearGradient>
+<radialGradient id="paint1_radial_74_5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(985 861.538) scale(1262.82 897.436)">
+<stop stop-color="#D5E9E6" stop-opacity="0.72"/>
+<stop offset="0.58" stop-color="#D5E9E6" stop-opacity="0.2"/>
+<stop offset="1" stop-color="#D5E9E6" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="clip0_74_5">
+<rect width="1970" height="1400" fill="white"/>
+</clipPath>
+</defs>
+</svg>
