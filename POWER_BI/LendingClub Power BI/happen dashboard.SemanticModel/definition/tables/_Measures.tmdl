@@ -1637,6 +1637,70 @@ table _Measures
 		displayFolder: HTML Visuals
 		lineageTag: ef804ad6-b6bb-494c-a28d-8e637e0dd478
 
+	/// Page title block for the Risk Analysis page with charcoal styling and risk-focused subtitle.
+	measure 'Risk Page Title HTML' =
+			VAR _y1 = MIN(dim_date[year])
+			VAR _y2 = MAX(dim_date[year])
+			VAR _period = IF(_y1 = _y2, FORMAT(_y1,"0"), FORMAT(_y1,"0") & " &ndash; " & FORMAT(_y2,"0"))
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .wrap{ height:100%; width:100%; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; padding:2px 0 0 0 }
+			  .top{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px }
+			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:38px; font-weight:600; color:#2d2c2c; line-height:1.02; letter-spacing:-.2px }
+			  .sub{ font-size:14px; font-weight:400; color:#666565; margin-top:6px; letter-spacing:.4px }
+			  .per{ font-size:12px; font-weight:500; letter-spacing:1.6px; color:#666565; padding-bottom:3px; white-space:nowrap }
+			  .per b{ color:#464444; font-weight:600 }
+			  .rule{ height:3px; width:100%; border-radius:999px; background:linear-gradient(90deg,#464444 0%,#9b9999 55%,rgba(155,153,153,0) 100%); margin-bottom:2px }
+			</style>
+			<div class='wrap'>
+			  <div class='top'>
+			    <div>
+			      <div class='ttl'>Risk Analysis</div>
+			      <div class='sub'>Default Rate &middot; Exposure &middot; Grade &middot; Vintage</div>
+			    </div>
+			    <div class='per'>PERIOD &nbsp;<b>" & _period & "</b></div>
+			  </div>
+			  <div class='rule'></div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: 85505155-0cb5-4b2c-90c2-41a9bc67601c
+
+	/// Page title block for the Borrower Profile page with teal styling and borrower-focused subtitle.
+	measure 'Borrower Page Title HTML' =
+			VAR _y1 = MIN(dim_date[year])
+			VAR _y2 = MAX(dim_date[year])
+			VAR _period = IF(_y1 = _y2, FORMAT(_y1,"0"), FORMAT(_y1,"0") & " &ndash; " & FORMAT(_y2,"0"))
+			VAR _html =
+			"<div style='font-family:Jost,Segoe UI,system-ui,sans-serif;height:100vh;width:100%;box-sizing:border-box;'>
+			<style>
+			  html,body{ overflow:hidden!important; margin:0; padding:0; height:100vh; width:100%; background:transparent!important }
+			  .wrap{ height:100%; width:100%; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; padding:2px 0 0 0 }
+			  .top{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px }
+			  .ttl{ font-family:Cormorant Garamond,Georgia,serif; font-size:38px; font-weight:600; color:#155E63; line-height:1.02; letter-spacing:-.2px }
+			  .sub{ font-size:14px; font-weight:400; color:#477a78; margin-top:6px; letter-spacing:.4px }
+			  .per{ font-size:12px; font-weight:500; letter-spacing:1.6px; color:#477a78; padding-bottom:3px; white-space:nowrap }
+			  .per b{ color:#155E63; font-weight:600 }
+			  .rule{ height:3px; width:100%; border-radius:999px; background:linear-gradient(90deg,#2A7473 0%,#9bcac3 55%,rgba(155,202,195,0) 100%); margin-bottom:2px }
+			</style>
+			<div class='wrap'>
+			  <div class='top'>
+			    <div>
+			      <div class='ttl'>Borrower Profile</div>
+			      <div class='sub'>Income &middot; Credit Age &middot; DTI &middot; Geography</div>
+			    </div>
+			    <div class='per'>PERIOD &nbsp;<b>" & _period & "</b></div>
+			  </div>
+			  <div class='rule'></div>
+			</div>
+			</div>"
+			RETURN _html
+		displayFolder: HTML Visuals
+		lineageTag: a991dac6-4ee8-4022-b42b-34b27762d273
+
 	column Column
 		formatString: 0
 		lineageTag: 3421dc75-983b-47d9-bf12-35329a9f517a
