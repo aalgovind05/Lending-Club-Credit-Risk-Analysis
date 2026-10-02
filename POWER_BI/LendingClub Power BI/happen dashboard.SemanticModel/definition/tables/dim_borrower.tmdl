@@ -1,6 +1,210 @@
 table dim_borrower
 	lineageTag: afce5955-fc21-4da4-9702-139c56218876
 
+	measure 'Falling Circles HTML' =
+			"<!DOCTYPE html>
+			<html lang=""en"">
+			<head>
+			<meta charset=""UTF-8"">
+			<meta name=""viewport"" content=""width=device-width, initial-scale=1"">
+			<title>Employment Length vs Default Rate</title>
+			<style>
+			  :root{ --fg:#111111; --fg-dim:#6b6b6b; }
+			  *{box-sizing:border-box;}
+			  body{
+			    margin:0;
+			    background:#ffffff;
+			    color:var(--fg);
+			    font-family:'Segoe UI', system-ui, sans-serif;
+			    display:flex;
+			    flex-direction:column;
+			    align-items:center;
+			    padding:16px 12px 30px;
+			  }
+			  h1{ font-size:1.1rem; font-weight:600; margin:0 0 2px; }
+			  p.sub{ margin:0 0 14px; color:var(--fg-dim); font-size:.8rem; text-align:center; }
+			  #stage-wrap{
+			    position:relative;
+			    width:100%;
+			    max-width:900px;
+			    background:#ffffff;
+			    border-radius:10px;
+			    overflow:hidden;
+			    border:1px solid #e5e5e5;
+			  }
+			  canvas{ display:block; width:100%; background:#ffffff; }
+			  #legend{
+			    display:flex; justify-content:space-between;
+			    max-width:900px; width:100%; margin-top:10px;
+			    font-size:.7rem; color:var(--fg-dim);
+			  }
+			  #legend .bar{
+			    height:6px; flex:1; margin:0 10px; border-radius:3px;
+			    background:linear-gradient(90deg,#d9d9d9,#111111); align-self:center;
+			  }
+			  #replay{
+			    margin-top:16px; background:#ffffff; border:1px solid #cccccc;
+			    color:var(--fg); padding:7px 16px; border-radius:6px; cursor:pointer; font-size:.8rem;
+			  }
+			  #replay:hover{ background:#f2f2f2; }
+			</style>
+			</head>
+			<body>
+			
+			<h1>Employment length vs default rate</h1>
+			<p class=""sub"">Each circle is an employment-length group — size alone tracks the average default rate.</p>
+			
+			<div id=""stage-wrap"">
+			  <canvas id=""stage""></canvas>
+			</div>
+			
+			<div id=""legend"">
+			  <span>Lower default rate</span>
+			  <div class=""bar""></div>
+			  <span>Higher default rate</span>
+			</div>
+			
+			<button id=""replay"">Replay</button>
+			
+			<script>
+			(function(){
+			  const data = [
+			    { label: ""Unknown"",   rate: 0.1438 },
+			    { label: ""8 years"",   rate: 0.1316 },
+			    { label: ""9 years"",   rate: 0.1277 },
+			    { label: ""7 years"",   rate: 0.1254 },
+			    { label: ""1 year"",    rate: 0.1226 },
+			    { label: ""3 years"",   rate: 0.1189 },
+			    { label: ""2 years"",   rate: 0.1184 },
+			    { label: ""6 years"",   rate: 0.1183 },
+			    { label: ""5 years"",   rate: 0.1181 },
+			    { label: ""< 1 year"",  rate: 0.1168 },
+			    { label: ""4 years"",   rate: 0.1164 },
+			    { label: ""10+ years"", rate: 0.1110 }
+			  ];
+			
+			  const canvas = document.getElementById('stage');
+			  const ctx = canvas.getContext('2d');
+			
+			  const W = 900, H = 500;
+			  canvas.width = W;
+			  canvas.height = H;
+			
+			  const minR = 30, maxR = 68;
+			  const rates = data.map(d => d.rate);
+			  const rMin = Math.min(...rates), rMax = Math.max(...rates);
+			  function radiusFor(rate){
+			    const t = (rate - rMin) / (rMax - rMin);
+			    return minR + t * (maxR - minR);
+			  }
+			
+			  const GRAVITY = 0.55;
+			  const RESTITUTION = 0.35;
+			  const FRICTION_AIR = 0.0025;
+			  const FLOOR_Y = H - 12;
+			
+			  let balls = [];
+			
+			  function spawnAll(){
+			    const ordered = [...data].sort((a,b) => b.rate - a.rate);
+			    balls = ordered.map((d, i) => {
+			      const r = radiusFor(d.rate);
+			      return {
+			        label: d.label,
+			        rate: d.rate,
+			        r: r,
+			        x: W/2 + (Math.random()*24 - 12),
+			        y: -40 - i * 95,
+			        vx: (Math.random()*0.6 - 0.3),
+			        vy: 0,
+			        settled: false
+			      };
+			    });
+			  }
+			
+			  function step(){
+			    for (let b of balls){
+			      b.vy += GRAVITY;
+			      b.x += b.vx;
+			      b.y += b.vy;
+			      b.vx *= (1 - FRICTION_AIR);
+			
+			      if (b.y + b.r > FLOOR_Y){
+			        b.y = FLOOR_Y - b.r;
+			        b.vy *= -RESTITUTION;
+			        b.vx *= 0.92;
+			        if (Math.abs(b.vy) < 0.6) b.vy = 0;
+			      }
+			      if (b.x - b.r < 0){ b.x = b.r; b.vx *= -RESTITUTION; }
+			      if (b.x + b.r > W){ b.x = W - b.r; b.vx *= -RESTITUTION; }
+			    }
+			
+			    for (let i = 0; i < balls.length; i++){
+			      for (let j = i+1; j < balls.length; j++){
+			        const a = balls[i], b = balls[j];
+			        const dx = b.x - a.x, dy = b.y - a.y;
+			        const dist = Math.sqrt(dx*dx + dy*dy) || 0.0001;
+			        const minDist = a.r + b.r;
+			        if (dist < minDist){
+			          const overlap = (minDist - dist) / 2;
+			          const nx = dx / dist, ny = dy / dist;
+			          a.x -= nx * overlap;
+			          a.y -= ny * overlap;
+			          b.x += nx * overlap;
+			          b.y += ny * overlap;
+			
+			          const avn = a.vx*nx + a.vy*ny;
+			          const bvn = b.vx*nx + b.vy*ny;
+			          const diff = (bvn - avn) * RESTITUTION;
+			          a.vx += nx * diff;
+			          a.vy += ny * diff;
+			          b.vx -= nx * diff;
+			          b.vy -= ny * diff;
+			        }
+			      }
+			    }
+			  }
+			
+			  function draw(){
+			    ctx.clearRect(0, 0, W, H);
+			    for (let b of balls){
+			      ctx.beginPath();
+			      ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+			      ctx.fillStyle = '#ffffff';
+			      ctx.fill();
+			      ctx.lineWidth = 5;
+			      ctx.strokeStyle = '#111111';
+			      ctx.stroke();
+			
+			      ctx.textAlign = 'center';
+			      ctx.fillStyle = '#111111';
+			      const labelSize = Math.max(10, b.r * 0.26);
+			      const pctSize = Math.max(11, b.r * 0.30);
+			      ctx.font = `600 ${labelSize}px Segoe UI, sans-serif`;
+			      ctx.fillText(b.label, b.x, b.y - 4);
+			      ctx.font = `700 ${pctSize}px Segoe UI, sans-serif`;
+			      ctx.fillText((b.rate*100).toFixed(1) + '%', b.x, b.y + 16);
+			    }
+			  }
+			
+			  function loop(){
+			    step();
+			    draw();
+			    requestAnimationFrame(loop);
+			  }
+			
+			  spawnAll();
+			  loop();
+			
+			  document.getElementById('replay').addEventListener('click', spawnAll);
+			})();
+			</script>
+			
+			</body>
+			</html>
+			"
+		lineageTag: 7be496ed-b814-4162-be26-88684e4d8b51
+
 	column borrower_key
 		dataType: int64
 		isHidden

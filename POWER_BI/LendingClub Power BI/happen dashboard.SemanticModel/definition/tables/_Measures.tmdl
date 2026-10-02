@@ -1224,29 +1224,6 @@ table _Measures
 		displayFolder: HTML Visuals
 		lineageTag: f686ab86-de8c-4d81-9b7a-f723e064c608
 
-	measure 'Borrower Credit Profile HTML' =
-			VAR _grades = ALLSELECTED(dim_grade[grade])
-			VAR _minFico = MINX(_grades, CALCULATE([Avg FICO Score]))
-			VAR _maxFico = MAXX(_grades, CALCULATE([Avg FICO Score]))
-			VAR _minIncome = MINX(_grades, CALCULATE([AVG Annual Income]))
-			VAR _maxIncome = MAXX(_grades, CALCULATE([AVG Annual Income]))
-			VAR _rows =
-				CONCATENATEX(
-					_grades,
-					VAR _grade = dim_grade[grade]
-					VAR _fico = CALCULATE([Avg FICO Score])
-					VAR _income = CALCULATE([AVG Annual Income])
-					VAR _ficoWidth = FORMAT(IF(_maxFico = _minFico, 100, 16 + 84 * DIVIDE(_fico - _minFico, _maxFico - _minFico)), "0")
-					VAR _incomeWidth = FORMAT(IF(_maxIncome = _minIncome, 100, 16 + 84 * DIVIDE(_income - _minIncome, _maxIncome - _minIncome)), "0")
-					RETURN "<div class='cp-row' title='Grade " & _grade & " · FICO " & FORMAT(_fico, "0") & " · Avg income " & FORMAT(_income, "$#,##0") & "'><div class='cp-grade'>" & _grade & "</div><div class='cp-metric'><span class='cp-value'>" & FORMAT(_fico, "0") & "</span><span class='cp-track'><span class='cp-fill cp-fico' style='width:" & _ficoWidth & "%'></span></span></div><div class='cp-metric'><span class='cp-value'>" & FORMAT(_income, "$#,##0") & "</span><span class='cp-track'><span class='cp-fill cp-income' style='width:" & _incomeWidth & "%'></span></span></div></div>",
-					"",
-					dim_grade[grade], ASC
-				)
-			RETURN
-				"<div class='cp-wrap'><style>.cp-wrap{font-family:Segoe UI,Arial,sans-serif;width:100%;height:100vh;box-sizing:border-box;background:#fff;border:1px solid #E5E8E8;border-radius:14px;padding:17px 22px;color:#2B2E2E}.cp-title{font-size:15px;font-weight:700;letter-spacing:.5px;color:#1B6B6B}.cp-sub{font-size:11px;color:#718080;margin-top:4px;margin-bottom:13px}.cp-head,.cp-row{display:grid;grid-template-columns:44px 1fr 1.25fr;align-items:center;column-gap:18px}.cp-head{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:#718080;padding-bottom:6px;border-bottom:1px solid #E9EEEE}.cp-row{height:26px;border-bottom:1px solid #F0F3F3;transition:background .18s ease;padding:0 4px}.cp-row:hover{background:#F3F7F7}.cp-grade{font-size:12px;font-weight:700;color:#1B6B6B}.cp-metric{display:grid;grid-template-columns:66px 1fr;align-items:center;gap:8px}.cp-value{font-size:11px;color:#3D5555;font-weight:600}.cp-track{display:block;height:7px;border-radius:8px;background:#EDF2F2;overflow:hidden}.cp-fill{display:block;height:100%;border-radius:8px;transition:width .35s ease}.cp-fico{background:#1B6B6B}.cp-income{background:#5C9A9A}</style><div class='cp-title'>CREDIT PROFILE BY GRADE</div><div class='cp-sub'>Credit quality and earning capacity across the lending tiers · hover a row for detail</div><div class='cp-head'><span>Grade</span><span>Average FICO</span><span>Average income</span></div><div class='cp-rows'>" & _rows & "</div></div>"
-		displayFolder: HTML Visuals
-		lineageTag: 6c3b2001-cfe5-4b4d-ae91-6e46bf5b2a91
-
 	measure 'Borrower Risk Factors HTML' =
 			VAR _employmentBase = FILTER(ALLSELECTED(dim_borrower[employment_length]), NOT ISBLANK(dim_borrower[employment_length]))
 			VAR _homeBase = FILTER(ALLSELECTED(dim_borrower[home_ownership]), NOT ISBLANK(dim_borrower[home_ownership]))
@@ -1448,6 +1425,217 @@ table _Measures
 			RETURN _css & "<div class='tp'><div class='hd'><div><div class='st'>" & _state & "</div><div class='sub'>Borrower snapshot</div></div><div class='badge' style='background:" & _defColor & "22;color:" & _defColor & ";border:1px solid " & _defColor & "55'>" & _defTxt & " · " & _defLabel & "</div></div><div class='grid'><div class='cell'><div class='k'>Total Amount</div><div class='v'>" & _amtTxt & "</div></div><div class='cell'><div class='k'>Total Loans</div><div class='v'>" & _cntTxt & "</div></div><div class='cell'><div class='k'>Avg Interest</div><div class='v'>" & _rateTxt & "</div></div><div class='cell'><div class='k'>Avg Income</div><div class='v'>" & _incTxt & "</div></div><div class='cell'><div class='k'>Avg FICO</div><div class='v'>" & _ficoTxt & "</div></div><div class='cell'><div class='k'>Avg DTI</div><div class='v'>" & _dtiTxt & "</div></div></div></div>"
 		displayFolder: HTML Visuals
 		lineageTag: f2881427-c47d-4ae9-a9ed-61936e13556e
+
+	measure 'Borrower Emp exp HTML' = ```
+			
+			 <!DOCTYPE html>
+			<html lang="en">
+			<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title>Employment Length vs Default Rate</title>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+			<style>
+			  :root{
+			    --fg:#111111;
+			    --fg-dim:#6b6b6b;
+			  }
+			  *{box-sizing:border-box;}
+			  body{
+			    margin:0;
+			    background:#ffffff;
+			    color:var(--fg);
+			    font-family:'Segoe UI', system-ui, sans-serif;
+			    display:flex;
+			    flex-direction:column;
+			    align-items:center;
+			    padding:24px 12px 40px;
+			  }
+			  h1{
+			    font-size:1.15rem;
+			    font-weight:600;
+			    letter-spacing:.2px;
+			    margin:0 0 2px;
+			  }
+			  p.sub{
+			    margin:0 0 18px;
+			    color:var(--fg-dim);
+			    font-size:.85rem;
+			  }
+			  #stage-wrap{
+			    position:relative;
+			    width:100%;
+			    max-width:900px;
+			    background:#ffffff;
+			    border-radius:10px;
+			    overflow:hidden;
+			    border:1px solid #e5e5e5;
+			  }
+			  canvas{display:block;width:100%;}
+			  #legend{
+			    display:flex;
+			    justify-content:space-between;
+			    max-width:900px;
+			    width:100%;
+			    margin-top:10px;
+			    font-size:.72rem;
+			    color:var(--fg-dim);
+			  }
+			  #legend .bar{
+			    height:6px;
+			    flex:1;
+			    margin:0 10px;
+			    border-radius:3px;
+			    background:linear-gradient(90deg,#d9d9d9,#111111);
+			    align-self:center;
+			  }
+			  #replay{
+			    margin-top:18px;
+			    background:#ffffff;
+			    border:1px solid #cccccc;
+			    color:var(--fg);
+			    padding:8px 16px;
+			    border-radius:6px;
+			    cursor:pointer;
+			    font-size:.82rem;
+			  }
+			  #replay:hover{background:#f2f2f2;}
+			</style>
+			</head>
+			<body>
+			
+			<h1>Employment length vs default rate</h1>
+			<p class="sub">Each circle is an employment-length group &mdash; size alone tracks the average default rate.</p>
+			
+			<div id="stage-wrap">
+			  <canvas id="stage"></canvas>
+			</div>
+			
+			<div id="legend">
+			  <span>Lower default rate</span>
+			  <div class="bar"></div>
+			  <span>Higher default rate</span>
+			</div>
+			
+			<button id="replay">Replay</button>
+			
+			<script>
+			const data = [
+			  { label: "Unknown",   rate: 0.1438 },
+			  { label: "8 years",   rate: 0.1316 },
+			  { label: "9 years",   rate: 0.1277 },
+			  { label: "7 years",   rate: 0.1254 },
+			  { label: "1 year",    rate: 0.1226 },
+			  { label: "3 years",   rate: 0.1189 },
+			  { label: "2 years",   rate: 0.1184 },
+			  { label: "6 years",   rate: 0.1183 },
+			  { label: "5 years",   rate: 0.1181 },
+			  { label: "< 1 year",  rate: 0.1168 },
+			  { label: "4 years",   rate: 0.1164 },
+			  { label: "10+ years", rate: 0.1110 }
+			];
+			
+			const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
+			
+			const canvas = document.getElementById('stage');
+			
+			const W = 900, H = 520;
+			canvas.width = W;
+			canvas.height = H;
+			
+			const engine = Engine.create();
+			engine.gravity.y = 1.1;
+			
+			const render = Render.create({
+			  canvas,
+			  engine,
+			  options: {
+			    width: W,
+			    height: H,
+			    wireframes: false,
+			    background: '#ffffff'
+			  }
+			});
+			Render.run(render);
+			const runner = Runner.create();
+			Runner.run(runner, engine);
+			
+			const minR = 32, maxR = 70;
+			const rates = data.map(d => d.rate);
+			const rMin = Math.min(...rates), rMax = Math.max(...rates);
+			function radiusFor(rate){
+			  const t = (rate - rMin) / (rMax - rMin);
+			  return minR + t * (maxR - minR);
+			}
+			// pure black ring for every circle; size alone carries the value
+			function ringColorFor(rate){
+			  return '#111111';
+			}
+			
+			const floor = Bodies.rectangle(W/2, H+20, W+40, 40, { isStatic:true, render:{visible:false} });
+			const wallL = Bodies.rectangle(-20, H/2, 40, H*2, { isStatic:true, render:{visible:false} });
+			const wallR = Bodies.rectangle(W+20, H/2, 40, H*2, { isStatic:true, render:{visible:false} });
+			World.add(engine.world, [floor, wallL, wallR]);
+			
+			let circles = [];
+			
+			function spawnAll(){
+			  circles.forEach(c => World.remove(engine.world, c.body));
+			  circles = [];
+			
+			  // sort so biggest (highest rate) falls first -> ends up more central/bottom
+			  const ordered = [...data].sort((a,b) => b.rate - a.rate);
+			
+			  ordered.forEach((d, i) => {
+			    const r = radiusFor(d.rate);
+			    // all start near the same narrow point at top-center, small random jitter
+			    const x = W/2 + (Math.random()*30 - 15);
+			    const y = -80 - i * 90; // staggered so they don't all spawn overlapping at once
+			    const body = Bodies.circle(x, y, r, {
+			      restitution: 0.35,
+			      friction: 0.5,
+			      frictionAir: 0.01,
+			      render: {
+			        fillStyle: '#ffffff',
+			        strokeStyle: ringColorFor(d.rate),
+			        lineWidth: 6
+			      }
+			    });
+			    Body.setAngle(body, (Math.random()-0.5) * 0.4);
+			    World.add(engine.world, body);
+			    circles.push({ body, label: d.label, rate: d.rate, r });
+			  });
+			}
+			
+			spawnAll();
+			
+			Events.on(render, 'afterRender', () => {
+			  const ctx = render.context;
+			  circles.forEach(c => {
+			    const { x, y } = c.body.position;
+			    ctx.save();
+			    ctx.translate(x, y);
+			    ctx.textAlign = 'center';
+			    ctx.fillStyle = '#111111';
+			    const labelSize = Math.max(10, c.r * 0.26);
+			    const pctSize = Math.max(11, c.r * 0.30);
+			    ctx.font = `600 ${labelSize}px Segoe UI, sans-serif`;
+			    ctx.fillText(c.label, 0, -4);
+			    ctx.font = `700 ${pctSize}px Segoe UI, sans-serif`;
+			    ctx.fillText((c.rate*100).toFixed(1) + '%', 0, 16);
+			    ctx.restore();
+			  });
+			});
+			
+			document.getElementById('replay').addEventListener('click', spawnAll);
+			</script>
+			
+			</body>
+			</html>
+			
+			```
+		displayFolder: HTML Visuals
+		lineageTag: ef804ad6-b6bb-494c-a28d-8e637e0dd478
 
 	column Column
 		formatString: 0
