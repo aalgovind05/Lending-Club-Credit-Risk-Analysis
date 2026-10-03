@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "btnSlicerOpen",
   "position": {
-    "x": 1868,
-    "y": 18,
+    "x": 1811.6666666666667,
+    "y": 23.333333333333336,
     "z": 10000,
-    "height": 58,
-    "width": 74,
-    "tabOrder": 19000
+    "height": 51.666666666666671,
+    "width": 126.66666666666667,
+    "tabOrder": 10000
   },
   "visual": {
     "visualType": "actionButton",
@@ -18,7 +18,7 @@
             "rectangleRoundedCurve": {
               "expr": {
                 "Literal": {
-                  "Value": "12L"
+                  "Value": "18L"
                 }
               }
             },
@@ -50,7 +50,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F766E'"
+                      "Value": "'#0F5D62'"
                     }
                   }
                 }
@@ -59,7 +59,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "0L"
+                  "Value": "100D"
                 }
               }
             }
@@ -114,14 +114,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'FILTER'"
+                  "Value": "'FILTERS  ·  5'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "12D"
                 }
               }
             },
@@ -151,6 +151,61 @@
       ]
     },
     "visualContainerObjects": {
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Bottom'"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "70L"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "90L"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "3L"
+                }
+              }
+            }
+          }
+        }
+      ],
       "visualLink": [
         {
           "properties": {

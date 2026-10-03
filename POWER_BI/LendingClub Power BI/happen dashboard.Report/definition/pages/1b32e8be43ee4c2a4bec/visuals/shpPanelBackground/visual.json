@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "shpPanelBackground",
   "position": {
-    "x": 1370,
-    "y": 38,
-    "z": 1000,
-    "height": 1324,
-    "width": 562,
+    "x": 1328,
+    "y": 24,
+    "z": 500,
+    "height": 1352,
+    "width": 606,
     "tabOrder": 20200
   },
   "visual": {
@@ -50,7 +50,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#F8FAFC'"
+                      "Value": "'#0B2F33'"
                     }
                   }
                 }
@@ -75,7 +75,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "btnPanelClose",
   "position": {
-    "x": 1842,
-    "y": 72,
+    "x": 1850,
+    "y": 58,
     "z": 8000,
-    "height": 58,
-    "width": 58,
+    "height": 52,
+    "width": 52,
     "tabOrder": 21000
   },
   "visual": {
@@ -50,7 +50,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E2E8F0'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -59,7 +59,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "0L"
+                  "Value": "84L"
                 }
               }
             }
@@ -114,14 +114,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'X'"
+                  "Value": "'×'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "22D"
                 }
               }
             },
@@ -137,7 +137,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#334155'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }

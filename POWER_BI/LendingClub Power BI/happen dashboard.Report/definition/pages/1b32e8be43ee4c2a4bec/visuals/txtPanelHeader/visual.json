@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "txtPanelHeader",
   "position": {
-    "x": 1408,
-    "y": 76,
+    "x": 1368,
+    "y": 1268,
     "z": 2000,
-    "height": 72,
-    "width": 430,
+    "height": 54,
+    "width": 522,
     "tabOrder": 20300
   },
   "visual": {
@@ -25,14 +25,39 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'REFINE VIEW'"
+                  "Value": "'FILTERS STAY ACTIVE WHILE YOU EXPLORE'"
                 }
               }
             },
             "bold": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#54706E'"
+                    }
+                  }
+                }
+              }
+            },
+            "horizontalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
                 }
               }
             }

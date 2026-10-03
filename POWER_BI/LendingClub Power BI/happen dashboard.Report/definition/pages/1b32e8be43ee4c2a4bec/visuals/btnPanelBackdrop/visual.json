@@ -43,7 +43,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#071A18'"
+                      "Value": "'#061B1E'"
                     }
                   }
                 }
@@ -52,7 +52,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "72L"
+                  "Value": "60L"
                 }
               }
             }

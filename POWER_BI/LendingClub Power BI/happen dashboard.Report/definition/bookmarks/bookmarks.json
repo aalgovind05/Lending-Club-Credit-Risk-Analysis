@@ -6,6 +6,18 @@
     },
     {
       "name": "bmSlicerPanelClosed"
+    },
+    {
+      "name": "bmLoanSlicerOpen"
+    },
+    {
+      "name": "bmLoanSlicerClosed"
+    },
+    {
+      "name": "bmRiskSlicerOpen"
+    },
+    {
+      "name": "bmRiskSlicerClosed"
     }
   ]
 }

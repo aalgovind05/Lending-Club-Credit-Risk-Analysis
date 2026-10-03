@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "loanSlicerPanelGroup",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 10000,
+    "height": 1080,
+    "width": 1920,
+    "tabOrder": 20000
+  },
+  "visualGroup": {
+    "displayName": "Group_Loan_Slicer_Panel",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "riskSlicerPanelGroup",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 11000,
+    "height": 1275,
+    "width": 1920,
+    "tabOrder": 10000
+  },
+  "visualGroup": {
+    "displayName": "Group_Risk_Slicer_Panel",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}
