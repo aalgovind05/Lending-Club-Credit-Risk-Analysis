@@ -1,6 +1,107 @@
 table dim_geography
 	lineageTag: 890c063e-28d3-4675-9eb3-b7988c2aedc7
 
+	measure 'Map Legend HTML' =
+			"<!DOCTYPE html>
+			<html lang=""en"">
+			<head>
+			<meta charset=""UTF-8"">
+			<meta name=""viewport"" content=""width=device-width, initial-scale=1"">
+			<title>Default Rate by State — Reading Guide</title>
+			<style>
+			  :root{
+			    --ink:#1a1a1a;
+			    --dim:#6b6b6b;
+			    --rule:#e8e8e8;
+			    --teal-lo:#dcecea;
+			    --teal-hi:#0f5f58;
+			  }
+			  *{box-sizing:border-box;}
+			  body{
+			    margin:0;
+			    background:#ffffff;
+			    color:var(--ink);
+			    font-family:'Segoe UI', system-ui, sans-serif;
+			    padding:22px 24px 20px;
+			  }
+			  h1{
+			    font-size:1.25rem;
+			    font-weight:700;
+			    letter-spacing:.2px;
+			    margin:0 0 12px;
+			  }
+			  p{
+			    font-size:1rem;
+			    line-height:1.65;
+			    color:#2b2b2b;
+			    margin:0 0 16px;
+			  }
+			  p strong{
+			    color:var(--ink);
+			    font-weight:700;
+			  }
+			
+			  .legend{
+			    margin:20px 0 8px;
+			  }
+			  .legend-bar{
+			    height:14px;
+			    width:100%;
+			    border-radius:7px;
+			    background:linear-gradient(90deg, var(--teal-lo), var(--teal-hi));
+			  }
+			  .legend-labels{
+			    display:flex;
+			    justify-content:space-between;
+			    font-size:.875rem;
+			    color:var(--dim);
+			    margin-top:7px;
+			    font-weight:600;
+			    letter-spacing:.2px;
+			  }
+			
+			  hr{
+			    border:none;
+			    border-top:1px solid var(--rule);
+			    margin:20px 0 14px;
+			  }
+			
+			  .hint{
+			    font-size:.875rem;
+			    font-style:italic;
+			    color:var(--dim);
+			  }
+			</style>
+			</head>
+			<body>
+			
+			<h1>How to read this map</h1>
+			
+			<p>
+			  Each state is shaded by its <strong>average loan default rate</strong>.
+			  Lighter shades mark states where borrowers default <strong>less often</strong>;
+			  darker shades mark states where defaults are <strong>more common</strong>.
+			  Color intensity alone tells the story &mdash; no two states are compared
+			  side by side here, each one simply reflects where it sits on the same scale.
+			</p>
+			
+			<div class=""legend"">
+			  <div class=""legend-bar""></div>
+			  <div class=""legend-labels"">
+			    <span>Lower default rate</span>
+			    <span>Higher default rate</span>
+			  </div>
+			</div>
+			
+			<hr>
+			
+			<p class=""hint"">Hover over any state on the map to see its exact default rate.</p>
+			
+			</body>
+			</html>
+			"
+		lineageTag: c45939aa-caa5-42f2-8eaa-370d8e8a3a5a
+
 	column state_key
 		dataType: int64
 		isHidden

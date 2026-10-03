@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "078a13c23b7c1015c52b",
   "position": {
-    "x": 34.883819959972179,
-    "y": 324.90790762373848,
+    "x": 34.457096876447785,
+    "y": 311.61200653483212,
     "z": 2000,
-    "height": 261.62864969979131,
-    "width": 1276.7478105349817,
+    "height": 275.65677501158228,
+    "width": 1277.9088537221721,
     "tabOrder": 2000
   },
   "visual": {
@@ -721,7 +721,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Total value of loans issued per year'"
+                  "Value": "'Total value of loans issued per year (Increase years to see Line chart)'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

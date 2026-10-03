@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
-  "name": "188580b6313c2cc027c5",
+  "name": "862037aec5ab37c66984",
   "position": {
-    "x": 34.457096876447785,
-    "y": 145.31906073980153,
-    "z": 1000,
-    "height": 179.77615761624929,
-    "width": 1854.6906927409721,
-    "tabOrder": 0
+    "x": 1279.6989587564944,
+    "y": 440.6149109490924,
+    "z": 7001,
+    "height": 310.34615466849118,
+    "width": 659.0066494195122,
+    "tabOrder": 7001
   },
   "visual": {
     "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6855",
@@ -20,14 +20,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "_Measures"
+                      "Entity": "dim_geography"
                     }
                   },
-                  "Property": "KPI Cards HTML"
+                  "Property": "Map Legend HTML"
                 }
               },
-              "queryRef": "_Measures.KPI Cards HTML",
-              "nativeQueryRef": "KPI Cards HTML"
+              "queryRef": "dim_geography.Map Legend HTML",
+              "nativeQueryRef": "Map Legend HTML"
             }
           ]
         }
@@ -53,7 +53,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             }
@@ -83,15 +83,64 @@
                 }
               }
             },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'CenterLeft'"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "180L"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "3L"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "70L"
+                }
+              }
+            },
             "color": {
               "solid": {
                 "color": {
                   "expr": {
                     "ThemeDataColor": {
                       "ColorId": 1,
-                      "Percent": 0
+                      "Percent": 0.4
                     }
                   }
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outer'"
                 }
               }
             }
